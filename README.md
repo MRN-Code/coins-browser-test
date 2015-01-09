@@ -17,9 +17,14 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
     1. `mocha --recursive --bail --reporter spec`, or
     1. `mocha --reporter yourFavoriteReporter path/to/test`
 
+<img src="https://raw.githubusercontent.com/MRN-Code/coins-selenium/master/img/test_example_output.png" height="200"  >
+
+
 # Usage - Designing Tests
 1. Place tests in dominant categorical subdirectory folders inside the `test` dir.
-1. Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.  This pattern allows each file to be run as a unit test, and to permit `require`ing browser actions *without* executing them in depedenent tests.  **It is not required** that pure browser actions have associated unit tests.
+1. Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.
+    1. This pattern allows each file to be run as a unit test, and to permit `require`ing browser actions *without* executing them in depedenent tests.  **It is not required** that pure browser actions have associated unit tests.
+    1. Consider the usage of `me` in the below example.  These files will commonly have 3+ nested scopes.  `self` or `_this` shall be used inside the mocha test blocks, but export-level references shall refer to the `me` for consistency. 
 
 ```js
 "use strict";
@@ -70,8 +75,6 @@ me.logon = function(client) {
         .waitFor('#page-container', timeoutDur);
 };
 ```
-
-![](path/to/image)
 
 # ToDo
 1. Put selenium server on lintcoin
