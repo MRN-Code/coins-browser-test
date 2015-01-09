@@ -1,0 +1,8 @@
+// Delete comment and rename to default.json
+{
+    "origin": "your.domain.mrn.org",
+    "auth": {
+        "un": "yourUsername",
+        "pw": "yourPassword"
+    }
+}

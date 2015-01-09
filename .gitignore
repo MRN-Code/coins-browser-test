@@ -1,0 +1,4 @@
+config/*.json
+selenium-server-standalone-*
+html-report/*
+node_modules
