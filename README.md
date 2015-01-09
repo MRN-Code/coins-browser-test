@@ -22,7 +22,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Usage - Designing Tests
 1. Place tests in dominant categorical subdirectory folders inside the `test` dir.
-1. Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.
+1. Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.  Refer the [webdriverio](http://webdriver.io/) docs for the selenium-browser driving API.
     1. This pattern allows each file to be run as a unit test, and to permit `require`ing browser actions *without* executing them in depedenent tests.  **It is not required** that pure browser actions have associated unit tests.
     1. Consider the usage of `me` in the below example.  These files will commonly have 3+ nested scopes.  `self` or `_this` shall be used inside the mocha test blocks, but export-level references shall refer to the `me` for consistency. 
 
