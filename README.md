@@ -1,4 +1,4 @@
-# coins-selenium
+# coins-browser-test
 Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriverio**-wrapped-**selenium** unit tests!
 
 # Setup
