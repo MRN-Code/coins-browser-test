@@ -2,3 +2,4 @@ config/*.json
 selenium-server-standalone-*
 html-report/*
 node_modules
+!node_modules/coins
