@@ -22,8 +22,10 @@
   "homepage": "https://github.com/MRN-Code/coins-selenium",
   "dependencies": {
     "config": "^1.10.0",
-    "underscore": "^1.7.0",
+    "rsvp": "^3.0.16",
     "should": "*",
+    "underscore": "^1.7.0",
+    "vargs": "^0.1.0",
     "webdriverio": "*"
   }
 }

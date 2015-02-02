@@ -4,11 +4,13 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 # Setup
 
 1. Clone repo to your local machine, as you will be running the test server on your own machine.
-1. `cd coins-selenium`
+1. `cd coins-browser-test`
 1. Install repo dependencies, `npm i`
 1. Ensure mocha is install, `npm i -g mocha phantomjs`
-1. Download the standalone server, `wget https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar --no-check-certificate`
-    1. Note: 2.44 does **not** work with phantomjs.  Use 2.43 instead.
+1. Download the standalone server:
+    * `wget https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar --no-check-certificate`
+    * OR: `curl -O https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar`
+    * Note: 2.44 does **not** work with phantomjs.  Use 2.43 instead.
 1. Move `config/default.json.example` to `config/default.json`.  Update all fields to match your configuration.
 
 # Usage - Running Tests
@@ -16,66 +18,94 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 1. Start the selenium server, `java -jar selenium-server-standalone-2.43.1.jar`
 1. Run your tests
     1. `mocha --recursive --bail --reporter spec`, or
-    1. `mocha --reporter yourFavoriteReporter path/to/test`
+    1. `mocha --reporter yourFavoriteReporter path/to/test`, or
+    1. `mocha path/to/test.js path/to/other/test.js`
 
 <img src="https://raw.githubusercontent.com/MRN-Code/coins-selenium/master/img/test_example_output.png" height="200"  >
 
+# Usage - re-using the web browser client
 
-# Usage - Designing Tests
-1. Place tests in dominant categorical subdirectory folders inside the `test` dir.
-1. Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.  Refer the [webdriverio](http://webdriver.io/) docs for the selenium-browser driving API.
-    1. This pattern allows each file to be run as a unit test, and to permit `require`ing browser actions *without* executing them in depedenent tests.  **It is not required** that pure browser actions have associated unit tests.
-    1. Consider the usage of `me` in the below example.  These files will commonly have 3+ nested scopes.  `self` or `_this` shall be used inside the mocha test blocks, but export-level references shall refer to the `me` for consistency. 
+In most cases, we will want to run all of our tests in a single browser insance.
+For example, we will want to start a browser, login to COINS, then navigate to ASMT, then select a study, then create an instrument, etc...
 
+In order to modularize the client creation process, `test/lib/client.js` was created.
+Simply require `./lib/client.js` into each of your test scripts.
+A promise is exported along with the client, which allows us to wait until the client is ready before kicking off our tests. 
+Example:
 ```js
-"use strict";
-// test deps
-var config = require('config');
-var should = require('should');
+//get client
+var Config = require('config');
+var Client = require('./lib/client.js');
+var client = Client.client;
 
-// webdriver deps
-var webdriverio = require('webdriverio');
-var options = {
-    desiredCapabilities: {
-        browserName: 'chrome'
-    }
-};
+// get browser actions: note that the client is passed as a param
+var Auth = require('./lib/auth/micis.js')(client, Config);
 
-// exports
-var me = {};
-module.exports = me;
-
-// test
-var timeoutDur = 15000;
+// create test case
 describe('micis logon', function() {
-    var block = this;
     this.timeout(timeoutDur);
-    var client = {};
 
-    before(function(done){
-        client = webdriverio.remote(options);
-        client.init(done);
+    before('initialize', function(done) {
+        // wait for client to be ready before testing
+        Client.clientReady.then(done);
     });
 
     it('should logon', function(done) {
-        me
-            .logon(client)
-            .end(done);
+        Auth.logon(done);
     });
-
-    it('should set auth cookies'); // define pending tests, i.e. need to be written or are being ignored
 });
-
-// Expose driver logic.  Pass your own client instance in!
-me.logon = function(client) {
-    return client
-        .url('https://' + config.origin + '/micis/index.php')
-        .setValue('#loginPopupUsername', config.auth.un)
-        .setValue('#loginPopupPassword', config.auth.pw)
-        .click('#submitBtn')
-        .waitFor('#page-container', timeoutDur);
-};
 ```
+
+# Usage - Navigating within COINS
+COINS is a single page app of sorts, and utilizes its own home-grown pagination system.
+As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**. 
+To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page. 
+
+To use **waitForPaginationComplete** simply include util/client.js, which will add the function to the webdriverio client. 
+To use **waitForPaginationComplete** without client.js, do the following:
+
+```
+var Webdriverio = require('webdriverio');
+var PaginationUtils = require('./../util/pagination.js');//assumes this is run from test/ dir
+var options = {
+    desiredCapabilities: {
+        browserName: 'firefox'
+    }
+};
+
+var client = Webdriverio.remote(options);
+PaginationUtils(client);
+```
+
+# Usage - Designing Tests
+1. There are two components to a test:
+    1. Browser actions defined in `test/lib`
+    1. Mocha test suites that use the browser actions (defined in `test/*`)
+1. Place tests and actions in dominant categorical subdirectory folders inside the `test` and `test/lib` dirs, respectively. 
+    1. Browser actions:
+        1. Write your browser functionality in js files within `test/lib/[category]`.
+        1. Each file should export a function with the following signature:
+        ` module.exports = function(client, config) { `
+        1. That function should return an object whose properties are functions to perform granular actions.
+    1. Tests:
+        1. Write your tests in js files within `test/`
+        1. Each file should create a client (see above), require the Config,
+        1. Additionally, each test should define at least one testsuite that sets a timeout and a `before` action that ensures the client is initialized:
+        ```js
+        describe('micis logon', function() {
+            this.timeout(timeoutDur);
+
+            before('initialize', function(done) {
+                // wait for client to be ready before testing
+                Client.clientReady.then(done);
+            });
+            ...
+        });
+        ```
+# Examples
+See `test/logon.js` and `test/lib/auth/micis.js` for a simple example.
+
+Write your tests as **mocha unit tests**, with the actual browser driver functionality attached to `module.exports`.  Refer the [webdriverio](http://webdriver.io/) docs for the selenium-browser driving API.
 
 # ToDo
 1. Put selenium server on lintcoin
