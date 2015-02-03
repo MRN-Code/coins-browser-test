@@ -3,10 +3,10 @@
 var Webdriverio = require('webdriverio');
 var Promise = require('rsvp').Promise;
 var PaginationUtils = require('./../../util/pagination.js');
+var Config = require('config');
 var options = {
     desiredCapabilities: {
-        browserName: 'firefox',
-        singleton: true
+        browserName: Config.get('browserName')
     }
 };
 
