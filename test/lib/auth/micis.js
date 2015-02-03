@@ -38,7 +38,7 @@ module.exports = function(client, config) {
             .click('input.submit') //TODO: update to use data-selector instead
             .waitForPaginationComplete(done) //TODO: update to be compatible with portals as well
 
-    };
+    });
 
     return me;
 }
