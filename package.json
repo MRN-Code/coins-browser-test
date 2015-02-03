@@ -25,7 +25,7 @@
     "rsvp": "^3.0.16",
     "should": "*",
     "underscore": "^1.7.0",
-    "vargs": "^0.1.0",
+    "vargs-callback": "^0.2.4",
     "webdriverio": "*"
   }
 }

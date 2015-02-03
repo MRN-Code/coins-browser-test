@@ -1,6 +1,6 @@
 'use strict';
 // test deps
-var Vargs = require('vargs').Constructor;
+var Vargscallback = require('vargs-callback');
 
 // exports
 /**
@@ -24,11 +24,9 @@ module.exports = function(client, config) {
      * @param url {string} The string to navigate to (should redirect to a CAS login page).
      * @param done {function} a mochajs function to call when login is successful
      */
-    me.logon = function(url, done) {
+    me.logon = Vargscallback(function(url, done) {
         //set default params
-        var args = new Vargs(arguments);
-        done = args.callback;
-        url = args.all[0] || 'https://' + config.origin + '/micis/index.php';
+        url = url || 'https://' + config.origin + '/micis/index.php';
 
         console.dir(config);
 
