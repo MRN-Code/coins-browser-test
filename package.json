@@ -22,7 +22,7 @@
   "homepage": "https://github.com/MRN-Code/coins-selenium",
   "dependencies": {
     "config": "^1.10.0",
-    "rsvp": "^3.0.16",
+    "rsvp": "3.0.14",
     "should": "*",
     "underscore": "^1.7.0",
     "vargs-callback": "^0.2.4",
