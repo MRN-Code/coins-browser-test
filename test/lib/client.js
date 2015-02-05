@@ -1,17 +1,17 @@
 "use strict";
 // webdriver deps
-var Webdriverio = require('webdriverio');
-var Promise = require('rsvp').Promise;
-var PaginationUtils = require('./../../util/pagination.js');
-var Config = require('config');
+var WebdriverIO = require('webdriverio');
+var Promise = require('rsvp').Promise; // jshint ignore:line
+var paginationUtils;
+var config = require('config');
 var options = {
     desiredCapabilities: {
-        browserName: Config.get('browserName')
+        browserName: config.get('browserName')
     }
 };
+var client = WebdriverIO.remote(options);
+paginationUtils = require('./../../util/pagination.js')(client);
 
-var client = Webdriverio.remote(options);
-PaginationUtils(client);
 var clientReady = new Promise(function (resolve, reject) {
     client.init(function(err) {
         if(!err) {

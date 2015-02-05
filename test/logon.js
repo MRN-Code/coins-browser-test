@@ -21,7 +21,7 @@ describe('micis logon', function() {
     it('should logon', function(done) {
         Auth.logon(done);
     });
-    
+
     it('should set auth cookies');
 });
 

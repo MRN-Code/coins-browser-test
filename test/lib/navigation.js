@@ -2,8 +2,6 @@
 // test deps
 var should = require('should');
 
-
-
 // test
 var timeoutDur = 95000;
 
@@ -12,8 +10,9 @@ module.exports = function(client, config) {
     var me = {};
 
     me.hoverHome = function(done) {
-        return client.moveToObject('.navUl>li>font>.homeLi', done)
-    }
+        return client.moveToObject('.navUl>li>font>.homeLi', done);
+    };
+
     me.gotoAsmt = function(done) {
         return client
             .waitForPaginationComplete()

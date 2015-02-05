@@ -1,4 +1,4 @@
-var Vargscallback = require('vargs-callback');
+var vargscb = require('vargs-callback');
 
 /**
  * Pagination Utilities
@@ -24,7 +24,7 @@ var waitForCondition = function(condition, options, cb) {
     options = options || {};
     var timeout = options.timeout || 9000;
     var interval = options.interval || 500;
-    
+
     var startTime = new Date();
     var self = this;
     var exec = function() {
@@ -32,7 +32,6 @@ var waitForCondition = function(condition, options, cb) {
         .execute(condition,
             function(err, ret) {
                 var duration = +new Date() - startTime;
-                var err;
                 if (err) {
                     cb(err);
                 }
@@ -54,7 +53,7 @@ var waitForCondition = function(condition, options, cb) {
     };
     // call exec to set off the recursive waiting
     return exec();
-}
+};
 
 
 /**
@@ -74,8 +73,8 @@ var waitForPaginationComplete = function(timeout, cb) {
         if (window.coinsUtils && window.coinsUtils.seleniumUtils) {
             if (window.coinsUtils.seleniumUtils.testNetworkAndPageReady instanceof Function) {
                 return window.coinsUtils.seleniumUtils.testNetworkAndPageReady();
-            } 
-        } 
+            }
+        }
         return false; //not ready yet
     };
     return this.waitForCondition(checkBrowserPaginationComplete, {timeout: timeout}, cb);
@@ -83,7 +82,7 @@ var waitForPaginationComplete = function(timeout, cb) {
 
 // exports;
 module.exports = function(client) {
-    client.addCommand('waitForCondition', Vargscallback(waitForCondition));
-    client.addCommand('waitForPaginationComplete', Vargscallback(waitForPaginationComplete));
+    client.addCommand('waitForCondition', vargscb(waitForCondition));
+    client.addCommand('waitForPaginationComplete', vargscb(waitForPaginationComplete));
     return client;
 };
