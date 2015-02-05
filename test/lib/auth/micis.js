@@ -27,7 +27,6 @@ module.exports = function(client, config) {
     me.logon = vargscb(function(url, done) {
         //set default params
         url = url || 'https://' + config.origin + '/micis/index.php';
-
         return client
             .url(url)
             .waitFor('#loginPopupUsername')

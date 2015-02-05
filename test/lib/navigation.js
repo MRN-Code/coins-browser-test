@@ -1,9 +1,4 @@
 "use strict";
-// test deps
-var should = require('should');
-
-// test
-var timeoutDur = 95000;
 
 // exports
 module.exports = function(client, config) {
@@ -15,11 +10,15 @@ module.exports = function(client, config) {
 
     me.gotoAsmt = function(done) {
         return client
-            .waitForPaginationComplete()
             .call(me.hoverHome)
             .click('=ASMT')
             .waitForPaginationComplete(done);
     };
+
+    me.goto = {
+        menu: require('./nav/menu.js')(client, config)
+    };
+
 
     me.selectAsmtStudy = function(studyId, done) {
         return client

@@ -26,6 +26,7 @@ var clientReady = new Promise(function (resolve, reject) {
 });
 
 module.exports.client = client;
+module.exports.client.clientReady = clientReady;
 module.exports.clientReady = clientReady;
 
 
