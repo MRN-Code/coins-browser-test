@@ -28,8 +28,67 @@ var getFormField = function(key) {
 
 // exports
 module.exports = function(client, config) {
-    var me = {};
+    var me = {instrumentId:undefined};
     
+    me.filterList = function(query, done) {
+        var selector = '#instrument_grid_filter input[type=search]';
+        return client.setValue(selector, query, done);
+    };
+
+    me.setInstrumentIdFromPage = function(done) {
+        var selector = '[name=instrument_id]';
+        return client.getValue(selector, function(err, val) {
+            if (err) {
+                throw err;
+            }
+            me.instrumentId = val;
+            done();
+        });
+    };
+
+    me.toggleLockFromList = function(instrumentId, done) {
+        var selector = '[data-instrument_id="' + instrumentId + '"] input.locked-unlocked';
+        var lockState, expectedState;
+        var expectedStateMap = {
+            'lock': 'unlock',
+            'unlock': 'lock'
+        };
+        var setLockState = function(err, val) {
+            if (!err) {
+                lockState = val;
+                expectedState = expectedStateMap[val];
+            } else {
+                throw err;
+            }
+        };
+        return client.getValue(selector, setLockState)
+            .click(selector)
+            .waitForPaginationComplete()
+            .getValue(selector, function(err, val) {
+                if(err) {
+                    throw err;
+                }
+                val.should.be.eql(expectedState);
+                done();
+            });
+    };
+
+    me.gotoEditFromList = function(instrumentId, done) {
+        var selector = '[data-instrument_id="' + instrumentId + '"] a.pvedit';
+        return client.click(selector)
+            .waitForPaginationComplete(done);
+    };
+    
+    me.gotoSection = function(sectionLabel, done) {
+        var navSelector = '#asmtPageNav'; 
+        var xPathNavSelector = '//*[@id="asmtPageNav"]';
+        var xPathSelector = xPathNavSelector + '//li[normalize-space(.) = "' + sectionLabel + '"]';
+
+        return client.moveToObject(xPathNavSelector, 80, 10)
+            .click(xPathSelector, done);
+    };
+
+
     me.create = function(options, done) {
         return client
             .setValue('input[name=label]', getStrict(options, 'label'))
