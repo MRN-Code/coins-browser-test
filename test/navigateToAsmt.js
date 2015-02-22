@@ -5,7 +5,7 @@ var should = require('should');
 
 var client = require('./lib/client.js').client;
 
-var nav = require('./lib/navigation.js')(client, config);
+var nav = require('./lib/nav/navigation.js')(client, config);
 var Auth = require('./lib/auth/micis.js')(client, config);
 
 var timeoutDur = 25000;
@@ -20,10 +20,6 @@ describe('navigate to asmt', function() {
     before('initialize', function(done) {
         // wait for client to be ready before testing
         client.clientReady.then(done);
-    });
-
-    after('close client', function(done) {
-        client.end(done);
     });
 
     it('should load asmt', function(done) {

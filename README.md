@@ -77,6 +77,23 @@ var client = Webdriverio.remote(options);
 PaginationUtils(client);
 ```
 
+## Going to ASMT:
+Either require `test/navigateToAsmt.js` in your mocha test, or use the `test/lib/nav/navigate.js` library:
+```js
+    require('./lib/nav/navigation.js');
+    it ('should go to asmt and select study_id 1234', function(done) {
+        nav.gotoAsmt();
+        nav.selectAsmtStudy(1234, done);
+    });
+```
+
+## Clicking on menu links:
+Use either micisMenu.js or asmtMenu.js in `test/lib/nav/`. The `menuMap` in each of these files still needs to be built up, but I will leave it up to us to build it up as needed, rather than building them all at once.
+Example usage:
+```js
+    nav.asmtMenu.clickNested('Create Instrument', done);
+```
+
 # Usage - Designing Tests
 1. There are two components to a test:
     1. Browser actions defined in `test/lib`

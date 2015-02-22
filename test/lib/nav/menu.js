@@ -1,23 +1,36 @@
 "use strict";
-
-// mouse mouse to menu items
-module.exports = function(client, config) {
+module.exports = function(client, config, menuMap) {
     var me = {};
 
-    me.hoverMenuItem = function(dest, done) {
-        return client.moveToObject('#nav_anchor_' + dest, done);
+    // put menuMap in public scope
+    me.menuMap = menuMap;
+
+    me.findLink = function(text) {
+        var findTextRecursive = function(obj) {
+            var children;
+            if (obj.text === text) {
+                return true;
+            };
+            if (obj.children) {
+                return obj.children.some(findTextRecursive);
+            };
+            return false;
+        }
+        return menuMap.filter(findTextRecursive);
     };
 
-    me.subjects = function(dest, done) {
-        return client
-            .waitForPaginationComplete()
-            .call(me.hoverMenuItem('SUBJECTS'), done);
-    };
+    me.clickNested = function(text, done) {
+        // Get top level menu item
+        var parent = me.findLink(text)[0];
+        // Ensure that top level menu item can be located
+        if (!parent) {
+            throw new Error('could not locate menu item with text `' + text + '`');
+        } 
 
-    me.subjects.addNew = function(done) {
-        return client
-            .call(me.subjects)
-            .call(me.hoverMenuItem('Enter_a_New_Subject'), done);
+        // hover over top level menu item before clicking on child
+        return client.moveToObject('=' + parent.text, 10, 10)
+            .click('=' + text)
+            .waitForPaginationComplete(done);
     };
 
     return me;

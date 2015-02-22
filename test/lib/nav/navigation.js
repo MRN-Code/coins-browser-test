@@ -4,6 +4,9 @@
 module.exports = function(client, config) {
     var me = {};
 
+    me.micisMenu = require('./micisMenu.js')(client, config);
+    me.asmtMenu = require('./asmtMenu.js')(client, config);
+
     me.hoverHome = function(done) {
         return client.moveToObject('.navUl>li>font>.homeLi', done);
     };
@@ -14,11 +17,6 @@ module.exports = function(client, config) {
             .click('=ASMT')
             .waitForPaginationComplete(done);
     };
-
-    me.goto = {
-        menu: require('./nav/menu.js')(client, config)
-    };
-
 
     me.selectAsmtStudy = function(studyId, done) {
         return client
