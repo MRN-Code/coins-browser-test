@@ -1,6 +1,7 @@
 // Delete comment and rename to default.json
 {
     "browserName": "chrome",
+    "defaultTimeout": 30000,
     "origin": "your.domain.mrn.org",
     "auth": {
         "un": "yourUsername",

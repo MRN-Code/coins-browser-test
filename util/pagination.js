@@ -1,5 +1,5 @@
 var vargscb = require('vargs-callback');
-
+var config = require('config');
 /**
  * Pagination Utilities
  * This module adds commands to the webdriver.io client to aid in dealing with COINS pagination
@@ -22,7 +22,7 @@ var vargscb = require('vargs-callback');
 var waitForCondition = function(condition, options, cb) {
     //locate callback (always last param)
     options = options || {};
-    var timeout = options.timeout || 9000;
+    var timeout = options.timeout || config.defaultTimeout;
     var interval = options.interval || 500;
 
     var startTime = new Date();
@@ -67,7 +67,7 @@ var waitForCondition = function(condition, options, cb) {
  *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
 var waitForPaginationComplete = function(timeout, cb) {
-    timeout = timeout || 9000;
+    timeout = timeout || config.defaultTimeout;
     // function to be executed in browser
     var checkBrowserPaginationComplete = function() {
         if (window.coinsUtils && window.coinsUtils.seleniumUtils) {

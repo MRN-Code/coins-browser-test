@@ -13,4 +13,4 @@ var menuMap = [
 
 module.exports = function(client, config) {
     return require('./menu.js')(client, config, menuMap);
-}
+};

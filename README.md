@@ -15,7 +15,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Usage - Running Tests
 1. Ensure the repo is always up-to-date to get the latest tests
-1. Start the selenium server, `java -jar selenium-server-standalone-2.43.1.jar`
+1. Start the selenium server, `npm start` (or `java -jar selenium-server-standalone-2.43.1.jar`)
 1. Run your tests
     1. `mocha --recursive --bail --reporter spec`, or
     1. `mocha --reporter yourFavoriteReporter path/to/test`, or
@@ -30,7 +30,7 @@ For example, we will want to start a browser, login to COINS, then navigate to A
 
 In order to modularize the client creation process, `test/lib/client.js` was created.
 Simply require `./lib/client.js` into each of your test scripts.
-A promise is exported along with the client, which allows us to wait until the client is ready before kicking off our tests. 
+A promise is exported along with the client, which allows us to wait until the client is ready before kicking off our tests.
 Example:
 ```js
 //get client
@@ -58,15 +58,15 @@ describe('micis logon', function() {
 
 # Usage - Navigating within COINS
 COINS is a single page app of sorts, and utilizes its own home-grown pagination system.
-As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**. 
-To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page. 
+As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**.
+To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page.
 
-To use **waitForPaginationComplete** simply include util/client.js, which will add the function to the webdriverio client. 
+To use **waitForPaginationComplete** simply include util/client.js, which will add the function to the webdriverio client.
 To use **waitForPaginationComplete** without client.js, do the following:
 
-```
+```js
 var Webdriverio = require('webdriverio');
-var PaginationUtils = require('./../util/pagination.js');//assumes this is run from test/ dir
+var PaginationUtils = require('./../util/pagination.js'); // assumes this is run from test/ dir
 var options = {
     desiredCapabilities: {
         browserName: 'firefox'
@@ -79,17 +79,18 @@ PaginationUtils(client);
 
 ## Going to ASMT:
 Either require `test/navigateToAsmt.js` in your mocha test, or use the `test/lib/nav/navigate.js` library:
+
 ```js
-    require('./lib/nav/navigation.js');
-    it ('should go to asmt and select study_id 1234', function(done) {
-        nav.gotoAsmt();
-        nav.selectAsmtStudy(1234, done);
-    });
+require('./lib/nav/navigation.js');
+it ('should go to asmt and select study_id 1234', function(done) {
+    nav.gotoAsmt();
+    nav.selectAsmtStudy(1234, done);
+});
 ```
 
 ## Clicking on menu links:
-Use either micisMenu.js or asmtMenu.js in `test/lib/nav/`. The `menuMap` in each of these files still needs to be built up, but I will leave it up to us to build it up as needed, rather than building them all at once.
-Example usage:
+Use either micisMenu.js or asmtMenu.js in `test/lib/nav/`. The `menuMap` in each of these files still needs to be built up, but I will leave it up to us to build it up as needed, rather than building them all at once.  Example:
+
 ```js
     nav.asmtMenu.clickNested('Create Instrument', done);
 ```
@@ -98,7 +99,7 @@ Example usage:
 1. There are two components to a test:
     1. Browser actions defined in `test/lib`
     1. Mocha test suites that use the browser actions (defined in `test/*`)
-1. Place tests and actions in dominant categorical subdirectory folders inside the `test` and `test/lib` dirs, respectively. 
+1. Place tests and actions in dominant categorical subdirectory folders inside the `test` and `test/lib` dirs, respectively.
     1. Browser actions:
         1. Write your browser functionality in js files within `test/lib/[category]`.
         1. Each file should export a function with the following signature:

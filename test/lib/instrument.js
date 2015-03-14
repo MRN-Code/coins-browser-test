@@ -5,7 +5,7 @@ var _ = require('lodash');
 
 var getStrict = function(obj, key) {
     if (obj[key] === undefined) {
-        throw new Error('Expected options.' + key + ' to be set');
+        throw new Error('Expected option `' + key + '` to be set');
     }
     return obj[key];
 };
@@ -29,7 +29,7 @@ var getFormField = function(key) {
 // exports
 module.exports = function(client, config) {
     var me = {instrumentId:undefined};
-    
+
     me.filterList = function(query, done) {
         var selector = '#instrument_grid_filter input[type=search]';
         return client.setValue(selector, query, done);
@@ -78,9 +78,9 @@ module.exports = function(client, config) {
         return client.click(selector)
             .waitForPaginationComplete(done);
     };
-    
+
     me.gotoSection = function(sectionLabel, done) {
-        var navSelector = '#asmtPageNav'; 
+        var navSelector = '#asmtPageNav';
         var xPathNavSelector = '//*[@id="asmtPageNav"]';
         var xPathSelector = xPathNavSelector + '//li[normalize-space(.) = "' + sectionLabel + '"]';
 
@@ -107,7 +107,7 @@ module.exports = function(client, config) {
             var field = getFormField(key);
             client[field.action]('[name=' + field.name + ']', option);
         });
-        
+
         return client
             .click('input.frmButton')
             .waitForPaginationComplete(done);

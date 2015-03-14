@@ -4,7 +4,8 @@
   "description": "suite of browser tests for COINS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "java -jar selenium-server-standalone-2.43.1.jar &"
   },
   "repository": {
     "type": "git",

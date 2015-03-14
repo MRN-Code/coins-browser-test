@@ -6,11 +6,8 @@ var client = require('./lib/client.js').client;
 
 var auth = require('./lib/auth/micis.js')(client, config);
 
-var timeoutDur = 25000;
-
-
 describe('micis logon', function() {
-    this.timeout(timeoutDur);
+    this.timeout(config.defaultTimeout);
 
     before('initialize', function(done) {
         // wait for client to be ready before testing

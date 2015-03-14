@@ -1,3 +1,14 @@
+/**
+ * menu.js shall not be called directly.  xxxMenu.js files shall require this file
+ * to extend each particular menu's functionality
+ *
+ * e.g.
+ * ```js
+ * module.exports = function(client, config) {
+ *     return require('./menu.js')(client, config, menuMap);
+ * };
+ */
+
 "use strict";
 module.exports = function(client, config, menuMap) {
     var me = {};
@@ -25,7 +36,7 @@ module.exports = function(client, config, menuMap) {
         // Ensure that top level menu item can be located
         if (!parent) {
             throw new Error('could not locate menu item with text `' + text + '`');
-        } 
+        }
 
         // hover over top level menu item before clicking on child
         return client.moveToObject('=' + parent.text, 10, 10)
