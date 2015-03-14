@@ -15,7 +15,9 @@ describe('subject', function() {
         client.clientReady.then(done);
     });
 
-    it('should be add-able', function(done) {
+/*
+
+     it('should be add-able', function(done) {
         nav.micisMenu
             .clickNested('Enter a New Subject');
         // assert proper defaults are set
@@ -24,5 +26,5 @@ describe('subject', function() {
         // test good and bogus values pre submit
         // submit
     });
-
+*/
 });
