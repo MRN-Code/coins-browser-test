@@ -9,6 +9,7 @@ module.exports = function(client, config) {
     me.newSubject = {};
 
     me.newSubject.fillForm = function(done) {
+        done = done || function(){};
         return client.setValue('input[name=FirstName]', 'testFirstName')
             .setValue('input[name=MiddleName]', 'testMiddleName')
             .setValue('input[name=LastName]', 'testLastName')
@@ -24,15 +25,13 @@ module.exports = function(client, config) {
             .setValue('input[name=Line1]', 'testAddressLine1')
             .setValue('input[name=Line2]', 'testAddressLine2')
             .setValue('input[name=City]', 'testCity')
-            .setValue('input[name=max_per_segment]', getStrict(options, 'maxPerSegment'))
-            .setValue('input[name=skip_question_text]', getStrict(options, 'skipQuestionText'))
             .selectByVisibleText('select[name=State]', 'AL - Alabama')
             .setValue('input[name=Zip]', 12345)
             .selectByVisibleText('select[name=Country]', 'United States')
             .setValue('#phone1_area_code', 123)
             .setValue('#phone2_area_code', 321)
             .setValue('#phone1_phone_num', 4567890)
-            .setValue('#phone2_phone_num', 0987654)
+            .setValue('#phone2_phone_num', 9876543)
             .setValue('#phone1_extension', 1111)
             .setValue('#phone2_extension', 2222)
             .setValue('#Notes', 'testNotes')
@@ -40,13 +39,14 @@ module.exports = function(client, config) {
             .selectByValue('#subject_tag_id', 1) // U.S. SSN
             .setValue('#value', 1112223333) // subject tag value
             .click('#context_site') // subject tag context === site
+            .scroll('#study_id')
             .selectByValue('#study_id', 2319) // NITEST
-            .waitForVisible('#enroll_study_meta')
+            .waitForVis('#site_id', 8000)
             .setValue('#consent_date', '02/22/2015')
             .click('[name=agreestosharedata]') // selects the first matched radio (Yes)
             .click('[name=agrees_to_future_studies]') // selects the first matched radio (Yes)
-            // (missing) select site MRN
-            .call(done || noop);
+            // // (missing) select site MRN
+            .call(done);
     };
 
     return me;
