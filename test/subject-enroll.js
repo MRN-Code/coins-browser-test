@@ -18,14 +18,14 @@ describe('subject enroll', function() {
         });
     });
 
-    describe('enrol existing subject', function() {
+    describe('enroll existing subject', function() {
         it('should be accessible', function(done) {
             nav.micisMenu
                 .clickNested('Enroll an Existing Subject')
                 .call(done);
         });
 
-       it('should find an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', function(done) {
+       it('should lookup an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', function(done) {
             subject.enroll.prepExisting('M06158639');
             subject.enroll.submitExisting(done);
         });
