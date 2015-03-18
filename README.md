@@ -3,6 +3,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Setup
 
+### Developer
 1. Clone repo to your local machine, as you will be running the test server on your own machine.
 1. `cd coins-browser-test`
 1. Install repo dependencies, `npm i`
@@ -12,6 +13,9 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
     * OR: `curl -O https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar`
     * Note: 2.44 does **not** work with phantomjs.  Use 2.43 instead.
 1. Move `config/default.json.example` to `config/default.json`.  Update all fields to match your configuration.
+
+### Server
+1. Currently, you must run your own selenium server locally.  A COINS specific selenium host is in work, running multiple browsers.
 
 # Usage - Running Tests
 1. Ensure the repo is always up-to-date to get the latest tests

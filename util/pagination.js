@@ -22,11 +22,10 @@ var _ = require('lodash');
  *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
 var waitForCondition = function(condition, conditionArgs, options, cb) {
-    //locate callback (always last param)
+    options = options || {};
     if (!_.isArray(conditionArgs)) {
         conditionArgs = [conditionArgs];
     }
-    options = options || {};
     var timeout = options.timeout || config.defaultTimeout;
     var interval = options.interval || 500;
 
@@ -87,16 +86,24 @@ var waitForPaginationComplete = function(timeout, cb) {
 
 
 
-
+/**
+ * Waits for element to be visible in DOM (not in screen)
+ * @param  {string}   sell    css selector
+ * @param  {number}   timeout ms
+ * @param  {Function} cb      internally populated by webdriverio. do not use
+ * @return {WebDriverIO}
+ */
 var waitForVis = function(sell, timeout, cb) {
     timeout = timeout || config.defaultTimeout;
     // function to be executed in browser
     var testForVis = function(sell) {
         var el = window.document.querySelector(sell);
-        return (el.offsetParent !== null);
+        return (el ? el.offsetParent !== null : false);
     };
     return this.waitForCondition(testForVis, sell, {timeout: timeout}, cb);
 };
+
+
 
 // exports;
 module.exports = function(client) {

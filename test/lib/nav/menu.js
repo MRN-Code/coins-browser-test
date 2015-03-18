@@ -21,12 +21,12 @@ module.exports = function(client, config, menuMap) {
             var children;
             if (obj.text === text) {
                 return true;
-            };
+            }
             if (obj.children) {
                 return obj.children.some(findTextRecursive);
-            };
+            }
             return false;
-        }
+        };
         return menuMap.filter(findTextRecursive);
     };
 
@@ -35,7 +35,7 @@ module.exports = function(client, config, menuMap) {
         var parent = me.findLink(text)[0];
         // Ensure that top level menu item can be located
         if (!parent) {
-            throw new Error('could not locate menu item with text `' + text + '`');
+            throw new Error('could not locate menu item with text `' + text + '`.  Was it added to the menu map file?');
         }
 
         // hover over top level menu item before clicking on child

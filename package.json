@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "java -jar selenium-server-standalone-2.43.1.jar &"
+    "start": "java -jar selenium-server-standalone-2.43.1.jar -port 4441 &"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,14 @@
   },
   "homepage": "https://github.com/MRN-Code/coins-selenium",
   "dependencies": {
+    "chromedriver": "*",
     "config": "^1.10.0",
     "lodash": "^3.1.0",
+    "phantomjs": "*",
     "rsvp": "3.0.14",
     "should": "*",
     "vargs-callback": "^0.2.4",
-    "webdriverio": "*"
+    "webdriverio": "*",
+    "winston": "^0.9.0"
   }
 }

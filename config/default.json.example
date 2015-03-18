@@ -6,5 +6,7 @@
     "auth": {
         "un": "yourUsername",
         "pw": "yourPassword"
-    }
+    },
+    "host": "localhost",
+    "port": 4441
 }

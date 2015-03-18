@@ -1,15 +1,20 @@
 'use strict';
 // test deps
 var vargscb = require('vargs-callback');
+var config = require('config');
+var client = require('../client.js').client;
+var noop = function(){};
 
 // exports
 /**
  * Browser actions for authenticating with MICIS
  * @param client {webdriverioClient} The browser client to perform actions on
  */
-module.exports = function(client, config) {
+module.exports = function(client) {
 
-    var me = {};
+    var me = {
+        loggedOn: false
+    };
 
     /**
      * log out of COINS
@@ -25,6 +30,7 @@ module.exports = function(client, config) {
      * @param done {function} a mochajs function to call when login is successful
      */
     me.logon = vargscb(function(url, done) {
+        done = done || noop;
         //set default params
         url = url || 'https://' + config.origin + '/micis/index.php';
         return client
@@ -33,7 +39,13 @@ module.exports = function(client, config) {
             .setValue('#loginPopupUsername', config.auth.un)
             .setValue('#loginPopupPassword', config.auth.pw)
             .click('input.submit') //TODO: update to use data-selector instead
-            .waitForPaginationComplete(done); //TODO: update to be compatible with portals as well
+            .waitForPaginationComplete()
+            .getCookie('MICIS', function(err, cookie) {
+                if (cookie) {
+                    me.loggedOn = cookie;
+                }
+            })
+            .call(done); //TODO: update to be compatible with portals as well
 
     });
 

@@ -18,6 +18,8 @@ describe('micis logon', function() {
         auth.logon(done);
     });
 
-    it('should set auth cookies');
+    it('should set auth cookies', function(done) {
+        done();
+    });
 });
 

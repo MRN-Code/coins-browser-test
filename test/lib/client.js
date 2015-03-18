@@ -7,7 +7,9 @@ var config = require('config');
 var options = {
     desiredCapabilities: {
         browserName: config.get('browserName')
-    }
+    },
+    host: config.get('host'),
+    port: config.get('port')
 };
 var client = WebdriverIO.remote(options);
 paginationUtils = require('./../../util/pagination.js')(client);

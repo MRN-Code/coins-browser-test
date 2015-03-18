@@ -5,12 +5,17 @@ var noop = function(){};
 
 module.exports = function(client, config) {
 
-    var me = {};
-    me.newSubject = {};
+    var me = {
+        new: {
+            newUrsis: []
+        },
+        enroll: {}
+    };
 
-    me.newSubject.fillForm = function(done) {
-        done = done || function(){};
-        return client.setValue('input[name=FirstName]', 'testFirstName')
+    me.new.fillForm = function(done) {
+        done = done || noop;
+        return client
+            .setValue('input[name=FirstName]', 'testFirstName')
             .setValue('input[name=MiddleName]', 'testMiddleName')
             .setValue('input[name=LastName]', 'testLastName')
             .setValue('input[name=Suffix]', 'testSuffix')
@@ -41,11 +46,102 @@ module.exports = function(client, config) {
             .click('#context_site') // subject tag context === site
             .scroll('#study_id')
             .selectByValue('#study_id', 2319) // NITEST
+            .alertDismiss(function(err, dismissed) {
+                if (err) { console.log("Study Enrollment limit OK - < 90% full"); }
+            })
             .waitForVis('#site_id', 8000)
+            .scroll('#site_id')
+            .selectByValue('#site_id', 7)
             .setValue('#consent_date', '02/22/2015')
             .click('[name=agreestosharedata]') // selects the first matched radio (Yes)
             .click('[name=agrees_to_future_studies]') // selects the first matched radio (Yes)
-            // // (missing) select site MRN
+            .call(done);
+    };
+
+    me.new.submit = function(done) {
+        done = done || noop;
+        return client
+            .scroll('#submit_new_subject')
+            .click('#submit_new_subject')
+            .waitForPaginationComplete()
+            .pause(100)
+            .isExisting('[value="Add >"]', function(err, isExisting) {
+                if (!isExisting) {
+                    throw new Error("Submit new subject did not detect that it made it to the verify page.");
+                }
+            })
+            .call(done);
+    };
+
+    me.new.verify = function(done) {
+        done = done || noop;
+        return client
+            .click('[value="Add >"]')
+            .waitForPaginationComplete()
+            .call(done);
+    };
+
+    me.new._handleSubjectMatchesClick = function(done) {
+        done = done || noop;
+        return client
+            .scroll('#verify_add_new_subject')
+            .click('#verify_add_new_subject')
+            .pause(10)
+            .call(done);
+    };
+
+    me.new.handleSubjectMatchesAddNew = function(done) {
+        done = done || noop;
+        return me.new._handleSubjectMatchesClick()
+            // determine if awful black modal popped up
+            .isVisible('#confirm_new_subject_confirmed', function(err, isVisible) {
+                if (isVisible) {
+                    // test that you can close and reopen
+                    client
+                        .click('#confirm_new_subject_declined')
+                        .isVisible('#confirm_new_subject_declined', function(err, isVisible) {
+                            if (isVisible) { throw new Error('#confirm_new_subject_declined should not be visible'); }
+                        })
+                        .click('#verify_add_new_subject')
+                        .pause(50)
+                        .click('#confirm_new_subject_confirmed');
+                } else {
+                     console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");
+                }
+            })
+            .waitForPaginationComplete()
+            .isExisting('#new_ursi', function(err, isExisting) {
+                if (!isExisting) {
+                    throw new Error("Submit verify subject did not detect that it made it to new URSI page.");
+                }
+            })
+            .getText('#new_ursi', function(err, text) {
+                me.new.newUrsis[text.trim()] = null;
+            })
+            .call(done);
+    };
+
+
+    me.enroll.prepExisting = function(ursi, done) {
+        if (!ursi) {
+            throw new Error('URSI to enroll must be provided');
+        }
+        done = done || noop;
+        return client
+            .click('[name="ursi"]')
+            .setValue('input[name="ursi"]', ursi)
+            .selectByValue('[name="study_id"]', 3580)
+            .call(done);
+    };
+
+    me.enroll.submitExisting = function(done) {
+        done = done || noop;
+        return client
+            .pause(1000)
+            .scroll('#enroll_subject_submit')
+            .click('#enroll_subject_submit')
+            .waitForPaginationComplete()
+            // .scroll('.confirmMsg')
             .call(done);
     };
 
