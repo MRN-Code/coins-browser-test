@@ -50,20 +50,20 @@ describe('subject', function() {
             // submit
         });
 
-        it('should be submitable', function(done) {
+        it('should be submittable', function(done) {
             subject.new.submit(done);
         });
 
     });
 
     describe('verify subject form', function() {
-        it('should be submitable', function(done) {
+        it('should be submittable', function(done) {
             subject.new.verify(done);
         });
     });
 
     describe('handle new subject matches form', function() {
-        it('should be sumbittable', function(done) {
+        it('should be submittable', function(done) {
             subject.new.handleSubjectMatchesAddNew(done);
         });
     });

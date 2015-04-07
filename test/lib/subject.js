@@ -93,8 +93,7 @@ module.exports = function(client, config) {
     me.new.handleSubjectMatchesAddNew = function(done) {
         done = done || noop;
         return me.new._handleSubjectMatchesClick()
-            // determine if awful black modal popped up
-            .isVisible('#confirm_new_subject_confirmed', function(err, isVisible) {
+            .isVisible('#confirm_new_participant_modal', function(err, isVisible) {
                 if (isVisible) {
                     // test that you can close and reopen
                     client
@@ -105,8 +104,6 @@ module.exports = function(client, config) {
                         .click('#verify_add_new_subject')
                         .pause(50)
                         .click('#confirm_new_subject_confirmed');
-                } else {
-                     console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");console.log("NO CONFIRM OVERLAY HAPPPENED");
                 }
             })
             .waitForPaginationComplete()
@@ -120,7 +117,6 @@ module.exports = function(client, config) {
             })
             .call(done);
     };
-
 
     me.enroll.prepExisting = function(ursi, done) {
         if (!ursi) {
