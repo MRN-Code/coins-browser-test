@@ -2,6 +2,32 @@
 
 var menuMap = [
     {
+        text: "DATA ENTRY",
+        children: [
+            {text: "New Assessment"},
+            {text: "Resume Entry"}
+        ]
+    },
+    {
+        text: "MANAGE",
+        children: [
+            {text: "Search Assessments"},
+            {text: "View Orphans"},
+            {text: "View Conflicts"},
+            {text: "Dual Entry Conflict Statistics"},
+            {text: "Backfill by ID"}
+        ]
+    },
+    {
+        text: "SELF-ASSESS",
+        children: [
+            {text: "Manage Subject Queues"},
+            {text: "Review Submissions"},
+            {text: "Go To Self Assessment"},
+            {text: "Self Assessment Time Log"}
+        ]
+    },
+    {
         text: "INSTRUMENTS",
         children: [
             {text: "List Instruments"},
@@ -9,6 +35,18 @@ var menuMap = [
             {text: "Show All Instruments All Studies"},
             {text: "Share Instruments"},
             {text: "Export Instruments"}
+        ]
+    },
+    {
+        text: "ADMIN",
+        children: [
+            {text: "List Raters"},
+            {text: "Add Rater"},
+            {text: "Import Assessments"},
+            {text: "Import Instruments"},
+            {text: "Edit Incomplete/Missions Reasons"},
+            {text: "Import Assessment Document"},
+            {text: "Duplicate Instrument"}
         ]
     }
 ];
