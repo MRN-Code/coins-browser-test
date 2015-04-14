@@ -4,6 +4,16 @@
 module.exports = function(client, config) {
     var me = {};
 
+    // disable COINS navigation alerts when changing pages
+    me.disableNavigationAlert = function() {
+        return client.execute(function _disableNavigationAlert() {
+            if (window.preventExitPopup === undefined) {
+                window.alert('EXPECTED `preventExitPopup` set in pagination.js');
+            }
+            window.preventExitPopup = true;
+        });
+    };
+
     me.micisMenu = require('./micisMenu.js')(client, config);
     me.asmtMenu = require('./asmtMenu.js')(client, config);
 

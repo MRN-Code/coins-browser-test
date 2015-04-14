@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('lodash');
 var config = require('config');
 var should = require('should');
 
@@ -13,7 +14,9 @@ describe('subject', function() {
 
     before('initialize', function(done) {
         client.clientReady.then(function boot() {
-            if (!micis.loggedOn) { micis.logon(); }
+            if (!micis.loggedOn) {
+                micis.logon();
+            }
             client.call(done);
         });
     });
@@ -69,3 +72,30 @@ describe('subject', function() {
     });
 
 });
+
+describe('subject lookup', function() {
+    this.timeout(config.defaultTimeout);
+
+    before('initialize', function(done) {
+        client.clientReady
+            .then(function boot() {
+                if (!micis.loggedOn) { micis.logon(); }
+                if (_.isEmpty(subject.new.newUrsis)) {
+                    throw new Error('ursis must have been added to lookup existing subject');
+                }
+                return client.call(done);
+            });
+    });
+
+    it('should be accessible', function(done) {
+        nav.micisMenu
+            .clickNested('Look Up a Subject')
+            .call(done);
+    });
+
+    it('should be able to lookup ursi just added', function(done) {
+        var ursi = Object.keys(subject.new.newUrsis)[0];
+        subject.lookup.existing(ursi, done);
+    });
+});
+

@@ -3,9 +3,9 @@
 var vargscb = require('vargs-callback');
 var config = require('config');
 var client = require('../client.js').client;
+var nav = require('../nav/navigation.js')(client, config);
 var noop = function(){};
 
-// exports
 /**
  * Browser actions for authenticating with MICIS
  * @param client {webdriverioClient} The browser client to perform actions on
@@ -28,12 +28,13 @@ module.exports = function(client) {
      * log onto COINS
      * @param url {string} The string to navigate to (should redirect to a CAS login page).
      * @param done {function} a mochajs function to call when login is successful
+     * TODO update to be compatible with portals as well
      */
     me.logon = vargscb(function(url, done) {
         done = done || noop;
         //set default params
         url = url || 'https://' + config.origin + '/micis/index.php';
-        return client
+        client
             .url(url)
             .waitFor('#loginPopupUsername')
             .setValue('#loginPopupUsername', config.auth.un)
@@ -43,9 +44,13 @@ module.exports = function(client) {
             .getCookie('MICIS', function(err, cookie) {
                 if (cookie) {
                     me.loggedOn = cookie;
+                } else {
+                    throw new Error('micis cookie not found');
                 }
-            })
-            .call(done); //TODO: update to be compatible with portals as well
+            });
+        return nav
+            .disableNavigationAlert()
+            .call(done);
 
     });
 

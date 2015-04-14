@@ -7,9 +7,10 @@ module.exports = function(client, config) {
 
     var me = {
         new: {
-            newUrsis: []
+            newUrsis: {}
         },
-        enroll: {}
+        enroll: {},
+        lookup: {}
     };
 
     me.new.fillForm = function(done) {
@@ -44,13 +45,13 @@ module.exports = function(client, config) {
             .selectByValue('#subject_tag_id', 1) // U.S. SSN
             .setValue('#value', 1112223333) // subject tag value
             .click('#context_site') // subject tag context === site
-            .scroll('#study_id')
+            .moveToObject('#study_id')
             .selectByValue('#study_id', 2319) // NITEST
             .alertDismiss(function(err, dismissed) {
-                if (err) { console.log("Study Enrollment limit OK - < 90% full"); }
+                if (err) { console.warn("Study Enrollment limit OK - < 90% full"); }
             })
             .waitForVis('#site_id', 8000)
-            .scroll('#site_id')
+            .moveToObject('#site_id')
             .selectByValue('#site_id', 7)
             .setValue('#consent_date', '02/22/2015')
             .click('[name=agreestosharedata]') // selects the first matched radio (Yes)
@@ -61,7 +62,7 @@ module.exports = function(client, config) {
     me.new.submit = function(done) {
         done = done || noop;
         return client
-            .scroll('#submit_new_subject')
+            .moveToObject('#submit_new_subject')
             .click('#submit_new_subject')
             .waitForPaginationComplete()
             .pause(100)
@@ -76,6 +77,8 @@ module.exports = function(client, config) {
     me.new.verify = function(done) {
         done = done || noop;
         return client
+            .pause(200)
+            .moveToObject('[value="Add >"]')
             .click('[value="Add >"]')
             .waitForPaginationComplete()
             .call(done);
@@ -84,7 +87,8 @@ module.exports = function(client, config) {
     me.new._handleSubjectMatchesClick = function(done) {
         done = done || noop;
         return client
-            .scroll('#verify_add_new_subject')
+            .pause(200)
+            .moveToObject('#verify_add_new_subject')
             .click('#verify_add_new_subject')
             .pause(10)
             .call(done);
@@ -101,6 +105,7 @@ module.exports = function(client, config) {
                         .isVisible('#confirm_new_subject_declined', function(err, isVisible) {
                             if (isVisible) { throw new Error('#confirm_new_subject_declined should not be visible'); }
                         })
+                        .moveToObject('#verify_add_new_subject')
                         .click('#verify_add_new_subject')
                         .pause(50)
                         .click('#confirm_new_subject_confirmed');
@@ -113,7 +118,7 @@ module.exports = function(client, config) {
                 }
             })
             .getText('#new_ursi', function(err, text) {
-                me.new.newUrsis[text.trim()] = null;
+                me.new.newUrsis[text.trim()] = text.trim();
             })
             .call(done);
     };
@@ -134,10 +139,20 @@ module.exports = function(client, config) {
         done = done || noop;
         return client
             .pause(1000)
-            .scroll('#enroll_subject_submit')
+            .moveToObject('#enroll_subject_submit')
             .click('#enroll_subject_submit')
             .waitForPaginationComplete()
             // .scroll('.confirmMsg')
+            .call(done);
+    };
+
+    me.lookup.existing = function(ursi, done) {
+        done = done || noop;
+        return client
+            .pause(100)
+            .setValue('input[name=ursi]', ursi)
+            .click('[value="Continue >"]')
+            .waitForPaginationComplete()
             .call(done);
     };
 

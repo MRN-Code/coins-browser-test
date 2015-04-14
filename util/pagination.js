@@ -104,7 +104,6 @@ var waitForVis = function(sell, timeout, cb) {
 };
 
 
-
 // exports;
 module.exports = function(client) {
     client.addCommand('waitForCondition', vargscb(waitForCondition));
