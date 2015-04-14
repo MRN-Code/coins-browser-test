@@ -29,7 +29,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Usage - re-using the web browser client
 
-In most cases, we will want to run all of our tests in a single browser insance.
+In most cases, we will want to run all of our tests in a single browser instance.
 For example, we will want to start a browser, login to COINS, then navigate to ASMT, then select a study, then create an instrument, etc...
 
 In order to modularize the client creation process, `test/lib/client.js` was created.
