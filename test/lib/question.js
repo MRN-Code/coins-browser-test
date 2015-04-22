@@ -47,7 +47,9 @@ module.exports = function(client, config) {
 
     me.openQuestionCreator = function(done) {
         var selector = '#asmtAddQuestion';
-        return client.click(selector)
+        return client
+            .scroll(selector, 0, -100)
+            .click(selector)
             .waitForPaginationComplete(done);
     }
     me.verifyQuestionInInstrument = function(questionId, done) {
@@ -101,6 +103,7 @@ module.exports = function(client, config) {
         }
         return client
             .call(setValues)
+            .scroll('[name=submitButton]', 0, -100)
             .click('[name=submitButton]')
             .waitForPaginationComplete(done);
     };

@@ -57,7 +57,7 @@ module.exports = function(client, config) {
             .call(setValues)
             .click('#addSectionIcon')
             .waitForPaginationComplete()
-            .pause(1000, done);
+            .waitForVis(formSelector, 2, done);
     };
     me.closeSectionEditor = function(done) {
         return client.click('.tclose')

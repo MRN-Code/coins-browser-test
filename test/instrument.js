@@ -36,7 +36,7 @@ var editInstOptions = {
     lock: "1"
 };
 
-var testQuestionIdSeed = 'SELENIUM11';
+var testQuestionIdSeed = 'SELENIUM8';
 
 var sectionLabelSeeds = [
 "selenium 1q/page section",
@@ -258,7 +258,7 @@ describe('instrument', function() {
             client.call(done);
         });
     });
-    describe('add multiple questions to first section', function() {
+    describe('add multiple questions to second section', function() {
         var questions = [
             {
                 questionId: testQuestionIdSeed + '_04',
@@ -337,9 +337,156 @@ describe('instrument', function() {
             client.call(done);
         });
     });
-    it('should add questions to likert section');
-    it('should add table to table section');
-    it('should add questions to side by side section');
+    describe('add multiple questions to likert section', function() {
+        var questions = [
+            {
+                questionId: testQuestionIdSeed + '_10',
+                label: 'selenium canned response question label',
+                saLabel: 'selenium canned response question SA label',
+                sectionId: sectionLabelSeeds[2] + ' label',
+                maxInstances: 1,
+                description: 'selenium canned response question description',
+                cannedTypeToggle: undefined,
+                addQuestionResponseLabel1: 'Ja',
+                addQuestionResponseDesc1: 'German for yes',
+                addQuestionResponseValue1: 1,
+                addQuestionResponseLabel2: 'Nein',
+                addQuestionResponseDesc2: 'German for no',
+                addQuestionResponseValue2: 0
+            }
+        ];
+        it('should navigate to the third section', function(done) {
+            instrument.gotoSection(sectionLabelSeeds[2] + ' label', done);
+        });
+        it('should add questions to the third section', function(done) {
+            questions.forEach(function(options) {
+                question.openQuestionCreator()
+                    .call(function() {question.create(options);})
+            });
+            client.call(done);
+        });
+        it('the newly created questions should exist', function(done) {
+            questions.forEach(function(options) {
+                question.verifyQuestionInInstrument(options.questionId);
+            });
+            client.call(done);
+        });
+        it('should duplicate the question', function(done) {
+            question.duplicate(testQuestionIdSeed + '_10', testQuestionIdSeed + '_11', done);
+        });
+        it('the newly duplicated question should exist', function(done) {
+            question.verifyQuestionInInstrument(testQuestionIdSeed + '_11', done);
+        });
+        it('should duplicate the question', function(done) {
+            question.duplicate(testQuestionIdSeed + '_10', testQuestionIdSeed + '_12', done);
+        });
+        it('the newly duplicated question should exist', function(done) {
+            question.verifyQuestionInInstrument(testQuestionIdSeed + '_12', done);
+        });
+        it('should duplicate the question', function(done) {
+            question.duplicate(testQuestionIdSeed + '_10', testQuestionIdSeed + '_13', done);
+        });
+        it('the newly duplicated question should exist', function(done) {
+            question.verifyQuestionInInstrument(testQuestionIdSeed + '_13', done);
+        });
+    });
+    describe('add questions to side by side section', function() {
+        var questions = [
+            {
+                questionId: testQuestionIdSeed + '_14',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+            {
+                questionId: testQuestionIdSeed + '_15',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+            {
+                questionId: testQuestionIdSeed + '_16',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+            {
+                questionId: testQuestionIdSeed + '_17',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+            {
+                questionId: testQuestionIdSeed + '_18',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+            {
+                questionId: testQuestionIdSeed + '_19',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[4] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+
+        ];
+        it('should navigate to the fifth section', function(done) {
+            instrument.gotoSection(sectionLabelSeeds[4] + ' label', done);
+        });
+        it('should add questions to the fifth section', function(done) {
+            questions.forEach(function(options) {
+                question.openQuestionCreator()
+                    .call(function() {question.create(options);})
+            });
+            client.call(done);
+        });
+        it('the newly created questions should exist', function(done) {
+            questions.forEach(function(options) {
+                question.verifyQuestionInInstrument(options.questionId);
+            });
+            client.call(done);
+        });
+    });
+    describe('add a question to the sacraficial section', function() {
+        var questions = [
+            {
+                questionId: testQuestionIdSeed + '_20',
+                label: 'selenium sxs text question label',
+                saLabel: 'selenium sxs text question SA label',
+                sectionId: sectionLabelSeeds[6] + ' label',
+                maxInstances: 1,
+                description: 'selenium sxs text question description',
+            },
+        ];
+        it('should navigate to the sacraficial section', function(done) {
+            instrument.gotoSection(sectionLabelSeeds[6] + ' label', done);
+        });
+        it('should add questions to the sacraficial section', function(done) {
+            questions.forEach(function(options) {
+                question.openQuestionCreator()
+                    .call(function() {question.create(options);})
+            });
+            client.call(done);
+        });
+        it('the newly created questions should exist', function(done) {
+            questions.forEach(function(options) {
+                question.verifyQuestionInInstrument(options.questionId);
+            });
+            client.call(done);
+        });
+    });
     it('should delete sacraficial section');
     it('should delete sacraficial section with questions: reassign quesitons');
 });
