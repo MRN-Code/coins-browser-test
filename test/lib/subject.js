@@ -1,5 +1,4 @@
 "use strict";
-var should = require('should');
 var _ = require('lodash');
 var noop = function(){};
 
