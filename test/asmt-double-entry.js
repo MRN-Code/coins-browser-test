@@ -6,6 +6,7 @@ var should = require('should');
 var client = require('./lib/client.js').client;
 var nav = require('./lib/nav/navigation.js')(client, config);
 var dataEntry = require('./lib/dataEntry.js')(client, config);
+var manage = require('./lib/manage.js')(client, config);
 
 var micis = require('./lib/auth/micis.js')(client);
 
@@ -37,7 +38,7 @@ describe('navigate to asmt and fill out asmts', function() {
             siteId: '7', // MRN (default)
             dataEntryTypeId: 1, // Clinical Study (default)
             incompleteAssessment: 'successfully_completedY', // (default)
-            notes: 'notes test...'
+            notes: 'double entry without error'
         };
 
         var asmtFirstEntry = {
@@ -110,15 +111,15 @@ describe('navigate to asmt and fill out asmts', function() {
         });
 
         it ('should fill assessment search criteria and click search button', function(done) {
-            dataEntry.fillAsmtSearchCriteria(asmtDetails, done);
+            manage.fillAsmtSearchCriteria(asmtDetails, done);
         });
 
         it ('should select "responses" button in order to view assessment responses', function(done) {
-            dataEntry.clickAsmtResponsesButton(done);
+            manage.clickAsmtResponsesButton(done);
         });
 
         it ('should find auto calc that matches: 10.760204081633', function (done) {
-            dataEntry.verifyAutoCalcResponseExists(done);
+            manage.verifyAutoCalcResponseExists(done);
         });
 
     });
@@ -132,7 +133,7 @@ describe('navigate to asmt and fill out asmts', function() {
             studyId: 2319, // NI TEST
             instrumentId: 26363, // Calculation Test
             segmentInterval: 'v2', // can vary this: visit1, v1, v2, v3, v4
-            sourceType: '3',  // can vary this: 3, 4, 5, 6, 7, 8, 9
+            sourceType: '4',  // can vary this: 3, 4, 5, 6, 7, 8, 9
             assessmentDate: '10/22/1953',
             assessmentStartTime: '11:22',
             rater1: 1341, // Abeer Ayaz
@@ -213,11 +214,11 @@ describe('navigate to asmt and fill out asmts', function() {
         });
 
         it ('should search for and find the asmt conflict', function(done) {
-            dataEntry.findAsmtConflict(asmtDetails, done);
+            manage.findAsmtConflict(asmtDetails, done);
         });
 
         it ('should fix the error, then resolve the conflict', function(done) {
-            dataEntry.fixAndResolveConflict(done);
+            manage.fixAndResolveConflict(done);
         });
 
         it ('should navigate to MANAGE > Search Assessments', function(done) {
@@ -226,15 +227,15 @@ describe('navigate to asmt and fill out asmts', function() {
         });
 
         it ('should fill assessment search criteria and click search button', function(done) {
-            dataEntry.fillAsmtSearchCriteria(asmtDetails, done);
+            manage.fillAsmtSearchCriteria(asmtDetails, done);
         });
 
         it ('should select "responses" button in order to view assessment responses', function(done) {
-            dataEntry.clickAsmtResponsesButton(done);
+            manage.clickAsmtResponsesButton(done);
         });
 
         it ('should find auto calc that matches: 10.760204081633', function (done) {
-            dataEntry.verifyAutoCalcResponseExists(done);
+            manage.verifyAutoCalcResponseExists(done);
         });
 
     });
