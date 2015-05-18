@@ -48,7 +48,7 @@ describe('study', function() {
         it('should be able to add a global subject tag', function(done) {
             study.view.subjectDetails
                 .addTag(tempTagId , 'Temporary Subject ID', 'global')
-                .moveToObject('[value="testTag"]') // asserts that new tag made it
+                .moveToObject('[value="' + tempTagId + '"]') // asserts that new tag made it
                 .call(done);
         });
 

@@ -24,6 +24,8 @@ module.exports = function(client, config) {
      */
     me.list.selectByName = function(name) {
         return client
+            .moveToObject('#study_list_filter input[type=search]')
+            .click('#study_list_filter input[type=search]')
             .setValue('#study_list_filter input[type=search]', name)
             .waitForText('=' + name)
             .click('=' + name)
