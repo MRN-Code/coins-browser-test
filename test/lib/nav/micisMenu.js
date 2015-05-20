@@ -9,6 +9,12 @@ var menuMap = [
             {text: "Merge Subjects"},
             {text: "Look Up a Subject"}
         ]
+    },
+    {
+        text: 'STUDIES',
+        children: [
+            {text: 'List Studies'}
+        ]
     }
 ];
 

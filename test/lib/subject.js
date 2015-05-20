@@ -1,5 +1,4 @@
 "use strict";
-var should = require('should');
 var _ = require('lodash');
 var noop = function(){};
 
@@ -53,6 +52,16 @@ module.exports = function(client, config) {
             .waitForVis('#site_id', 8000)
             .moveToObject('#site_id')
             .selectByValue('#site_id', 7)
+            .moveToObject('#first_name_at_birth', function(err, ok) {
+                if (err) { return; } // not an RDoC study
+                return client
+                    .setValue('#first_name_at_birth', 'testFirstNameAtBirth')
+                    .setValue('#middle_name_at_birth', 'testMiddleNameAtBirth')
+                    .setValue('#last_name_at_birth', 'testLastNameAtBirth')
+                    .click('#physical_sex_at_birth_f')
+                    .setValue('#city_born_in', 'testCityBornIn');
+
+            })
             .setValue('#consent_date', '02/22/2015')
             .click('[name=agreestosharedata]') // selects the first matched radio (Yes)
             .click('[name=agrees_to_future_studies]') // selects the first matched radio (Yes)

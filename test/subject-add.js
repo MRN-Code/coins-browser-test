@@ -98,4 +98,3 @@ describe('subject lookup', function() {
         subject.lookup.existing(ursi, done);
     });
 });
-
