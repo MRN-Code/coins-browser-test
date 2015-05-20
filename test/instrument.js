@@ -36,7 +36,7 @@ var editInstOptions = {
     lock: "1"
 };
 
-var testQuestionIdSeed = 'SELENIUM8';
+var testQuestionIdSeed = 'SELENIUM4';
 
 var sectionLabelSeeds = [
 "selenium 1q/page section",

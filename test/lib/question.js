@@ -78,6 +78,8 @@ module.exports = function(client, config) {
             .click(clickSelector)
             .pause(1500)
             .setValue('input[name=question_id]', toId)
+            .click('.tcontent')
+            .pause(500)
             .click('input[value=Duplicate]')
             .pause(500)
             .alertAccept()
