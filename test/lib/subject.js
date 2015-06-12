@@ -6,7 +6,7 @@ module.exports = function(client, config) {
 
     var me = {
         new: {
-            newUrsis: {}
+            newUrsis: []
         },
         enroll: {},
         lookup: {}
@@ -127,7 +127,13 @@ module.exports = function(client, config) {
                 }
             })
             .getText('#new_ursi', function(err, text) {
-                me.new.newUrsis[text.trim()] = text.trim();
+                text = (text || '').trim();
+
+                if (!text || text.charAt(0) !== 'M') {
+                    throw new Error('Unable to retrieve new URSI value.');
+                }
+
+                me.new.newUrsis.push(text);
             })
             .call(done);
     };
@@ -156,6 +162,9 @@ module.exports = function(client, config) {
     };
 
     me.lookup.existing = function(ursi, done) {
+        if (!ursi) {
+            throw new Error('subject.lookup.existing expects an ursi');
+        }
         done = done || noop;
         return client
             .pause(100)
