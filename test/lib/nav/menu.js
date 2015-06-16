@@ -10,6 +10,9 @@
  */
 
 "use strict";
+
+var _ = require('lodash');
+
 module.exports = function(client, config, menuMap) {
     var me = {};
 
@@ -31,6 +34,8 @@ module.exports = function(client, config, menuMap) {
     };
 
     me.clickNested = function(text, done) {
+        done = done || _.noop;
+
         // Get top level menu item
         var parent = me.findLink(text)[0];
         // Ensure that top level menu item can be located
@@ -41,7 +46,9 @@ module.exports = function(client, config, menuMap) {
         // hover over top level menu item before clicking on child
         return client.moveToObject('=' + parent.text, 10, 10)
             .click('=' + text)
-            .waitForPaginationComplete(done);
+            .waitForPaginationComplete()
+            .click('#pageHeader') // Close the menu by clicking the banner
+            .call(done);
     };
 
     return me;
