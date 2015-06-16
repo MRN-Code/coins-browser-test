@@ -108,7 +108,9 @@ module.exports = function(client, config) {
                 });
         },
         navigateToEditPage: function (segmentInterval) {
-            var selector = '//tr/td[. = "' + segmentInterval + '"]/following-sibling::td/a';
+            var selector = '//tr/td[. = "' + segmentInterval;
+            selector += '"]/following-sibling::td/a';
+
             return client
                 .scroll(selector, 0, -30, function (err) {
                     if (err) {
