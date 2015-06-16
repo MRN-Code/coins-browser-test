@@ -87,14 +87,9 @@ describe('subject lookup', function() {
             });
     });
 
-    it('should be accessible', function(done) {
-        nav.micisMenu
-            .clickNested('Look Up a Subject')
-            .call(done);
-    });
-
     it('should be able to lookup ursi just added', function(done) {
         var ursi = Object.keys(subject.new.newUrsis)[0];
+        nav.micisMenu.clickNested('Look Up a Subject');
         subject.lookup.existing(ursi, done);
     });
 });
