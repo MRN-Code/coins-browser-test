@@ -62,7 +62,7 @@ describe('study visit', function () {
             study.view.visits
                 .visitTableContainsRow(row, function (containsRow) {
                     containsRow.should.be.ok;
-                    done();
+                    client.call(done);
                 });
         });
     });
@@ -80,13 +80,31 @@ describe('study visit', function () {
                 .call(done);
         });
         it('should accept edited visit values', function (done) {
-            study.view.visits.fillOutForm({
-                data: editVisitData,
-                mode: 'update'
-            });
-
-            study.view.visits.submitForm().call(done);
+            study.view.visits
+                .fillOutForm({
+                    data: editVisitData,
+                    mode: 'update'
+                })
+                .call(done);
         });
-        it('should save edited visit values');
+        it('should save edited visit values', function (done) {
+            var row = ['label', 'timeFromBaseline', 'timeUnit']
+                .map(function (key) {
+                    var value = '';
+                    if (key in editVisitData) {
+                        value = editVisitData[key];
+                    }
+                    return value;
+                });
+
+            study.view.visits
+                .submitForm()
+                .waitForPaginationComplete();
+            study.view.visits
+                .visitTableContainsRow(row, function (containsRow) {
+                    containsRow.should.be.ok;
+                    client.call(done);
+                });
+        });
     });
 });
