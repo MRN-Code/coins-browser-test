@@ -48,44 +48,22 @@ describe('study visit', function () {
                 .call(done);
         });
         it('should save new visit values', function (done) {
-            // A string for comparison
-            var visitDataCompare = ['label', 'timeFromBaseline', 'timeUnit', 'segmentInterval']
+            // An array representation for comparison
+            var row = ['label', 'timeFromBaseline', 'timeUnit', 'segmentInterval']
                 .map(function (key) {
                     var value = '';
                     if (key in sampleVisitData) {
                         value = sampleVisitData[key];
                     }
                     return value;
-                }).join('').replace(/\s/g, '').toLowerCase();
+                });
 
-            study.view.visits.submitForm();
-
-            client
-                .waitForPaginationComplete()
-                // Check for table's population with `tbody tr` in the selector
-                .isExisting('.box-container > table tbody tr', function (err, res) {
-                    if (err || !res) {
-                        throw new Error('Study visits table should exist.');
-                    }
-                })
-                .getText('.box-container > table', function (err, res) {
-                    if (err) {
-                        throw err;
-                    } else if (!res) {
-                        throw new Error('Study visits table doesn\'t contain any visits.');
-                    }
-
-                    var newVisitDataExists = res
-                        .toLowerCase()
-                        .replace(/edit|[^\S\n]/g, '') // Remove 'Edit' button text and whitespace
-                        .split(/\n/)
-                        .some(function (row) {
-                            return row.indexOf(visitDataCompare) !== -1;
-                        });
-
-                    newVisitDataExists.should.be.ok;
-                })
-                .call(done);
+            study.view.visits.submitForm().waitForPaginationComplete();
+            study.view.visits
+                .visitTableContainsRow(row, function (containsRow) {
+                    containsRow.should.be.ok;
+                    done();
+                });
         });
     });
     describe('edit study visit', function () {
@@ -102,12 +80,12 @@ describe('study visit', function () {
                 .call(done);
         });
         it('should accept edited visit values', function (done) {
-            study.view.visits
-                .fillOutForm({
-                    data: editVisitData,
-                    mode: 'update'
-                })
-                .call(done);
+            study.view.visits.fillOutForm({
+                data: editVisitData,
+                mode: 'update'
+            });
+
+            study.view.visits.submitForm().call(done);
         });
         it('should save edited visit values');
     });

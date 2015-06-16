@@ -120,6 +120,42 @@ module.exports = function(client, config) {
                         throw err;
                     }
                 });
+        },
+        /**
+         * See if the visits table contains a row.
+         *
+         * @param  {array}   row
+         * @return {boolean}
+         */
+        visitTableContainsRow: function (row, cb) {
+            var compareRow = row.join('').replace(/\s/g, '').toLowerCase();
+
+            return client
+                /**
+                 * The client needs to be on the 'Edit Study Visits' page.
+                 * Implementation should be handled outside this method.
+                 *
+                 * Ensure the visits table's population by checking for
+                 * `tbody tr` in the selector.
+                 */
+                .waitFor('.box-container > table tbody tr', 4000)
+                .getText('.box-container > table', function (err, res) {
+                    if (err) {
+                        throw err;
+                    } else if (!res) {
+                        throw new Error('Study visits table doesn\'t contain any visits.');
+                    }
+
+                    var rowExists = res
+                        .toLowerCase()
+                        .replace(/edit|[^\S\n]/g, '') // Remove 'Edit' button text and whitespace
+                        .split(/\n/)
+                        .some(function (row) {
+                            return row.indexOf(compareRow) !== -1;
+                        });
+
+                    cb(rowExists);
+                });
         }
     };
 
