@@ -55,6 +55,21 @@ module.exports = function(client, config) {
             .waitForPaginationComplete();
     };
 
+    me.view.visits = {
+        fillOutForm: function (formData) {
+            return client
+                .moveToObject('#frmAdd')
+                .setValue('#addStudyVisitLabel', formData.label)
+                .setValue('#frmAdd input[name=time_from_baseline]' , formData.timeFromBaseline)
+                .selectByVisibleText('#frmAdd select[name=time_unit]', formData.timeUnit)
+                .setValue('#frmAdd input[name=segment_interval]', formData.segmentInterval);
+        },
+        submitForm: function () {
+            var buttonSelector = '#addStudyVisitSubmitBtn';
+            return client.moveToObject(buttonSelector).click(buttonSelector);
+        }
+    };
+
     return me;
 
 };
