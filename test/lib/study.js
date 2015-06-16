@@ -79,7 +79,7 @@ module.exports = function(client, config) {
          * @return {Object}         Instance of `client`
          */
         fillOutForm: function (options) {
-            if (! options.data) {
+            if (!options.data) {
                 throw new Error('Study visit form needs data');
             }
 
