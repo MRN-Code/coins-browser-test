@@ -56,17 +56,70 @@ module.exports = function(client, config) {
     };
 
     me.view.visits = {
-        fillOutForm: function (formData) {
-            return client
-                .moveToObject('#frmAdd')
-                .setValue('#addStudyVisitLabel', formData.label)
-                .setValue('#frmAdd input[name=time_from_baseline]' , formData.timeFromBaseline)
-                .selectByVisibleText('#frmAdd select[name=time_unit]', formData.timeUnit)
-                .setValue('#frmAdd input[name=segment_interval]', formData.segmentInterval);
+        /**
+         * Fill out a study's visit form.
+         *
+         * This method works for both 'create' and 'edit' visit forms. The only
+         * thing that changes is the `form`'s `id`.
+         *
+         * @param  {Object} options Contains `data` and `mode` properties.
+         *   `data` contains input data for the form. `mode` holds the input
+         *   type of the form, either `add` for adding a new visit or `update`
+         *   for updating a visit. Example:
+         *
+         *       {
+         *           data: {
+         *               label: 'Test Label 2',
+         *               timeFromBaseline: 2,
+         *               timeUnit: 'Month'
+         *           },
+         *           mode: 'update'
+         *       }
+         *
+         * @return {Object}         Instance of `client`
+         */
+        fillOutForm: function (options) {
+            if (! options.data) {
+                throw new Error('Study visit form needs data');
+            }
+
+            var formId = (options.mode === 'update') ? '#frmUpdate' : '#frmAdd';
+            var data = options.data;
+
+            client.moveToObject(formId);
+            client.setValue('#addStudyVisitLabel', data.label);
+            client.setValue(formId + ' input[name=time_from_baseline]' , data.timeFromBaseline);
+            client.selectByVisibleText(formId + ' select[name=time_unit]', data.timeUnit);
+
+            if (options.mode === 'add') {
+                client.setValue(formId + ' input[name=segment_interval]', data.segmentInterval);
+            }
+
+            return client;
         },
         submitForm: function () {
             var buttonSelector = '#addStudyVisitSubmitBtn';
-            return client.moveToObject(buttonSelector).click(buttonSelector);
+            return client
+                .moveToObject(buttonSelector)
+                .click(buttonSelector, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
+        },
+        navigateToEditPage: function (segmentInterval) {
+            var selector = '//tr/td[. = "' + segmentInterval + '"]/following-sibling::td/a';
+            return client
+                .scroll(selector, 0, -30, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                })
+                .click(selector, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
         }
     };
 

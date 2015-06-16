@@ -8,18 +8,17 @@ var client = require('./lib/client.js').client;
 var study = require('./lib/study.js')(client, config);
 var micis = require('./lib/auth/micis.js')(client);
 
-// var currentTime = (new Date()).getTime();
 var sampleVisitData = {
     label: 'Test Label 1',
     timeFromBaseline: 1,
     timeUnit: 'Week',
     segmentInterval: 'test_' + (new Date()).getTime()
 };
-// var editVisitData = {
-//     label: 'Test Label 2',
-//     timeFromBaseline: 2,
-//     timeUnit: 'Month'
-// };
+var editVisitData = {
+    label: 'Test Label 2',
+    timeFromBaseline: 2,
+    timeUnit: 'Month'
+};
 
 describe('study visit', function () {
     this.timeout(config.defaultTimeout);
@@ -41,7 +40,12 @@ describe('study visit', function () {
 
     describe('add study visit', function () {
         it('should accept new visit values', function (done) {
-            study.view.visits.fillOutForm(sampleVisitData).call(done);
+            study.view.visits
+                .fillOutForm({
+                    data: sampleVisitData,
+                    mode: 'add'
+                })
+                .call(done);
         });
         it('should save new visit values', function (done) {
             // A string for comparison
@@ -85,8 +89,26 @@ describe('study visit', function () {
         });
     });
     describe('edit study visit', function () {
-        it('should have an edit visit form');
-        it('should accept edited visit values');
+        it('should have an edit visit form', function (done) {
+            var segmentInt = sampleVisitData.segmentInterval;
+            study.view.visits
+                .navigateToEditPage(segmentInt)
+                .waitForPaginationComplete()
+                .isExisting('#frmUpdate', function (err, res) {
+                    if (err || !res) {
+                        throw new Error('Visit ' + segmentInt + ' edit form doesn\'t exist.');
+                    }
+                })
+                .call(done);
+        });
+        it('should accept edited visit values', function (done) {
+            study.view.visits
+                .fillOutForm({
+                    data: editVisitData,
+                    mode: 'update'
+                })
+                .call(done);
+        });
         it('should save edited visit values');
     });
 });
