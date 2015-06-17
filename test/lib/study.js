@@ -55,6 +55,112 @@ module.exports = function(client, config) {
             .waitForPaginationComplete();
     };
 
+    me.view.visits = {
+        /**
+         * Fill out a study's visit form.
+         *
+         * This method works for both 'create' and 'edit' visit forms. The only
+         * thing that changes is the `form`'s `id`.
+         *
+         * @param  {Object} options Contains `data` and `mode` properties.
+         *   `data` contains input data for the form. `mode` holds the input
+         *   type of the form, either `add` for adding a new visit or `update`
+         *   for updating a visit. Example:
+         *
+         *       {
+         *           data: {
+         *               label: 'Test Label 2',
+         *               timeFromBaseline: 2,
+         *               timeUnit: 'Month'
+         *           },
+         *           mode: 'update'
+         *       }
+         *
+         * @return {Object}         Instance of `client`
+         */
+        fillOutForm: function (options) {
+            if (!options.data) {
+                throw new Error('Study visit form needs data');
+            }
+
+            var formId = (options.mode === 'update') ? '#frmUpdate' : '#frmAdd';
+            var data = options.data;
+
+            client.moveToObject(formId);
+            client.setValue('#addStudyVisitLabel', data.label);
+            client.setValue(formId + ' input[name=time_from_baseline]' , data.timeFromBaseline);
+            client.selectByVisibleText(formId + ' select[name=time_unit]', data.timeUnit);
+
+            if (options.mode === 'add') {
+                client.setValue(formId + ' input[name=segment_interval]', data.segmentInterval);
+            }
+
+            return client;
+        },
+        submitForm: function () {
+            var buttonSelector = '#addStudyVisitSubmitBtn';
+            return client
+                .moveToObject(buttonSelector)
+                .click(buttonSelector, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
+        },
+        navigateToEditPage: function (segmentInterval) {
+            var selector = '//tr/td[. = "' + segmentInterval;
+            selector += '"]/following-sibling::td/a';
+
+            return client
+                .scroll(selector, 0, -30, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                })
+                .click(selector, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
+        },
+        /**
+         * See if the visits table contains a row.
+         *
+         * @param  {array}   row
+         * @return {boolean}
+         */
+        visitTableContainsRow: function (row, cb) {
+            var compareRow = row.join('').replace(/\s/g, '').toLowerCase();
+
+            return client
+                /**
+                 * The client needs to be on the 'Edit Study Visits' page.
+                 * Implementation should be handled outside this method.
+                 *
+                 * Ensure the visits table's population by checking for
+                 * `tbody tr` in the selector.
+                 */
+                .waitFor('.box-container > table tbody tr', 4000)
+                .getText('.box-container > table', function (err, res) {
+                    if (err) {
+                        throw err;
+                    } else if (!res) {
+                        throw new Error('Study visits table doesn\'t contain any visits.');
+                    }
+
+                    var rowExists = res
+                        .toLowerCase()
+                        .replace(/edit|[^\S\n]/g, '') // Remove 'Edit' button text and whitespace
+                        .split(/\n/)
+                        .some(function (row) {
+                            return row.indexOf(compareRow) !== -1;
+                        });
+
+                    cb(rowExists);
+                });
+        }
+    };
+
     return me;
 
 };
