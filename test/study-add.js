@@ -1,5 +1,12 @@
 /**
  * Test creating a new study.
+ *
+ * Steps:
+ *
+ *   1. Navigate to New Study form (MICIS > Studies > Add a Study)
+ *   1. Fill out with some sample data
+ *   2. Click through to view the saved values
+ *   3. Verify values match entered data.
  */
 
 'use strict';
@@ -12,6 +19,10 @@ var nav = require('./lib/nav/navigation')(client, config);
 var micis = require('./lib/auth/micis')(client);
 var should = require('should');
 
+/**
+ * Set up sample data. This should be unique every time the test is run through
+ * the use of random numbers.
+ */
 var sampleSlug = _.random(1e6, 1e7 - 1);
 var sampleData = {
     label: 'test_' + sampleSlug,
@@ -54,6 +65,9 @@ describe('Add a new study', function () {
         });
     });
 
+    /**
+     * Confirm the form exists (step #1).
+     */
     it('should show a new study form', function (done) {
         client
             .element('form#frmAdd', function (err) {
@@ -64,6 +78,9 @@ describe('Add a new study', function () {
             .call(done);
     });
 
+    /**
+     * Fill out the form using `sampleData` (step #2).
+     */
     it('should accept new study values', function (done) {
         client
             .setValue('input[name=label]', sampleData.label)
@@ -94,20 +111,25 @@ describe('Add a new study', function () {
             .call(done);
     });
 
+    /**
+     * Click through to save the new study (step #3).
+     */
     it('should save new study', function (done) {
         client
             .moveToObject('input[name=DoAdd]')
             .click('input[name=DoAdd]')
             .waitForPaginationComplete()
-            .waitFor('.confirmMsg', 1500)
+            .waitForExist('.confirmMsg', 1500)
             .getText('.confirmMsg', function (err, res) {
-                debugger;
-
                 if (err) {
                     throw err;
                 }
 
-                // Confirm 'success' message exists with the right label
+                /**
+                 * A 'study saved' view is served with a confirmation message.
+                 * Check the message's text to make sure it contains the
+                 * sample data's label value.
+                 */
                 var pattern = new RegExp(sampleData.label + ' successfully added', 'i');
                 res.should.match(pattern);
             })
@@ -116,8 +138,17 @@ describe('Add a new study', function () {
             .call(done);
     });
 
+    /**
+     * Verify the new study's values were saved (step #4).
+     */
     it('should display correct study values', function (done) {
-        // Associate the form's labels to the data they should match
+        /**
+         * Associate the form's labels to the data they should match.
+         *
+         * The view study page contains a very large table with all the study's
+         * saved data. This data structure matches the table's labels (`label`)
+         * to the text values they should match (`match`).
+         */
         var labelMatches = [{
             label: 'Study Name',
             match: sampleData.label
@@ -186,12 +217,20 @@ describe('Add a new study', function () {
             match: sampleData.cssUrl
         }];
 
-        client.waitFor('.box-container > table:nth-of-type(2)', 1500, function (err) {
+        /**
+         * Wait for the study data table to show up.
+         *
+         * @{@link  http://webdriver.io/api/utility/waitForExist.html}
+         */
+        client.waitForExist('.box-container > table:nth-of-type(2)', 1500, false, function (err) {
             if (err) {
                 throw err;
             }
 
-            // Iterate over the labels and ensure their values are right
+            /**
+             * Iterate over the table's labels and ensure their values are
+             * correct.
+             */
             labelMatches.forEach(function (item) {
                 client.getText(
                     '//tr/td[text()="' + item.label + '"]/following-sibling::td[1]',
