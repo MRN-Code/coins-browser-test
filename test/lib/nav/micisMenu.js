@@ -13,7 +13,8 @@ var menuMap = [
     {
         text: 'STUDIES',
         children: [
-            {text: 'List Studies'}
+            {text: 'List Studies'},
+            {text: 'Add New Study'}
         ]
     }
 ];
