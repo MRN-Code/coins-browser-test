@@ -28,6 +28,14 @@ module.exports = function(client, config) {
             .waitForPaginationComplete(done);
     };
 
+    me.goToQueryBuilder = function (done) {
+        return client
+            .scroll(0, 0)
+            .call(me.hoverHome)
+            .click('=Query Builder')
+            .waitForPaginationComplete(done);
+    };
+
     me.selectAsmtStudy = function(studyId, done) {
         return client
             .waitForPaginationComplete()
