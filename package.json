@@ -30,7 +30,7 @@
     "rsvp": "3.0.14",
     "should": "*",
     "vargs-callback": "^0.2.4",
-    "webdriverio": "*",
+    "webdriverio": "~2.4.5",
     "winston": "^0.9.0"
   }
 }
