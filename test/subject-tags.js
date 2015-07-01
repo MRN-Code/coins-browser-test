@@ -47,7 +47,7 @@ describe('Add subject tags', function () {
             nav.micisMenu
                 .clickNested('Look Up a Subject')
                 .setValue('#ursi', sampleUrsi)
-                .click('#frmFindSubject .frmBtn')
+                .click('#frmFindSubject .ui-button-success')
                 .waitForPaginationComplete()
                 .waitForText('=Subject Tags')
                 .click('=Subject Tags')

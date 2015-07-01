@@ -45,7 +45,7 @@ describe('Edit subject type', function () {
             nav.micisMenu
                 .clickNested('Look Up a Subject')
                 .setValue('#ursi', sampleUrsi)
-                .click('#frmFindSubject .frmBtn')
+                .click('#frmFindSubject .ui-button-success')
                 .waitForPaginationComplete()
                 .waitForText('=Study Enrollment')
                 .click('=Study Enrollment')
