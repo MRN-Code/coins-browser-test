@@ -508,7 +508,6 @@ describe('Query Builder', function () {
      */
     describe('Scan Data', function () {
         before(goBack);
-        after(goBack);
 
         /**
          * Use a different subject selection:
@@ -523,5 +522,131 @@ describe('Query Builder', function () {
         }));
         it('should setup scan data', setupScanData);
         it('should preview and export', previewAndExport);
+    });
+
+    describe('CRUD', function () {
+        before(goBack);
+
+        var sampleQueryName = 'test_' + Date.now();
+        var sampleQueryNameUpdate = sampleQueryName + '_update';
+
+        it('should save a query', function (done) {
+            setupQuery();
+            setupDemograpicData();
+
+            /** Set up and save a new query. */
+            client
+                .setValue('#queryLabel', sampleQueryName)
+                .click('input[type=button][value=Save]')
+                .waitForVis('#query_act_pop', 2000)
+                .click('#query_act_pop input[type=button]')
+                .getText('#savedQueries', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).match(new RegExp(sampleQueryName));
+                });
+
+            /** Reload the page to get a fresh thing */
+            nav.goToQueryBuilder();
+
+            /**
+             * Load up the query. Ensure the form fields have the right values.
+             */
+            client
+                .selectByVisibleText('#savedQueries', sampleQueryName)
+                .click('input[type=button][name=loadQuery]')
+                .waitForPaginationComplete()
+                /** Make sure all the saved data is set */
+                .pause(2000) // ?
+                .scroll(0, 0)
+                .isSelected('#optAllSubjectsInStudy', function (err, isSelected) {
+                    should(isSelected).be.ok;
+                })
+                .getText('#ursiStudyDiv select option:checked', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).match(new RegExp(_.escapeRegExp(sampleStudyId)));
+                })
+                .isSelected('#optDemoDataOutput', function (err, isSelected) {
+                    should(isSelected).be.ok;
+                })
+                .getText('#outputDemoRows table', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).match(/Gender/);
+                    should(res).match(/Subject Type/);
+                })
+                .getText('#outputDemoStudies', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).match(new RegExp(_.escapeRegExp(sampleStudyId)));
+                })
+                .getText('#savedQueries option:checked', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).match(new RegExp(sampleQueryName));
+                })
+                .call(done);
+        });
+
+        /** Update the query's name. Unfortunately, other aspects of the query can't be updated. */
+        it('should rename a saved query', function (done) {
+            /** Change the sample query name for the update */
+            sampleQueryName += '_update';
+
+            client
+                .click('input[name=loadQuery][value="Rename Query"]')
+                .alertText(sampleQueryNameUpdate)
+                .alertAccept()
+                .call(done);
+
+            nav
+                .goToQueryBuilder()
+                .getText('#savedQueries', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    /**
+                     * The text, `res`, represents the `select`'s `option`s. It
+                     * comes in as a newline-separated string. Ensure it *does*
+                     * contain the updated query name and *does not* contain the
+                     * old name.
+                     */
+                    should(res).not.match(new RegExp('^' + sampleQueryName + '$', 'm'));
+                    should(res).match(new RegExp('^' + sampleQueryNameUpdate + '$', 'm'));
+                })
+                .call(done);
+        });
+
+        it('should delete a saved query', function (done) {
+            client
+                .waitForExist('//select[@id="savedQueries"]/option[text()="' + sampleQueryNameUpdate + '"]', 1000)
+                .selectByVisibleText('#savedQueries', sampleQueryNameUpdate)
+                .click('input[name=loadQuery][value="Delete Query"]')
+                .alertAccept()
+                .waitForPaginationComplete();
+
+            /** Reload the page and make sure the saved query doesn't exist in the `select`. */
+            nav.goToQueryBuilder()
+                .getText('#savedQueries', function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    should(res).not.match(new RegExp(sampleQueryNameUpdate));
+                })
+                .call(done);
+        });
     });
 });
