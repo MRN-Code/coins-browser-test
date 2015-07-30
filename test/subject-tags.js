@@ -129,6 +129,7 @@ describe('Add subject tags', function () {
             .setValue('#editExtIdFrm input[name=value]', tag.value += '_edit')
             .click('#editExtIdFrm input[name=doChange]')
             .waitForPaginationComplete()
+            .waitForText('#subject_tags_table tbody', 1000)
             .getText('#subject_tags_table tbody', function (err, res) {
                 var hasMatch = res.split(/\n/).some(function (row) {
                     return row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1;
