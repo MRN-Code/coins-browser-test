@@ -34,7 +34,7 @@ describe('subject look up', function () {
         
         client
             .setValue('#email', testUser.email)
-            .click('#frmFindSubject .frmBtn')
+            .click('#frmFindSubject .ui-button-success')
             .waitForPaginationComplete()
             .waitFor('.box-container .objbox', 4000)
             .getText('.objbox > table tr:nth-child(2)', function (err, text) {
