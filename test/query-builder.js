@@ -606,6 +606,7 @@ describe('Query Builder', function () {
 
             client
                 .click('input[name=loadQuery][value="Rename Query"]')
+                .pause(250)
                 .alertText(sampleQueryNameUpdate)
                 .alertAccept()
                 .call(done);
@@ -634,6 +635,7 @@ describe('Query Builder', function () {
                 .waitForExist('//select[@id="savedQueries"]/option[text()="' + sampleQueryNameUpdate + '"]', 1000)
                 .selectByVisibleText('#savedQueries', sampleQueryNameUpdate)
                 .click('input[name=loadQuery][value="Delete Query"]')
+                .pause(250)
                 .alertAccept()
                 .waitForPaginationComplete();
 
