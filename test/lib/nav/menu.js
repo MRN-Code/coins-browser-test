@@ -44,7 +44,9 @@ module.exports = function(client, config, menuMap) {
         }
 
         // hover over top level menu item before clicking on child
-        return client.moveToObject('=' + parent.text, 10, 10)
+        return client
+            .moveToObject('=' + parent.text, 10, 10)
+            .click('=' + parent.text)
             .click('=' + text)
             .waitForPaginationComplete()
             .click('#pageHeader') // Close the menu by clicking the banner

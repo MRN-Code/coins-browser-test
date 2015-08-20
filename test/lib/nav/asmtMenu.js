@@ -2,14 +2,14 @@
 
 var menuMap = [
     {
-        text: "DATA ENTRY",
+        text: "Data Entry",
         children: [
             {text: "New Assessment"},
             {text: "Resume Entry"}
         ]
     },
     {
-        text: "MANAGE",
+        text: "Manage",
         children: [
             {text: "Search Assessments"},
             {text: "View Orphans"},
@@ -19,7 +19,7 @@ var menuMap = [
         ]
     },
     {
-        text: "SELF-ASSESS",
+        text: "Self-Assess",
         children: [
             {text: "Manage Subject Queues"},
             {text: "Review Submissions"},
@@ -28,7 +28,7 @@ var menuMap = [
         ]
     },
     {
-        text: "INSTRUMENTS",
+        text: "Instruments",
         children: [
             {text: "List Instruments"},
             {text: "Create Instrument"},
@@ -38,7 +38,7 @@ var menuMap = [
         ]
     },
     {
-        text: "ADMIN",
+        text: "Admin",
         children: [
             {text: "List Raters"},
             {text: "Add Rater"},
