@@ -329,6 +329,7 @@ var previewAndExport = function (options, callback) {
                 });
             }
         })
+        .scroll(0, 0)
         .click('input[name=btnExport]')
         .scroll(0, 0);
 
