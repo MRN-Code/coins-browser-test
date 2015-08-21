@@ -18,7 +18,9 @@ module.exports = function(client, config) {
     me.asmtMenu = require('./asmtMenu.js')(client, config);
 
     me.hoverHome = function(done) {
-        return client.moveToObject('.navUl>li>font>.homeLi', done);
+        return client
+            .moveToObject('a.primary-nav-menu-button')
+            .click('=Menu', done);
     };
 
     me.gotoAsmt = function(done) {

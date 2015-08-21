@@ -2,7 +2,7 @@
 
 var menuMap = [
     {
-        text: "SUBJECTS",
+        text: "Subjects",
         children: [
             {text: "Enter a New Subject"},
             {text: 'Enroll an Existing Subject'},
@@ -11,7 +11,7 @@ var menuMap = [
         ]
     },
     {
-        text: 'STUDIES',
+        text: 'Studies',
         children: [
             {text: 'List Studies'},
             {text: 'Add New Study'}
