@@ -199,7 +199,7 @@ var setupAssessmentData = function (callback) {
             sampleStudyId
         )
         .waitForExist(
-            '#asmtDataDiv select[name=selProtocol] option[value="simple test"]',
+            '#asmtDataDiv select[name=selInstrument] option[value="simple test"]',
             1500
         )
         .selectByVisibleText(
