@@ -112,7 +112,7 @@ module.exports = function(client, config) {
             selector += '"]/following-sibling::td/a';
 
             return client
-                .scroll(selector, 0, -30, function (err) {
+                .scroll(selector, 0, -60, function (err) {
                     if (err) {
                         throw err;
                     }
