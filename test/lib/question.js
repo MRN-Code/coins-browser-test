@@ -81,7 +81,7 @@ module.exports = function(client, config) {
             .click('.tcontent')
             .pause(500)
             .click('input[value=Duplicate]')
-            .pause(500)
+            .pause(1000)
             .alertAccept()
             .waitForPaginationComplete(done);
     };

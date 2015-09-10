@@ -98,7 +98,7 @@ module.exports = function(client, config) {
             .setValue('input[name=version]', getStrict(options, 'version'))
             .setValue('input[name=max_per_segment]', getStrict(options, 'maxPerSegment'))
             .setValue('input[name=skip_question_text]', getStrict(options, 'skipQuestionText'))
-            .click('input.frmButton')
+            .click('button[id=add_instrument]')
             .waitForPaginationComplete(done);
     };
 
@@ -109,7 +109,7 @@ module.exports = function(client, config) {
         });
 
         return client
-            .click('input.frmButton')
+            .click('button[id=update_instrument]')
             .waitForPaginationComplete(done);
     };
 
