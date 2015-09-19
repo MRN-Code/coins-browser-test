@@ -36,10 +36,10 @@ module.exports = function(client) {
         url = url || 'https://' + config.origin + '/micis/index.php';
         client
             .url(url)
-            .waitFor('#loginPopupUsername')
-            .setValue('#loginPopupUsername', config.auth.un)
-            .setValue('#loginPopupPassword', config.auth.pw)
-            .click('input.submit') //TODO: update to use data-selector instead
+            .waitFor('#coins-logon-widget-1')
+            .setValue('#coins-logon-widget-1', config.auth.un)
+            .setValue('#coins-logon-widget-0', config.auth.pw)
+            .click('#coins-logon-widget button[type=submit]') //TODO: update to use data-selector instead
             .waitForPaginationComplete()
             .getCookie('MICIS', function(err, cookie) {
                 if (cookie) {
