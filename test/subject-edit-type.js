@@ -47,6 +47,7 @@ describe('Edit subject type', function () {
                 .setValue('#ursi', sampleUrsi)
                 .click('#frmFindSubject .ui-button-success')
                 .waitForPaginationComplete()
+                .pause(200)
                 .waitForText('=Study Enrollment')
                 .click('=Study Enrollment')
                 .waitForPaginationComplete()
