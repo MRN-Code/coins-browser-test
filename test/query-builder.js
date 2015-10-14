@@ -150,7 +150,10 @@ var addFieldsToQuery = function (options) {
             /**
              * The first `tr` is always used as a heading. Start on the next.
              */
-            .waitForExist(options.table + ' tr:nth-of-type(' + (i + 2) + ')')
+            .waitForExist(
+                options.table + ' tr:nth-of-type(' + (i + 2) + ')',
+                10000
+            )
             .getText(
                 options.table + ' tr:nth-of-type(' + (i + 2) + ')',
                 testTableRow
@@ -200,7 +203,7 @@ var setupAssessmentData = function (callback) {
         )
         .waitForExist(
             '#asmtDataDiv select[name=selInstrument] option[value="simple test"]',
-            1500
+            10000
         )
         .selectByVisibleText(
             '#asmtDataDiv select[name=selInstrument]',
@@ -239,7 +242,7 @@ var setupScanData = function (callback) {
         /** Wait for the `select` to be populated with the study's protocols. */
         .waitForExist(
             'select[name=selProtocol] option[value=mprage_5e]',
-            1500,
+            10000,
             function (err) {
                 if (err) {
                     throw err;
