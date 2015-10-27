@@ -24,6 +24,7 @@ module.exports = function(client) {
      * @param done {function} a mochajs function to call when login is successful
      */
     me.logout = function(done) {
+        me.loggedOn = false;
         return client.url('https://' + config.origin + '/micis/logout.php');
     };
 
