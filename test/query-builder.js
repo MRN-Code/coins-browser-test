@@ -242,7 +242,7 @@ var setupScanData = function (callback) {
         /** Wait for the `select` to be populated with the study's protocols. */
         .waitForExist(
             'select[name=selProtocol] option[value=mprage_5e]',
-            10000,
+            15000,
             function (err) {
                 if (err) {
                     throw err;
