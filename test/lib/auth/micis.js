@@ -12,9 +12,12 @@ var noop = function(){};
  */
 module.exports = function(client) {
 
-    var me = {
-        loggedOn: false
-    };
+    var me = {};
+    Object.defineProperty(me, 'loggedOn', {
+        get: function () { return client._loggedOnMicis; },
+        set: function (x) { client._loggedOnMicis = x; }
+    });
+
 
     /**
      * log out of COINS
@@ -34,20 +37,23 @@ module.exports = function(client) {
         done = done || noop;
         //set default params
         url = url || 'https://' + config.origin + '/micis/index.php';
-        client
-            .url(url)
-            .waitFor('#coins-logon-widget-1')
-            .setValue('#coins-logon-widget-1', config.auth.un)
-            .setValue('#coins-logon-widget-0', config.auth.pw)
-            .click('#coins-logon-widget button[type=submit]') //TODO: update to use data-selector instead
-            .waitForPaginationComplete()
-            .getCookie('MICIS', function(err, cookie) {
-                if (cookie) {
-                    me.loggedOn = cookie;
-                } else {
-                    throw new Error('micis cookie not found');
-                }
-            });
+
+        client.url(url);
+        if (!me.loggedOn) {
+            client
+                .waitFor('#coins-logon-widget-1')
+                .setValue('#coins-logon-widget-1', config.auth.un)
+                .setValue('#coins-logon-widget-0', config.auth.pw)
+                .click('#coins-logon-widget button[type=submit]') //TODO: update to use data-selector instead
+                .waitForPaginationComplete()
+                .getCookie('MICIS', function(err, cookie) {
+                    if (cookie) {
+                        me.loggedOn = cookie;
+                    } else {
+                        throw new Error('micis cookie not found');
+                    }
+                });
+        }
         return nav
             .disableNavigationAlert()
             .call(done);

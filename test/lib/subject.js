@@ -121,6 +121,7 @@ module.exports = function(client, config) {
                 }
             })
             .waitForPaginationComplete()
+            .pause(200)
             .isExisting('#new_ursi', function(err, isExisting) {
                 if (!isExisting) {
                     throw new Error("Submit verify subject did not detect that it made it to new URSI page.");
