@@ -30,6 +30,11 @@ module.exports = function(client, config) {
             .waitForPaginationComplete(done);
     };
 
+    me.gotoOcoins = function(done) {
+        return client.url('https://' + config.origin + '/micis/index.php?subsite=ocoins_beta')
+            .waitForPaginationComplete(done);
+    };
+
     me.goToQueryBuilder = function (done) {
         return client
             .scroll(0, 0)
