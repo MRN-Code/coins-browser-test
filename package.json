@@ -1,5 +1,5 @@
 {
-  "name": "coins-selenium",
+  "name": "coins-browser-test",
   "version": "1.0.0",
   "description": "suite of browser tests for COINS",
   "main": "index.js",
