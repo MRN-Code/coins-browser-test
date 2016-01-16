@@ -2,6 +2,7 @@
 // test deps
 var config = require('config');
 var should = require('should');
+var randomstring = require('randomstring');
 
 var client = require('./lib/client.js').client;
 
@@ -9,6 +10,7 @@ var nav = require('./lib/nav/navigation.js')(client, config);
 var instrument = require('./lib/instrument.js')(client, config);
 var section = require('./lib/section.js')(client, config);
 var question = require('./lib/question.js')(client, config);
+
 
 var instOptions = {
     label: "selenium test instrument label",
@@ -36,7 +38,7 @@ var editInstOptions = {
     lock: "1"
 };
 
-var testQuestionIdSeed = 'SELENIUM1';
+var testQuestionIdSeed = 'SELENIUM' + randomstring.generate(7);
 
 var sectionLabelSeeds = [
 "selenium 1q/page section",
