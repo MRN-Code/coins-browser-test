@@ -85,7 +85,8 @@ module.exports = function(client, config) {
         var xPathSelector = xPathNavSelector + '//li[normalize-space(.) = "' + sectionLabel + '"]';
 
         return client.moveToObject(xPathNavSelector, 80, 10)
-            .click(xPathSelector, done);
+            .click(xPathSelector)
+            .moveToObject('#page-container', 0, 0, done);
     };
 
 
@@ -128,7 +129,14 @@ module.exports = function(client, config) {
             .getValue('input[name=skip_question_text]', function(err, val) { options.skipQuestionText = val; })
             .getValue('select[name=hide_sa_previous]', function(err, val) { options.hideSaPrevious = val; })
             .getValue('select[name=sa_hide_skipped_questions]', function(err, val) { options.saHideSkippedQuestions = val; })
-            .getValue('select[name=lock]', function(err, val) { options.lock = val; })
+            .getValue('select[name=lock]', function(err, val) {
+                if (err) {
+                    // the lock select element is not printed if the instrument is locked
+                    options.lock = '1';
+                } else {
+                    options.lock = val;
+                }
+            })
             .call(callbackWrapper);
     };
 
