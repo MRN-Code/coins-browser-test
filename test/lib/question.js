@@ -79,9 +79,9 @@ module.exports = function(client, config) {
             .pause(1500)
             .setValue('input[name=question_id]', toId)
             .click('.tcontent')
-            .pause(500)
+            .pause(1500)
             .click('input[value=Duplicate]')
-            .pause(1000)
+            .pause(1500)
             .alertAccept()
             .waitForPaginationComplete(done);
     };
@@ -90,7 +90,7 @@ module.exports = function(client, config) {
 
         return me.hoverEdit(questionId)
             .click(clickSelector)
-            .pause(1500)
+            .pause(10000)
             .click('input[value=Delete]')
             .waitForPaginationComplete(done);
     };
