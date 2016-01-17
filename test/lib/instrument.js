@@ -85,7 +85,8 @@ module.exports = function(client, config) {
         var xPathSelector = xPathNavSelector + '//li[normalize-space(.) = "' + sectionLabel + '"]';
 
         return client.moveToObject(xPathNavSelector, 80, 10)
-            .click(xPathSelector, done);
+            .click(xPathSelector)
+            .moveToObject('#page-container', 0, 0, done);
     };
 
 
