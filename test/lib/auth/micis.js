@@ -42,10 +42,16 @@ module.exports = function(client) {
         client.url(url);
         if (!me.loggedOn) {
             client
-                .waitFor('#coins-logon-widget-1')
-                .setValue('#coins-logon-widget-1', config.auth.un)
-                .setValue('#coins-logon-widget-0', config.auth.pw)
-                .click('#coins-logon-widget button[type=submit]') //TODO: update to use data-selector instead
+                .waitFor('.coins-logon-widget-form')
+                .setValue(
+                    '.coins-logon-widget-form input[name=username]',
+                    config.auth.un
+                )
+                .setValue(
+                    '.coins-logon-widget-form input[name=password]',
+                    config.auth.pw
+                )
+                .click('.coins-logon-widget-form button[type=submit]') //TODO: update to use data-selector instead
                 .waitForPaginationComplete()
                 .getCookie('MICIS', function(err, cookie) {
                     if (cookie) {
