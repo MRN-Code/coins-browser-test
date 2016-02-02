@@ -96,6 +96,7 @@ describe('Add subject tags', function () {
      */
     it('should save new tags', function (done) {
         client
+            .pause(500)
             .getText('#subject_tags_table tbody', function (err, res) {
                 if (err) {
                     throw err;
