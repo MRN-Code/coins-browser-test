@@ -11,11 +11,19 @@ module.exports = function(client, config) {
         app: {},
     };
 
-    me.configure.cacheStudy = function(studyName) {
+    me.configure.cacheStudy = function(studyName, mode) {
+        mode = mode || 'data-entry';
         me.configure.filterByName(studyName);
         client.pause(100);
         me.configure.clickCacheFirstRow();
-        me.configure.clickCacheDataEntry();
+        if (mode === 'data-entry') {
+            me.configure.clickCacheDataEntry();
+        } else if (mode === 'self-assess') {
+            me.configure.clickCacheSelfAssess();
+        } else {
+            throw new TypeError('cacheStudy only supports `data-entry` and ' +
+                '`self-assess` cache modes.  Received: ' + toString(mode));
+        }
         me.configure.filterByName('');
     };
 
@@ -27,18 +35,27 @@ module.exports = function(client, config) {
             .waitForExist('#study_cache_details_container', 10000);
     };
 
-    me.configure.clickDeleteFirstRow = function() {
+    me.configure.deleteFirstRow = function() {
         var path = '//button[./*[contains(., \'Delete\')]]';
         return client
             .moveToObject(path)
             .click(path)
             .click('//div[contains(@class, \'ui-dialog\')]/button[contains(., \'Delete\')]')
-            .pause(1000) // wait for fade to finish
+            .pause(1100) // wait for fade to finish
             .waitForVis('#ocoins_study_config_table_wrapper', 20000);
     };
 
     me.configure.clickCacheDataEntry = function() {
         var path = '//button[./*[contains(., \'Data Entry\')]]';
+        return me.configure.clickCacheModeButton(path);
+    };
+
+    me.configure.clickCacheSelfAssess = function() {
+        var path = '//button[./*[contains(., \'Self Asses\')]]';
+        return me.configure.clickCacheModeButton(path);
+    };
+
+    me.configure.clickCacheModeButton = function(path) {
         return client
             .moveToObject(path)
             .waitForEnabled(path, 10000)
@@ -48,7 +65,7 @@ module.exports = function(client, config) {
 
     me.configure.deleteStudy = function(studyName) {
         me.configure.filterByName('RioArribaCo');
-        me.configure.clickDeleteFirstRow();
+        me.configure.deleteFirstRow();
         me.configure.filterByName('');
     };
 

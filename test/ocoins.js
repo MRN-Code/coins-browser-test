@@ -24,18 +24,23 @@ describe('ocoins', function() {
     describe('caching', function() {
 
         it('caches app assets in the AppCache', function(done) {
-            client
-                .waitForCondition(function testOcoinsAssetsCached() {
-                    var cacheStatus = document.querySelector('#ocoins-appcache-status');
-                    if (cacheStatus) {
-                        return cacheStatus.innerText === 'OK';
-                    }
-                }, null, 40000)
-                .call(done);
+            client.waitForCondition(function testOcoinsAssetsCached() {
+                var cacheStatus = document.querySelector('#ocoins-appcache-status');
+                if (cacheStatus) {
+                    return cacheStatus.innerText === 'OK';
+                }
+            }, null, 40000)
+            .call(done);
         });
 
-        it('caches non-asset data, studies & instruments, in browser storage', function(done) {
-            ocoins.configure.cacheStudy('RioArribaCo'); // tiny study w/ just 1 instrument
+        it('caches non-asset data, studies & instruments, in browser storage (data entry)', function(done) {
+            ocoins.configure.cacheStudy('RioArribaCo', 'data-entry'); // tiny study w/ just 1 instrument
+            ocoins.configure.deleteStudy('RioArribaCo');
+            client.call(done);
+        });
+
+        it('caches non-asset data, studies & instruments, in browser storage (self assess)', function(done) {
+            ocoins.configure.cacheStudy('RioArribaCo', 'self-assess'); // tiny study w/ just 1 instrument
             ocoins.configure.deleteStudy('RioArribaCo');
             client.call(done);
         });
