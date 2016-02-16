@@ -100,8 +100,6 @@ describe('Edit subject type', function () {
     it('should persist subject type, note', function (done) {
         client
             .click('#frmChange input[name=doChangeSubjectType]')
-            .pause(200)
-            .alertAccept()
             .waitForPaginationComplete()
             .getText('#update_subject_type_id option:checked', function (err, res) {
                 if (err) {
