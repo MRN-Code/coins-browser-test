@@ -51,8 +51,10 @@ module.exports = function(client, config) {
     };
 
     me.beginNewAssessment = function(done) {
+        var selector = 'button[id="new_asmt_bottom"]';
         return client
-            .click('input[value="Begin a new assessment"]')
+            .scroll(selector, 0, 0)
+            .click(selector)
             .waitForPaginationComplete(done);
     };
 
