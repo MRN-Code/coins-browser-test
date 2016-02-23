@@ -36,17 +36,20 @@ describe('subject look up', function () {
             .setValue('#email', testUser.email)
             .click('#frmFindSubject .ui-button-success')
             .waitForPaginationComplete()
-            .waitFor('.box-container .objbox', 4000)
-            .getText('.objbox > table tr:nth-child(2)', function (err, text) {
-                if (err) {
-                    throw err;
-                }
+            .waitFor('.box-container .dataTables_scrollBody', 4000)
+            .getText(
+                '.box-container .dataTables_scrollBody > table tr:nth-child(1)',
+                function (err, text) {
+                    if (err) {
+                        throw err;
+                    }
 
-                should(
-                    text.indexOf(testUser.firstName) !== -1 &&
-                    text.indexOf(testUser.lastName) !== -1
-                ).be.ok;
-            })
+                    should(
+                        text.indexOf(testUser.firstName) !== -1 &&
+                        text.indexOf(testUser.lastName) !== -1
+                    ).be.ok;
+                }
+            )
             .call(done);
     });
 });

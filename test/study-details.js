@@ -102,8 +102,8 @@ describe('Study details', function () {
 
         it('should display subjects in a table', function (done) {
             client
-                .waitForExist('table.obj tbody tr', 500)
-                .elements('table.obj tbody tr', function (err, res) {
+                .waitForExist('.dataTables_scrollBody tr', 500)
+                .elements('.dataTables_scrollBody tr', function (err, res) {
                     if (err) {
                         throw err;
                     }
