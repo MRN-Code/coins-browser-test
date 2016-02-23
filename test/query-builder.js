@@ -211,7 +211,7 @@ var setupAssessmentData = function (callback) {
         )
         .waitForExist(
             'select[name=selField] option:nth-child(2)',
-            1500,
+            5000,
             function (err) {
                 if (err) {
                     throw err;
