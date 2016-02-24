@@ -26,7 +26,7 @@ describe('navigate to asmt and fill out asmts', function() {
 
         // define inputs
         var asmtDetails = {
-            ursi: 'M06112539',
+            ursi: 'M06100119',
             studyId: 2319, // NI TEST
             instrumentId: 26363, // Calculation Test
             segmentInterval: 'visit1', // can vary this: visit1, v1, v2, v3, v4
@@ -129,7 +129,7 @@ describe('navigate to asmt and fill out asmts', function() {
 
         // define inputs
         var asmtDetails = {
-            ursi: 'M06112539',
+            ursi: 'M06100119',
             studyId: 2319, // NI TEST
             instrumentId: 26363, // Calculation Test
             segmentInterval: 'v2', // can vary this: visit1, v1, v2, v3, v4
