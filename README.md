@@ -14,6 +14,10 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
     * Note: 2.44 does **not** work with phantomjs.  Use 2.43 instead.
 1. Move `config/default.json.example` to `config/default.json`.  Update all fields to match your configuration.
 
+#### Chrome Driver
+
+If you stick with the example configuration, you’ll need Selenium’s Chrome Webdriver. Download it [via the official downloads page](https://sites.google.com/a/chromium.org/chromedriver/downloads) and place it in the project root.
+
 ### Server
 1. Currently, you must run your own selenium server locally.  A COINS specific selenium host is in work, running multiple browsers.
 
