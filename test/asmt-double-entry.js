@@ -80,10 +80,10 @@ describe('navigate to asmt and fill out asmts', function() {
             dataEntry.fillCalculationTestAsmt(asmtFirstEntry, done);
         });
 
-        //it ('should begin a new assessment', function(done) {
-        //    dataEntry.beginNewAssessment();
-        //    client.call(done);
-        //});
+        it ('should begin a new assessment', function(done) {
+            dataEntry.beginNewAssessment();
+            client.call(done);
+        });
 
         it ('should select Calculation Test (instrument_id 26363) for the second time', function(done) {
             // select calculation test
@@ -183,10 +183,10 @@ describe('navigate to asmt and fill out asmts', function() {
             dataEntry.fillCalculationTestAsmt(asmtFirstEntry, done);
         });
 
-        //it ('should begin a new assessment', function(done) {
-        //    dataEntry.beginNewAssessment();
-        //    client.call(done);
-        //});
+        it ('should begin a new assessment', function(done) {
+            dataEntry.beginNewAssessment();
+            client.call(done);
+        });
 
         it ('should select Calculation Test (instrument_id 26363) for the second time', function(done) {
             // select calculation test
