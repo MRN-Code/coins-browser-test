@@ -49,7 +49,7 @@ module.exports = function(client, config, menuMap) {
             .click('=' + parent.text)
             .click('=' + text)
             .waitForPaginationComplete()
-            .click('#pageHeader') // Close the menu by clicking the banner
+            .click('.site-header') // Close the menu by clicking the banner
             .call(done);
     };
 
