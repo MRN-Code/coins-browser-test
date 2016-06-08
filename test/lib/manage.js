@@ -32,25 +32,17 @@ module.exports = function(client, config) {
 
     me.verifyAutoCalcResponseExists = function(done) {
         return client
-            .getHTML('div.box-container>table', function(err, html) {
+            .getHTML('div#page', function(err, html) {
                 var n;
 
-                // 1) grab html from the second table on the page: html[1]
+                // 1) grab html from the page
                 // 2) search for 10.760204081633
-                n = html[1].search('10.760204081633');
+                n = html.search('10.760204081633');
 
                 // 3) assert that the text we are searching for actually exists
                 n.should.not.equal(-1);
             })
             .call(done);
-
-        // TODO: update above search function.  Possibly utilizing XPATH trickery...
-        //XPATH goodness
-        //$x('//*[contains(text(), "10.760204081633")]')
-        //getText(BIG_XPATH_QUERY, function() { .. })
-
-        // From: https://saucelabs.com/resources/the-selenium-click-command
-        // selenium.click("xpath=//input[@name=myButton' and @type='submit']")
     };
 
     me.findAsmtConflict = function(details, done) {
