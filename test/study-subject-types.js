@@ -1,4 +1,5 @@
 /* jshint expr: true */
+/* global coinsUtils */
 
 /**
  * Study subject types.
@@ -56,6 +57,28 @@ function getEditLinkSelector(text) {
     return '//td[text()="' + text + '"]/../td/a';
 }
 
+/**
+ * Find notify item.
+ *
+ * @param {string} label
+ * @returns {(string|undefined)}
+ */
+function findNotifyItem(label) {
+    if (
+        'notify' in coinsUtils &&
+        'queue' in coinsUtils.notify &&
+        Array.isArray(coinsUtils.notify.queue)
+    ) {
+        var item = coinsUtils.notify.queue.find(function findItem(item) {
+            return item.body.indexOf(label) > -1;
+        });
+
+        if (item) {
+            return item.body;
+        }
+    }
+}
+
 describe('Edit study subject type', function editStudySubjectType() {
     /**
      * Description control selector for the 'edit subject type' form.
@@ -103,45 +126,12 @@ describe('Edit study subject type', function editStudySubjectType() {
             .setValue(descriptionSelector, testSubjectType.description)
             .click('input[type=button][name=DoUpdate]')
             .waitForPaginationComplete()
-            .getText('.confirmMsg', function validateConfirmMessage(err, text) {
-                if (err) {
-                    throw err;
-                }
+            .execute(
+                findNotifyItem,
+                testSubjectType.label,
+                function validateConfirmMessage(err, res) {
+                    var text = res.value;
 
-                text.should.match(new RegExp(testSubjectType.label));
-            })
-            .getValue(
-                labelSelector,
-                function validateLabelControl(err, value) {
-                    if (err) {
-                        throw err;
-                    }
-
-                    value.should.be.equal(testSubjectType.label);
-                }
-            )
-            .getValue(
-                descriptionSelector,
-                function validateDescriptionControl(err, value) {
-                    if (err) {
-                        throw err;
-                    }
-
-                    value.should.be.equal(testSubjectType.description);
-                }
-            )
-            .call(done);
-    });
-
-    it('should reflect changes in list', function reflectChangesInList(done) {
-        study
-            .goToView('NITEST')
-            .waitForPaginationComplete()
-            .click('input[value="Edit Subject Types"]')
-            .waitForPaginationComplete()
-            .getText(
-                '.box-container > table',
-                function validateList(err, text) {
                     if (err) {
                         throw err;
                     }
@@ -152,23 +142,71 @@ describe('Edit study subject type', function editStudySubjectType() {
             .call(done);
     });
 
-    it('should reset subject type', function resetSubjectType(done) {
-        var linkSelector = getEditLinkSelector(testSubjectType.label);
+    it(
+        'should reflect changes in list and form',
+        function reflectChangesInList(done) {
+            var linkSelector = getEditLinkSelector(testSubjectType.label);
 
+            study
+                .goToView('NITEST')
+                .waitForPaginationComplete()
+                .click('input[value="Edit Subject Types"]')
+                .waitForPaginationComplete()
+                .getText(
+                    '.box-container .coins-datatable',
+                    function validateList(err, text) {
+                        if (err) {
+                            throw err;
+                        }
+
+                        text.should.match(new RegExp(testSubjectType.label));
+                    }
+                )
+                .click(linkSelector)
+                .waitForPaginationComplete()
+                .getValue(
+                    labelSelector,
+                    function validateLabelControl(err, value) {
+                        if (err) {
+                            throw err;
+                        }
+
+                        value.should.be.equal(testSubjectType.label);
+                    }
+                )
+                .getValue(
+                    descriptionSelector,
+                    function validateDescriptionControl(err, value) {
+                        if (err) {
+                            throw err;
+                        }
+
+                        value.should.be.equal(testSubjectType.description);
+                    }
+                )
+                .call(done);
+        }
+    );
+
+    it('should reset subject type', function resetSubjectType(done) {
         client
-            .click(linkSelector)
-            .waitForPaginationComplete()
             .setValue(labelSelector, targetSubjectTypeLabel)
             .setValue(descriptionSelector, targetSubjectTypeLabel)
             .click('input[type=button][name=DoUpdate]')
             .waitForPaginationComplete()
-            .getText('.confirmMsg', function validateConfirmMessage(err, text) {
-                if (err) {
-                    throw err;
-                }
+            .execute(
+                findNotifyItem,
+                targetSubjectTypeLabel,
+                function validateConfirmMessage(err, res) {
+                    var text = res.value;
 
-                text.should.match(new RegExp(targetSubjectTypeLabel));
-            })
+                    if (err) {
+                        throw err;
+                    }
+
+                    text.should.match(new RegExp(targetSubjectTypeLabel));
+                }
+            )
             .call(done);
     });
 });
