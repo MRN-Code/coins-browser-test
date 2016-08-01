@@ -140,8 +140,8 @@ module.exports = function(client, config) {
                  * Ensure the visits table's population by checking for
                  * `tbody tr` in the selector.
                  */
-                .waitFor('.box-container > table tbody tr:nth-child(2)', 4000)
-                .getText('.box-container > table', function (err, res) {
+                .waitFor('.box-container .coins-datatable tbody tr:nth-child(2)', 4000)
+                .getText('.box-container .coins-datatable', function (err, res) {
                     if (err) {
                         throw err;
                     } else if (!res) {
