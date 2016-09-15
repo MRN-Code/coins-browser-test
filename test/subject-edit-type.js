@@ -8,7 +8,7 @@
  *   2. Enter an URSI to find a single subject
  *   3. Go to "Study Enrollment" tab
  *   4. Click "change" button (to the right) for a study
- *   5. Choose something form "Change Subject Type To:" dropdown
+ *   5. Choose something from "Change Subject Type To:" dropdown
  *   6. Add note in Reason for Change/Disenrollment (text)
  *   7. Click "Update"
  *   8. Confirm changes persisted to form.
