@@ -71,7 +71,8 @@ module.exports = function(client, config) {
     me.new.submit = function(done) {
         done = done || noop;
         return client
-            .moveToObject('#submit_new_subject')
+            .pause(1000)
+            .scroll('#submit_new_subject')
             .click('#submit_new_subject')
             .waitForPaginationComplete()
             .pause(100)
@@ -139,16 +140,21 @@ module.exports = function(client, config) {
             .call(done);
     };
 
-    me.enroll.prepExisting = function(ursi, done) {
-        if (!ursi) {
-            throw new Error('URSI to enroll must be provided');
+    me.new.handleSubjectMatchesExisting = function() {
+        client
+            .scroll(0, 0)
+            .setValue('.coins-datatable-wrapper input[type=search]', 'testaddressline1')
+            .click('//*[@id="datatable-container"]/tbody/tr[1]/td[8]/a')
+            .pause(500);
+
+        // Create/Re-use
+        if (Date.now() % 2 === 0) {
+            client.click("#page-container > div.boxBody > div > a:nth-child(2)");            
+        } else {
+            client.click("#page-container > div.boxBody > div > a:nth-child(5)");
         }
-        done = done || noop;
-        return client
-            .click('[name="ursi"]')
-            .setValue('input[name="ursi"]', ursi)
-            .selectByValue('[name="study_id"]', 3580)
-            .call(done);
+
+        client.click("input[type=button][value=Continue]");
     };
 
     me.enroll.submitExisting = function(done) {
