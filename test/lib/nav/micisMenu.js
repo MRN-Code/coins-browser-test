@@ -16,6 +16,12 @@ var menuMap = [
             {text: 'List Studies'},
             {text: 'Add New Study'}
         ]
+    },
+    {
+        text: "Data Exchange",
+        children: [
+            {text: "Browse Available Data"}
+        ]
     }
 ];
 
