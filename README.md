@@ -7,7 +7,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 1. Clone repo to your local machine, as you will be running the test server on your own machine.
 1. `cd coins-browser-test`
 1. Install repo dependencies, `npm i`
-1. Ensure mocha is install, `npm i -g mocha phantomjs` _(Note: you'll need mocha@2.x.x)_
+1. Ensure mocha is installed, `npm i -g mocha` _(Note: you'll need mocha@2.x.x)_
 1. Download the standalone server:
     * `wget https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar --no-check-certificate`
     * OR: `curl -O https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar`
