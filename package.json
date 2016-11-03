@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "java -jar selenium-server-standalone-2.43.1.jar -port 4441 &"
+    "clean": "rm selenium-server-standalone-3.0.1.jar",
+    "install": "curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar"
   },
   "repository": {
     "type": "git",

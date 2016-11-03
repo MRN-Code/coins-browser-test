@@ -3,23 +3,41 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Setup
 
-### Developer
-1. Clone repo to your local machine, as you will be running the test server on your own machine.
-1. `cd coins-browser-test`
-1. Install repo dependencies, `npm i`
-1. Ensure mocha is installed, `npm i -g mocha` _(Note: you'll need mocha@2.x.x)_
-1. Download the standalone server:
-    * `wget https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar --no-check-certificate`
-    * OR: `curl -O https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar`
-    * Note: 2.44 does **not** work with phantomjs.  Use 2.43 instead.
-1. Move `config/default.json.example` to `config/default.json`.  Update all fields to match your configuration.
+You need [Node.js](https://nodejs.org/en/) and npm (packaged with recent versions of Node.js) installed on your machine.
 
-#### Chrome Driver
+1. Clone the repository:
 
-If you stick with the example configuration, you’ll need Selenium’s Chrome Webdriver. Download it [via the official downloads page](https://sites.google.com/a/chromium.org/chromedriver/downloads) and place it in the project root.
+  ```shell
+  git clone git@github.com:MRN-Code/coins-browser-test.git
+  ```
 
-### Server
-1. Currently, you must run your own selenium server locally.  A COINS specific selenium host is in work, running multiple browsers.
+2. Install _coins-browser-test_ dependencies:
+
+  ```shell
+  cd coins-browser-test
+  npm install
+  ```
+
+  This automatically installs the [Selenium](http://www.seleniumhq.org/download/) standalone server via _cURL_ in a [npm `install` script](https://docs.npmjs.com/misc/scripts). This will place the 3.0.1 standalone server in the root of the repository. If you don’t have _cURL_ or installation download the standalone server manualy:
+
+  ```shell
+  # Using cURL:
+  curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
+
+  # Using wget:
+  wget https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar --no-check-certificate
+  ```
+
+  Or, use Selenium’s link: http://www.seleniumhq.org/download/
+
+3. Install [mocha](https://mochajs.org/) globally:
+
+  ```shell
+  npm install -g mocha@2.5.3
+  ```
+
+  You’ll **need version 2**; versions 3+ contain incompatibilities with _coins-browser-test_.
+4. Copy `config/default.json.example` to `config/default.json`. Update all fields to match your configuration.
 
 # Usage - Running Tests
 1. Ensure the repo is always up-to-date to get the latest tests
