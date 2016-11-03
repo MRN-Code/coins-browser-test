@@ -4,9 +4,9 @@
   "description": "suite of browser tests for COINS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm selenium-server-standalone-3.0.1.jar",
-    "install": "curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar"
+    "install": "curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar",
+    "start": "java -Dwebdriver.chrome.driver=node_modules/chromedriver/bin/chromedriver -jar selenium-server-standalone-3.0.1.jar -port 4441"
   },
   "repository": {
     "type": "git",

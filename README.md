@@ -40,9 +40,14 @@ You need [Node.js](https://nodejs.org/en/) and npm (packaged with recent version
 4. Copy `config/default.json.example` to `config/default.json`. Update all fields to match your configuration.
 
 # Usage - Running Tests
-1. Ensure the repo is always up-to-date to get the latest tests
-1. Start the selenium server, `npm start` (or `java -jar selenium-server-standalone-2.43.1.jar`)
-1. Run your tests
+
+1. Start the Selenium standalone server:
+
+  ```shell
+  npm start
+  ```
+
+2. Run your tests
     1. `mocha --recursive --bail --reporter spec`, or
     1. `mocha --reporter yourFavoriteReporter path/to/test`, or
     1. `mocha path/to/test.js path/to/other/test.js`
