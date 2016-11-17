@@ -1,0 +1,15 @@
+{
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "impliedStrict": false,
+      "jsx": true
+    },
+    "ecmaVersion": 6
+  }
+}

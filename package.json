@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rm selenium-server-standalone-3.0.1.jar",
     "install": "stat selenium-server-standalone-3.0.1.jar || curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar",
+    "lint": "eslint test util",
     "start": "java -Dwebdriver.chrome.driver=node_modules/chromedriver/bin/chromedriver -jar selenium-server-standalone-3.0.1.jar -port 4441"
   },
   "repository": {
@@ -32,5 +33,12 @@
     "vargs-callback": "^0.2.4",
     "webdriverio": "~2.4.5"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1"
+  }
 }
