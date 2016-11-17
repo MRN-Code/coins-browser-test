@@ -1,20 +1,20 @@
-"use strict";
-var _ = require('lodash');
-var noop = function(){};
 
-module.exports = function(client, config) {
 
-    var me = {
-        new: {
-            newUrsis: []
-        },
-        enroll: {},
-        lookup: {}
-    };
+const _ = require('lodash');
+const noop = function () {};
 
-    me.new.fillForm = function(done) {
-        done = done || noop;
-        return client
+module.exports = function (client, config) {
+  const me = {
+    new: {
+      newUrsis: [],
+    },
+    enroll: {},
+    lookup: {},
+  };
+
+  me.new.fillForm = function (done) {
+    done = done || noop;
+    return client
             .setValue('input[name=FirstName]', 'testFirstName')
             .setValue('input[name=MiddleName]', 'testMiddleName')
             .setValue('input[name=LastName]', 'testLastName')
@@ -46,135 +46,133 @@ module.exports = function(client, config) {
             .click('#context_site') // subject tag context === site
             .moveToObject('#study_id')
             .selectByValue('#study_id', 2319) // NITEST
-            .alertDismiss(function(err, dismissed) {
-                if (err) { console.warn("Study Enrollment limit OK - < 90% full"); }
+            .alertDismiss((err, dismissed) => {
+              if (err) { console.warn('Study Enrollment limit OK - < 90% full'); }
             })
             .waitForVis('#site_id', 8000)
             .moveToObject('#site_id')
             .selectByValue('#site_id', 7)
-            .moveToObject('#first_name_at_birth', function(err, ok) {
-                if (err) { return; } // not an RDoC study
-                return client
+            .moveToObject('#first_name_at_birth', (err, ok) => {
+              if (err) { return; } // not an RDoC study
+              return client
                     .setValue('#first_name_at_birth', 'testFirstNameAtBirth')
                     .setValue('#middle_name_at_birth', 'testMiddleNameAtBirth')
                     .setValue('#last_name_at_birth', 'testLastNameAtBirth')
                     .click('#physical_sex_at_birth_f')
                     .setValue('#city_born_in', 'testCityBornIn');
-
             })
             .setValue('#consent_date', '02/22/2015')
             .click('[name=agreestosharedata]') // selects the first matched radio (Yes)
             .click('[name=agrees_to_future_studies]') // selects the first matched radio (Yes)
             .call(done);
-    };
+  };
 
-    me.new.submit = function(done) {
-        done = done || noop;
-        return client
+  me.new.submit = function (done) {
+    done = done || noop;
+    return client
             .moveToObject('#submit_new_subject')
             .click('#submit_new_subject')
             .waitForPaginationComplete()
             .pause(100)
-            .isExisting('[value="Add >"]', function(err, isExisting) {
-                if (!isExisting) {
-                    throw new Error("Submit new subject did not detect that it made it to the verify page.");
-                }
+            .isExisting('[value="Add >"]', (err, isExisting) => {
+              if (!isExisting) {
+                throw new Error('Submit new subject did not detect that it made it to the verify page.');
+              }
             })
             .call(done);
-    };
+  };
 
-    me.new.verify = function(done) {
-        done = done || noop;
-        return client
+  me.new.verify = function (done) {
+    done = done || noop;
+    return client
             .pause(200)
             .moveToObject('[value="Add >"]')
             .click('[value="Add >"]')
             .waitForPaginationComplete()
             .call(done);
-    };
+  };
 
-    me.new._handleSubjectMatchesClick = function(done) {
-        done = done || noop;
-        return client
+  me.new._handleSubjectMatchesClick = function (done) {
+    done = done || noop;
+    return client
             .pause(200)
             .moveToObject('#verify_add_new_subject')
             .click('#verify_add_new_subject')
             .pause(10)
             .call(done);
-    };
+  };
 
-    me.new.handleSubjectMatchesAddNew = function(done) {
-        done = done || noop;
-        return me.new._handleSubjectMatchesClick()
-            .isVisible('#confirm_new_participant_modal', function(err, isVisible) {
-                if (isVisible) {
+  me.new.handleSubjectMatchesAddNew = function (done) {
+    done = done || noop;
+    return me.new._handleSubjectMatchesClick()
+            .isVisible('#confirm_new_participant_modal', (err, isVisible) => {
+              if (isVisible) {
                     // test that you can close and reopen
-                    client
+                client
                         .click('#confirm_new_subject_declined')
-                        .isVisible('#confirm_new_subject_declined', function(err, isVisible) {
-                            if (isVisible) { throw new Error('#confirm_new_subject_declined should not be visible'); }
+                        .isVisible('#confirm_new_subject_declined', (err, isVisible) => {
+                          if (isVisible) { throw new Error('#confirm_new_subject_declined should not be visible'); }
                         })
                         .moveToObject('#verify_add_new_subject')
                         .click('#verify_add_new_subject')
                         .pause(50)
                         .click('#confirm_new_subject_confirmed');
-                }
+              }
             })
             .waitForPaginationComplete()
             .pause(200)
-            .isExisting('#new_ursi', function(err, isExisting) {
-                if (!isExisting) {
-                    throw new Error("Submit verify subject did not detect that it made it to new URSI page.");
-                }
+            .isExisting('#new_ursi', (err, isExisting) => {
+              if (!isExisting) {
+                throw new Error('Submit verify subject did not detect that it made it to new URSI page.');
+              }
             })
-            .getText('#new_ursi', function(err, text) {
-                text = (text || '').trim();
+            .getText('#new_ursi', (err, text) => {
+              text = (text || '').trim();
 
-                if (!text || text.charAt(0) !== 'M') {
-                    throw new Error('Unable to retrieve new URSI value.');
-                }
+              if (!text || text.charAt(0) !== 'M') {
+                throw new Error('Unable to retrieve new URSI value.');
+              }
 
-                me.new.newUrsis.push(text);
+              me.new.newUrsis.push(text);
             })
             .call(done);
-    };
+  };
 
-    me.enroll.prepExisting = function(ursi, done) {
-        if (!ursi) {
-            throw new Error('URSI to enroll must be provided');
-        }
-        done = done || noop;
-        return client
+  me.enroll.prepExisting = function (ursi, done) {
+    if (!ursi) {
+      throw new Error('URSI to enroll must be provided');
+    }
+    done = done || noop;
+    return client
             .click('[name="ursi"]')
             .setValue('input[name="ursi"]', ursi)
             .selectByValue('[name="study_id"]', 3580)
             .call(done);
-    };
+  };
 
-    me.enroll.submitExisting = function(done) {
-        done = done || noop;
-        return client
+  me.enroll.submitExisting = function (done) {
+    done = done || noop;
+    return client
             .pause(1000)
             .moveToObject('#enroll_subject_submit')
             .click('#enroll_subject_submit')
             .waitForPaginationComplete()
             // .scroll('.confirmMsg')
             .call(done);
-    };
+  };
 
-    me.lookup.existing = function(ursi, done) {
-        if (!ursi) {
-            throw new Error('subject.lookup.existing expects an ursi');
-        }
-        done = done || noop;
-        return client
+  me.lookup.existing = function (ursi, done) {
+    if (!ursi) {
+      throw new Error('subject.lookup.existing expects an ursi');
+    }
+    done = done || noop;
+    return client
             .pause(100)
             .setValue('input[name=ursi]', ursi)
             .click('[value="Continue >"]')
             .waitForPaginationComplete()
             .call(done);
-    };
+  };
 
-    return me;
-
+  return me;
 };

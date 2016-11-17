@@ -1,32 +1,32 @@
 'use strict';
+
 // test deps
-var config = require('config');
-var should = require('should');
+const config = require('config');
+const should = require('should');
 
-var client = require('./lib/client.js').client;
+const client = require('./lib/client.js').client;
 
-var nav = require('./lib/nav/navigation.js')(client, config);
-var Auth = require('./lib/auth/micis.js')(client, config);
+const nav = require('./lib/nav/navigation.js')(client, config);
 
-var timeoutDur = 25000;
-var defaultStudyId = 2319; //NITEST
+const timeoutDur = 25000;
+const defaultStudyId = 2319; // NITEST
 
-//include pre-requisite tests
+// include pre-requisite tests
 require('./logon.js');
 
-describe('navigate to asmt', function() {
-    this.timeout(timeoutDur);
+describe('navigate to asmt', () => {
+  this.timeout(timeoutDur);
 
-    before('initialize', function(done) {
+  before('initialize', (done) => {
         // wait for client to be ready before testing
-        client.clientReady.then(done);
-    });
+    client.clientReady.then(done);
+  });
 
-    it('should load asmt', function(done) {
-        nav.gotoAsmt(done);
-    });
+  it('should load asmt', (done) => {
+    nav.gotoAsmt(done);
+  });
 
-    it('should change asmt study', function(done) {
-        nav.selectAsmtStudy(defaultStudyId, done);
-    });
+  it('should change asmt study', (done) => {
+    nav.selectAsmtStudy(defaultStudyId, done);
+  });
 });

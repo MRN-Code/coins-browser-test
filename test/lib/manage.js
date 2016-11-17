@@ -1,13 +1,14 @@
-"use strict";
-var should = require('should');
-var _ = require('lodash');
+'use strict';
+
+let should = require('should');
+let _ = require('lodash');
 
 // exports
-module.exports = function(client, config) {
-    var me = {};
+module.exports = function (client, config) {
+    let me = {};
 
-    me.fillAsmtSearchCriteria = function(details, done) {
-        return client
+  me.fillAsmtSearchCriteria = function (details, done) {
+      return client
             .setValue('input[name=ursi]', details.ursi)
             .setValue('input[name=assessment_date]', details.assessmentDate)
 
@@ -23,50 +24,49 @@ module.exports = function(client, config) {
             .waitForPaginationComplete(done);
     };
 
-    me.clickAsmtResponsesButton = function(done) {
-        return client
+  me.clickAsmtResponsesButton = function (done) {
+      return client
             .moveToObject('#asmt_grid>tbody>tr>td>a')
             .click('=responses')
             .waitForPaginationComplete(done);
     };
 
-    me.verifyAutoCalcResponseExists = function(done) {
-        return client
-            .getHTML('div#page', function(err, html) {
-                var n;
+  me.verifyAutoCalcResponseExists = function (done) {
+      return client
+            .getHTML('div#page', (err, html) => {
+                let n;
 
                 // 1) grab html from the page
                 // 2) search for 10.760204081633
-                n = html.search('10.760204081633');
+              n = html.search('10.760204081633');
 
                 // 3) assert that the text we are searching for actually exists
-                n.should.not.equal(-1);
+              n.should.not.equal(-1);
             })
             .call(done);
     };
 
-    me.findAsmtConflict = function(details, done) {
+  me.findAsmtConflict = function (details, done) {
         // TODO: this could be made more robust. As of now, it
         // just selects the first ("View") button, which is pretty brittle
-        var selector = '#conflicts_table>tbody>tr>td>button';
+        let selector = '#conflicts_table>tbody>tr>td>button';
 
-        return client
+      return client
             .setValue(
                 'input[type=search]',
-                details.ursi + ' ' + details.assessmentDate + ' ' + details.segmentInterval
+                details.ursi + ' ' + details.assessmentDate + ' ' + details.segmentInterval,
             )
             .scroll(selector, -350, 0)
             .click(selector)
             .waitForPaginationComplete(done);
     };
 
-    me.fixAndResolveConflict = function(done) {
-        return client
+  me.fixAndResolveConflict = function (done) {
+      return client
             .click('input[value=">>>"]')
             .click('input[value="Resolve"]')
             .waitForPaginationComplete(done);
     };
 
-    return me;
-
+  return me;
 };

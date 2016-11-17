@@ -14,35 +14,34 @@
  *   8. Confirm changes persisted to form.
  */
 
-'use strict';
 
-var _ = require('lodash');
-var config = require('config');
-var client = require('./lib/client.js').client;
-var micis = require('./lib/auth/micis.js')(client);
-var nav = require('./lib/nav/navigation.js')(client, config);
-var should = require('should');
+const _ = require('lodash');
+const config = require('config');
+const client = require('./lib/client.js').client;
+const micis = require('./lib/auth/micis.js')(client);
+const nav = require('./lib/nav/navigation.js')(client, config);
+const should = require('should');
 
-var sampleUrsi = 'M87161657';
-var sampleNote = 'Test: ' + Date.now();
-var sampleType;
+const sampleUrsi = 'M87161657';
+const sampleNote = `Test: ${Date.now()}`;
+let sampleType;
 
 /** These types should not be selected. */
-var DISALLOWED_TYPES = ['EXCLUDED', 'WITHDRAWN'];
+const DISALLOWED_TYPES = ['EXCLUDED', 'WITHDRAWN'];
 
 describe('Edit subject type', function () {
-    this.timeout(config.defaultTimeout);
+  this.timeout(config.defaultTimeout);
 
-    before('initialize', function (done) {
-        client.clientReady.then(function () {
-            if (!micis.loggedOn) {
-                micis.logon();
-            }
+  before('initialize', (done) => {
+    client.clientReady.then(() => {
+      if (!micis.loggedOn) {
+        micis.logon();
+      }
 
             /**
              * Navigate to the appropriate view. This completes steps 1-3.
              */
-            nav.micisMenu
+      nav.micisMenu
                 .clickNested('Look Up a Subject')
                 .setValue('#ursi', sampleUrsi)
                 .click('#frmFindSubject .ui-button-success')
@@ -58,63 +57,61 @@ describe('Edit subject type', function () {
                  */
                 .click(
                     '//td/a[text()="[99-998]: NITEST"]/../..//input[@type="button"]',
-                    function (err) {
-                        if (err) {
-                            throw err;
-                        }
+                    (err) => {
+                      if (err) {
+                        throw err;
+                      }
 
-                        client.waitForPaginationComplete().call(done);
+                      client.waitForPaginationComplete().call(done);
                     });
-        });
     });
+  });
 
-    it('should show a study enrollment form', function (done) {
-        client.element('#frmChange', function (err) {
-                if (err) {
-                    throw err;
-                }
+  it('should show a study enrollment form', (done) => {
+    client.element('#frmChange', (err) => {
+      if (err) {
+        throw err;
+      }
 
-                client.call(done);
-            });
+      client.call(done);
     });
-    it('should accept new enrollment type and note', function (done) {
-        client.
+  });
+  it('should accept new enrollment type and note', (done) => {
+    client
             /** Select a random 'type' */
-            getText('#update_subject_type_id', function (err, res) {
-                if (err) {
-                    throw err;
-                }
+            .getText('#update_subject_type_id', (err, res) => {
+              if (err) {
+                throw err;
+              }
 
-                sampleType = _.sample(res.replace(/[^\S\n]/g, '')
+              sampleType = _.sample(res.replace(/[^\S\n]/g, '')
                     .split(/\n/)
-                    .filter(function (type) {
-                        return DISALLOWED_TYPES.indexOf(type) !== -1;
-                    }));
+                    .filter(type => DISALLOWED_TYPES.indexOf(type) !== -1));
 
-                client.selectByVisibleText('#update_subject_type_id', sampleType);
+              client.selectByVisibleText('#update_subject_type_id', sampleType);
             })
             .setValue('#frmChange textarea[name=notes]', sampleNote)
             .call(done);
-    });
+  });
 
-    it('should persist subject type, note', function (done) {
-        client
+  it('should persist subject type, note', (done) => {
+    client
             .click('#frmChange input[name=doChangeSubjectType]')
             .waitForPaginationComplete()
-            .getText('#update_subject_type_id option:checked', function (err, res) {
-                if (err) {
-                    throw err;
-                }
+            .getText('#update_subject_type_id option:checked', (err, res) => {
+              if (err) {
+                throw err;
+              }
 
-                should(res === sampleType).be.ok;
+              should(res === sampleType).be.ok;
             })
-            .getValue('#frmChange textarea[name=notes]', function (err, res) {
-                if (err) {
-                    throw err;
-                }
+            .getValue('#frmChange textarea[name=notes]', (err, res) => {
+              if (err) {
+                throw err;
+              }
 
-                should(res === sampleNote).be.ok;
+              should(res === sampleNote).be.ok;
             })
             .call(done);
-    });
+  });
 });

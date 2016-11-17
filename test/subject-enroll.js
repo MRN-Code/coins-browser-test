@@ -1,34 +1,34 @@
-'use strict';
-var config = require('config');
-var should = require('should');
 
-var client = require('./lib/client.js').client;
-var nav = require('./lib/nav/navigation.js')(client, config);
-var subject = require('./lib/subject.js')(client, config);
 
-var micis = require('./lib/auth/micis.js')(client);
+const config = require('config');
+const should = require('should');
 
-describe('subject enroll', function() {
-    this.timeout(config.defaultTimeout);
+const client = require('./lib/client.js').client;
+const nav = require('./lib/nav/navigation.js')(client, config);
+const subject = require('./lib/subject.js')(client, config);
 
-    before('initialize', function(done) {
-        client.clientReady.then(function boot() {
-            if (!micis.loggedOn) { micis.logon(); }
-            client.call(done);
-        });
+const micis = require('./lib/auth/micis.js')(client);
+
+describe('subject enroll', function () {
+  this.timeout(config.defaultTimeout);
+
+  before('initialize', (done) => {
+    client.clientReady.then(() => {
+      if (!micis.loggedOn) { micis.logon(); }
+      client.call(done);
     });
+  });
 
-    describe('enroll existing subject', function() {
-        it('should be accessible', function(done) {
-            nav.micisMenu
+  describe('enroll existing subject', () => {
+    it('should be accessible', (done) => {
+      nav.micisMenu
                 .clickNested('Enroll an Existing Subject')
                 .call(done);
-        });
-
-       it('should lookup an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', function(done) {
-            subject.enroll.prepExisting('M06158639');
-            subject.enroll.submitExisting(done);
-        });
     });
 
+    it('should lookup an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', (done) => {
+      subject.enroll.prepExisting('M06158639');
+      subject.enroll.submitExisting(done);
+    });
+  });
 });

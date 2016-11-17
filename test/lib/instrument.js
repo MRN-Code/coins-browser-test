@@ -1,97 +1,99 @@
-"use strict";
-// test deps
-var should = require('should');
-var _ = require('lodash');
 
-var getStrict = function(obj, key) {
-    if (obj[key] === undefined) {
-        throw new Error('Expected option `' + key + '` to be set');
-    }
-    return obj[key];
+
+// test deps
+const should = require('should');
+const _ = require('lodash');
+
+const getStrict = function (obj, key) {
+  if (obj[key] === undefined) {
+    throw new Error(`Expected option \`${key}\` to be set`);
+  }
+  return obj[key];
 };
 
-var getFormField = function(key) {
-    var exceptions = {
-        saLabel: 'salabel'
-    };
-    var actions = {
-        hideSaPrevious: 'selectByValue',
-        saHideSkippedQuestions: 'selectByValue',
-        lock: 'selectByValue',
-        _default: 'setValue'
-    }
-    return {
-        name: exceptions[key] || _.snakeCase(key),
-        action: actions[key] || actions._default
-    };
+const getFormField = function (key) {
+  const exceptions = {
+    saLabel: 'salabel',
+  };
+  const actions = {
+    hideSaPrevious: 'selectByValue',
+    saHideSkippedQuestions: 'selectByValue',
+    lock: 'selectByValue',
+    _default: 'setValue',
+  };
+  return {
+    name: exceptions[key] || _.snakeCase(key),
+    action: actions[key] || actions._default,
+  };
 };
 
 // exports
-module.exports = function(client, config) {
-    var me = {instrumentId:undefined};
+module.exports = function (client, config) {
+  const me = { instrumentId: undefined };
 
-    me.filterList = function(query, done) {
-        var selector = '#instrument_grid_filter input[type=search]';
-        return client.setValue(selector, query, done);
+  me.filterList = function (query, done) {
+    const selector = '#instrument_grid_filter input[type=search]';
+    return client.setValue(selector, query, done);
+  };
+
+  me.setInstrumentIdFromPage = function (done) {
+    const selector = '[name=instrument_id]';
+    return client.getValue(selector, (err, val) => {
+      if (err) {
+        throw err;
+      }
+      me.instrumentId = val;
+      done();
+    });
+  };
+
+  me.toggleLockFromList = function (instrumentId, done) {
+    const selector = `[data-instrument_id="${instrumentId}"] input.locked-unlocked`;
+    let lockState,
+      expectedState;
+    const expectedStateMap = {
+      lock: 'unlock',
+      unlock: 'lock',
     };
-
-    me.setInstrumentIdFromPage = function(done) {
-        var selector = '[name=instrument_id]';
-        return client.getValue(selector, function(err, val) {
-            if (err) {
-                throw err;
-            }
-            me.instrumentId = val;
-            done();
-        });
+    const setLockState = function (err, val) {
+      if (!err) {
+        lockState = val;
+        expectedState = expectedStateMap[val];
+      } else {
+        throw err;
+      }
     };
-
-    me.toggleLockFromList = function(instrumentId, done) {
-        var selector = '[data-instrument_id="' + instrumentId + '"] input.locked-unlocked';
-        var lockState, expectedState;
-        var expectedStateMap = {
-            'lock': 'unlock',
-            'unlock': 'lock'
-        };
-        var setLockState = function(err, val) {
-            if (!err) {
-                lockState = val;
-                expectedState = expectedStateMap[val];
-            } else {
-                throw err;
-            }
-        };
-        return client.getValue(selector, setLockState)
+    return client.getValue(selector, setLockState)
             .click(selector)
             .waitForPaginationComplete()
-            .getValue(selector, function(err, val) {
-                if(err) {
-                    throw err;
-                }
-                val.should.be.eql(expectedState);
-                done();
+            .getValue(selector, (err, val) => {
+              if (err) {
+                throw err;
+              }
+              val.should.be.eql(expectedState);
+              done();
             });
-    };
+  };
 
-    me.gotoEditFromList = function(instrumentId, done) {
-        var selector = '[data-instrument_id="' + instrumentId + '"] a.pvedit';
-        return client.click(selector)
+  me.gotoEditFromList = function (instrumentId, done) {
+    const selector = `[data-instrument_id="${instrumentId}"] a.pvedit`;
+    return client.click(selector)
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.gotoSection = function(sectionLabel, done) {
-        var navSelector = '#asmtPageNav';
-        var xPathNavSelector = '//*[@id="asmtPageNav"]';
-        var xPathSelector = xPathNavSelector + '//li[normalize-space(.) = "' + sectionLabel + '"]';
+  me.gotoSection = function (sectionLabel, done) {
+    const navSelector = '#asmtPageNav';
+    const xPathNavSelector = '//*[@id="asmtPageNav"]';
+    const xPathSelector = `${xPathNavSelector}//li[normalize-space(.) = "${sectionLabel}"]`;
 
-        return client.moveToObject(xPathNavSelector, 80, 10)
+    return client.moveToObject(xPathNavSelector, 80, 10)
             .click(xPathSelector)
             .moveToObject('#page-container', 0, 0, done);
-    };
+  };
 
 
-    me.create = function(options, done) {
-        return client
+  me.create = function (options, done) {
+    return client
             .setValue('input[name=label]', getStrict(options, 'label'))
             .setValue('input[name=salabel]', getStrict(options, 'saLabel'))
             .setValue('input[name=description]', getStrict(options, 'description'))
@@ -101,44 +103,44 @@ module.exports = function(client, config) {
             .setValue('input[name=skip_question_text]', getStrict(options, 'skipQuestionText'))
             .click('button[id=add_instrument]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.edit = function(options, done) {
-        _.forEach(options, function(option, key) {
-            var field = getFormField(key);
-            client[field.action]('[name=' + field.name + ']', option);
-        });
+  me.edit = function (options, done) {
+    _.forEach(options, (option, key) => {
+      const field = getFormField(key);
+      client[field.action](`[name=${field.name}]`, option);
+    });
 
-        return client
+    return client
             .click('button[id=update_instrument]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.fromHtml = function(callback) {
-        var options = {};
-        var callbackWrapper = function() {
-            callback(null, options);
-        };
-        client
-            .getValue('input[name=label]', function(err, val) { options.label = val; })
-            .getValue('input[name=salabel]', function(err, val) { options.saLabel = val; })
-            .getValue('input[name=description]', function(err, val) { options.description = val; })
-            .getValue('input[name=cr_notice]', function(err, val) { options.crNotice = val; })
-            .getValue('input[name=version]', function(err, val) { options.version = val; })
-            .getValue('input[name=max_per_segment]', function(err, val) { options.maxPerSegment = val; })
-            .getValue('input[name=skip_question_text]', function(err, val) { options.skipQuestionText = val; })
-            .getValue('select[name=hide_sa_previous]', function(err, val) { options.hideSaPrevious = val; })
-            .getValue('select[name=sa_hide_skipped_questions]', function(err, val) { options.saHideSkippedQuestions = val; })
-            .getValue('select[name=lock]', function(err, val) {
-                if (err) {
+  me.fromHtml = function (callback) {
+    const options = {};
+    const callbackWrapper = function () {
+      callback(null, options);
+    };
+    client
+            .getValue('input[name=label]', (err, val) => { options.label = val; })
+            .getValue('input[name=salabel]', (err, val) => { options.saLabel = val; })
+            .getValue('input[name=description]', (err, val) => { options.description = val; })
+            .getValue('input[name=cr_notice]', (err, val) => { options.crNotice = val; })
+            .getValue('input[name=version]', (err, val) => { options.version = val; })
+            .getValue('input[name=max_per_segment]', (err, val) => { options.maxPerSegment = val; })
+            .getValue('input[name=skip_question_text]', (err, val) => { options.skipQuestionText = val; })
+            .getValue('select[name=hide_sa_previous]', (err, val) => { options.hideSaPrevious = val; })
+            .getValue('select[name=sa_hide_skipped_questions]', (err, val) => { options.saHideSkippedQuestions = val; })
+            .getValue('select[name=lock]', (err, val) => {
+              if (err) {
                     // the lock select element is not printed if the instrument is locked
-                    options.lock = '1';
-                } else {
-                    options.lock = val;
-                }
+                options.lock = '1';
+              } else {
+                options.lock = val;
+              }
             })
             .call(callbackWrapper);
-    };
+  };
 
-    return me;
+  return me;
 };

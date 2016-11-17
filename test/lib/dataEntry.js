@@ -1,42 +1,43 @@
-"use strict";
-var should = require('should');
-var _ = require('lodash');
+
+
+const should = require('should');
+const _ = require('lodash');
 
 // exports
-module.exports = function(client, config) {
-    var me = {};
+module.exports = function (client, config) {
+  const me = {};
 
-    me.selectInstrument = function(instrumentId, done) {
-        return client
+  me.selectInstrument = function (instrumentId, done) {
+    return client
             .selectByValue('#instrument_id', instrumentId) // calculation test
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.fillCoverSheetPart1 = function(details, done) {
-        return client
+  me.fillCoverSheetPart1 = function (details, done) {
+    return client
             .setValue('input[name=ursi]', details.ursi)
             .selectByValue('#segment_interval', details.segmentInterval)
             .selectByValue('#source_type', details.sourceType)
             .setValue('input[name=assessment_date]', details.assessmentDate)
             .click('button[name=update]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.fillCoverSheetPart2 = function(details, done) {
-        return client
+  me.fillCoverSheetPart2 = function (details, done) {
+    return client
             .setValue('input[name=assessment_starttime]', details.assessmentStartTime)
             .selectByValue('#rater1', details.rater1)
             .selectByValue('#rater2', details.rater2)
             .selectByValue('#site_id', details.siteId)
             .selectByValue('#dataentry_type_id', details.dataEntryTypeId)
-            .click('#' + details.incompleteAssessment)
+            .click(`#${details.incompleteAssessment}`)
             .setValue('textarea[name=notes]', details.notes)
             .click('button[name=update]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.fillCalculationTestAsmt = function(details, done) {
-        return client
+  me.fillCalculationTestAsmt = function (details, done) {
+    return client
             .setValue('textarea[name=asmt-Testcal_1-1]', details.asmtTestcal11)
             .setValue('textarea[name=asmt-Testcal_2-1]', details.asmtTestcal21)
             .setValue('textarea[name=asmt-Testcal_3-1]', details.asmtTestcal31)
@@ -48,23 +49,22 @@ module.exports = function(client, config) {
             .pause(3500)
             .click('div[id=asmtComplete_bottom]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.beginNewAssessment = function(done) {
-        var selector = 'button[id="new_asmt_bottom"]';
-        return client
+  me.beginNewAssessment = function (done) {
+    const selector = 'button[id="new_asmt_bottom"]';
+    return client
             .scroll(selector, 0, 0)
             .click(selector)
             .waitForPaginationComplete(done);
-    };
+  };
 
-    me.clickCoverSheetNextButton = function(done) {
-        return client
+  me.clickCoverSheetNextButton = function (done) {
+    return client
             .click('button[name=update]')
             .waitForPaginationComplete(done);
-    };
+  };
 
-    return me;
-
+  return me;
 };
 

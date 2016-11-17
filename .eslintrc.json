@@ -1,5 +1,6 @@
 {
   "env": {
+    "commonjs": true,
     "es6": true,
     "mocha": true,
     "node": true
@@ -11,5 +12,24 @@
       "jsx": true
     },
     "ecmaVersion": 6
+  },
+  "rules": {
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "should"
+      }
+    ],
+    "strict": [0, "global"]
   }
 }
