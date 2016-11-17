@@ -1,7 +1,6 @@
 "use strict";
 // webdriver deps
 var WebdriverIO = require('webdriverio');
-var Promise = require('rsvp').Promise; // jshint ignore:line
 var paginationUtils;
 var config = require('config');
 var options = {
