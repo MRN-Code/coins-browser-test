@@ -19,30 +19,29 @@ describe('Test data exchange functionality', function() {
     });
   });
 
-  it('should be accessible', function(done) {
+  it('should open Data Exchange', function(done) {
     nav
       .micisMenu
       .clickNested('Browse Available Data')
       .call(done);
   });
 
-  it('should load templates', function(done) {
+  it('should verify that [Previous Request Templates] have loaded', function(done) {
     client
-      .elements("#requestMenu option", function(error, response) {
+      .elements("#requestMenu option")
+      .then(response => {
         response.value.length.should.be.greaterThan(1);
       })
       .call(done);
   });
 
-  it('should load four modalities', function(done) {
+  it('should verify that all 4 modality filters have loaded', function(done) {
+    const modalityFilters = ['MR', 'Assessments', 'Studies', 'Subjects'];
     client
-      .pause(1000)
-      .getText('.statisticsLabel label', function(error, response) {
-        const modalities = [];
-        response.forEach(function(text) { modalities.push(text); });
-        ['MR', 'Assessments', 'Studies', 'Subjects'].forEach(function(modality) {
-          modalities.should.containEql(modality);
-        });
+      .waitForExist('div#filterContainer .statisticsLabel div label')
+      .getText('div#filterContainer .statisticsLabel div label')
+      .then(response => {
+        response.should.be.eql(modalityFilters);
       })
       .call(done);
   });
