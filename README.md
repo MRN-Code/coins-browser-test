@@ -3,7 +3,7 @@ Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriveri
 
 # Setup
 
-You need [Node.js](https://nodejs.org/en/) and npm (packaged with recent versions of Node.js) installed on your machine.
+You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes with Node.js) installed on your machine.
 
 1. Clone the repository:
 
