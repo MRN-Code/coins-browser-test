@@ -1,4 +1,4 @@
-
+'use strict';
 
 const config = require('config');
 const should = require('should');
@@ -9,7 +9,7 @@ const subject = require('./lib/subject.js')(client, config);
 
 const micis = require('./lib/auth/micis.js')(client);
 
-describe('subject enroll', function () {
+describe('subject enroll', function subjectEnroll() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {
@@ -22,8 +22,8 @@ describe('subject enroll', function () {
   describe('enroll existing subject', () => {
     it('should be accessible', (done) => {
       nav.micisMenu
-                .clickNested('Enroll an Existing Subject')
-                .call(done);
+        .clickNested('Enroll an Existing Subject')
+        .call(done);
     });
 
     it('should lookup an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', (done) => {

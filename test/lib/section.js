@@ -1,4 +1,4 @@
-
+'use strict';
 
 /**
  * available section options object properties:
@@ -11,14 +11,15 @@
  *   multiInstGrid: {undefined}
  *   likertGrid: {undefined}
  *   noGrid: {undefined}
- * The last four are mutually exclusive (only one may be specified). If more than one is specified, the last one specified will be used.
+ *
+ * The last four are mutually exclusive (only one may be specified). If more
+ * than one is specified, the last one specified will be used.
  */
-// test deps
 
 const should = require('should');
 const _ = require('lodash');
 
-const getFormField = function (key) {
+const getFormField = (key) => {
   const exceptions = {};
   const actions = {
     noGrid: 'click',
@@ -30,40 +31,40 @@ const getFormField = function (key) {
   return {
     id: exceptions[key] || _.snakeCase(key),
     selector: `#${exceptions[key] || _.snakeCase(key)}`,
-    action: actions[key] || actions._default,
+    action: actions[key] || actions._default, // eslint-disable-line no-underscore-dangle
   };
 };
 
-// exports
-module.exports = function (client, config) {
+module.exports = (client) => {
   const me = {};
   const formSelector = '#instrument_add_edit_new_section';
 
-  me.openSectionEditor = function (done) {
+  me.openSectionEditor = (done) => {
     const selector = 'div.simLink[title="Edit Section Sort Order"]';
     return client.click(selector)
-            .waitForPaginationComplete()
-            .pause(1000)
-            .isVisible(formSelector, done);
+      .waitForPaginationComplete()
+      .pause(1000)
+      .isVisible(formSelector, done);
   };
-  me.create = function (options, done) {
-    const setValues = function () {
+
+  me.create = (options, done) => {
+    const setValues = () => {
       _.forEach(options, (option, key) => {
         const field = getFormField(key);
         client[field.action](field.selector, option);
       });
       return client;
     };
+
     return client
-            .call(setValues)
-            .click('#addSectionIcon')
-            .waitForPaginationComplete()
-            .waitForVis(formSelector, 4000, done);
+      .call(setValues)
+      .click('#addSectionIcon')
+      .waitForPaginationComplete()
+      .waitForVis(formSelector, 4000, done);
   };
-  me.closeSectionEditor = function (done) {
-    return client.click('.tclose')
-            .waitForPaginationComplete(done);
-  };
+
+  me.closeSectionEditor = done => client.click('.tclose')
+    .waitForPaginationComplete(done);
 
   return me;
 };

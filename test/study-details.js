@@ -27,7 +27,7 @@ function navigateToSingleStudy(cb) {
   study.goToView('NITEST').waitForPaginationComplete().call(callback);
 }
 
-describe('Study details', () => {
+describe('Study details', function studyDetails() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {

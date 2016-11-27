@@ -1,4 +1,4 @@
-
+'use strict';
 
 // test deps
 const config = require('config');
@@ -57,7 +57,7 @@ const timeoutDur = 90000;
 require('./logon.js');
 require('./navigateToAsmt.js');
 
-describe('instrument', () => {
+describe('instrument', function instrumenTest() {
   this.timeout(timeoutDur);
 
   before('initialize', (done) => {

@@ -50,7 +50,7 @@ const sampleData = {
   cssUrl: 'http://www.mrn.org/_ui/css/style.css',
 };
 
-describe('Add a new study', () => {
+describe('Add a new study', function studyAdd() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {

@@ -14,7 +14,7 @@ const defaultStudyId = 2319; // NITEST
 // include pre-requisite tests
 require('./logon.js');
 
-describe('navigate to asmt', () => {
+describe('navigate to asmt', function navigateToAsmt() {
   this.timeout(timeoutDur);
 
   before('initialize', (done) => {

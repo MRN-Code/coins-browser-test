@@ -78,7 +78,7 @@ function findNotifyItem(label) { // eslint-disable-line consistent-return
   }
 }
 
-describe('Edit study subject type', () => {
+describe('Edit study subject type', function studySubjectTypes() {
   /**
    * Description control selector for the 'edit subject type' form.
    *
@@ -102,9 +102,9 @@ describe('Edit study subject type', () => {
       }
 
       study
-                .goToView('NITEST')
-                .waitForPaginationComplete()
-                .call(done);
+        .goToView('NITEST')
+        .waitForPaginationComplete()
+        .call(done);
     });
   });
 
@@ -119,26 +119,26 @@ describe('Edit study subject type', () => {
     const linkSelector = getEditLinkSelector(targetSubjectTypeLabel);
 
     client
-            .click(linkSelector)
-            .waitForPaginationComplete()
-            .setValue(labelSelector, testSubjectType.label)
-            .setValue(descriptionSelector, testSubjectType.description)
-            .click('input[type=button][name=DoUpdate]')
-            .waitForPaginationComplete()
-            .execute(
-                findNotifyItem,
-                testSubjectType.label,
-                (err, res) => {
-                  const text = res.value;
+      .click(linkSelector)
+      .waitForPaginationComplete()
+      .setValue(labelSelector, testSubjectType.label)
+      .setValue(descriptionSelector, testSubjectType.description)
+      .click('input[type=button][name=DoUpdate]')
+      .waitForPaginationComplete()
+      .execute(
+          findNotifyItem,
+          testSubjectType.label,
+          (err, res) => {
+            const text = res.value;
 
-                  if (err) {
-                    throw err;
-                  }
+            if (err) {
+              throw err;
+            }
 
-                  text.should.match(new RegExp(testSubjectType.label));
-                }
-            )
-            .call(done);
+            text.should.match(new RegExp(testSubjectType.label));
+          }
+      )
+      .call(done);
   });
 
   it(

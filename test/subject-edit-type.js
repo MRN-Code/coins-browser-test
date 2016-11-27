@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Edit a subject's type.
  *
@@ -29,7 +31,7 @@ let sampleType;
 /** These types should not be selected. */
 const DISALLOWED_TYPES = ['EXCLUDED', 'WITHDRAWN'];
 
-describe('Edit subject type', function () {
+describe('Edit subject type', function subjectEditType() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {
@@ -38,32 +40,33 @@ describe('Edit subject type', function () {
         micis.logon();
       }
 
-            /**
-             * Navigate to the appropriate view. This completes steps 1-3.
-             */
+      /**
+       * Navigate to the appropriate view. This completes steps 1-3.
+       */
       nav.micisMenu
-                .clickNested('Look Up a Subject')
-                .setValue('#ursi', sampleUrsi)
-                .click('#frmFindSubject .ui-button-success')
-                .waitForPaginationComplete()
-                .pause(200)
-                .waitForText('=Study Enrollment')
-                .click('=Study Enrollment')
-                .waitForPaginationComplete()
-                /**
-                 * Click a the "Change" button to edit the participant's
-                 * study-level details (step 4). Choose "NITEST" as it has
-                 * several non-desctructive test subject types.
-                 */
-                .click(
-                    '//td/a[text()="[99-998]: NITEST"]/../..//input[@type="button"]',
-                    (err) => {
-                      if (err) {
-                        throw err;
-                      }
+        .clickNested('Look Up a Subject')
+        .setValue('#ursi', sampleUrsi)
+        .click('#frmFindSubject .ui-button-success')
+        .waitForPaginationComplete()
+        .pause(200)
+        .waitForText('=Study Enrollment')
+        .click('=Study Enrollment')
+        .waitForPaginationComplete()
+        /**
+         * Click a the "Change" button to edit the participant's
+         * study-level details (step 4). Choose "NITEST" as it has
+         * several non-desctructive test subject types.
+         */
+        .click(
+          '//td/a[text()="[99-998]: NITEST"]/../..//input[@type="button"]',
+          (err) => {
+            if (err) {
+              throw err;
+            }
 
-                      client.waitForPaginationComplete().call(done);
-                    });
+            client.waitForPaginationComplete().call(done);
+          }
+        );
     });
   });
 
@@ -78,40 +81,40 @@ describe('Edit subject type', function () {
   });
   it('should accept new enrollment type and note', (done) => {
     client
-            /** Select a random 'type' */
-            .getText('#update_subject_type_id', (err, res) => {
-              if (err) {
-                throw err;
-              }
+      /** Select a random 'type' */
+      .getText('#update_subject_type_id', (err, res) => {
+        if (err) {
+          throw err;
+        }
 
-              sampleType = _.sample(res.replace(/[^\S\n]/g, '')
-                    .split(/\n/)
-                    .filter(type => DISALLOWED_TYPES.indexOf(type) !== -1));
+        sampleType = _.sample(res.replace(/[^\S\n]/g, '')
+              .split(/\n/)
+              .filter(type => DISALLOWED_TYPES.indexOf(type) !== -1));
 
-              client.selectByVisibleText('#update_subject_type_id', sampleType);
-            })
-            .setValue('#frmChange textarea[name=notes]', sampleNote)
-            .call(done);
+        client.selectByVisibleText('#update_subject_type_id', sampleType);
+      })
+      .setValue('#frmChange textarea[name=notes]', sampleNote)
+      .call(done);
   });
 
   it('should persist subject type, note', (done) => {
     client
-            .click('#frmChange input[name=doChangeSubjectType]')
-            .waitForPaginationComplete()
-            .getText('#update_subject_type_id option:checked', (err, res) => {
-              if (err) {
-                throw err;
-              }
+      .click('#frmChange input[name=doChangeSubjectType]')
+      .waitForPaginationComplete()
+      .getText('#update_subject_type_id option:checked', (err, res) => {
+        if (err) {
+          throw err;
+        }
 
-              should(res === sampleType).be.ok;
-            })
-            .getValue('#frmChange textarea[name=notes]', (err, res) => {
-              if (err) {
-                throw err;
-              }
+        should(res === sampleType).be.ok; // eslint-disable-line no-unused-expressions
+      })
+      .getValue('#frmChange textarea[name=notes]', (err, res) => {
+        if (err) {
+          throw err;
+        }
 
-              should(res === sampleNote).be.ok;
-            })
-            .call(done);
+        should(res === sampleNote).be.ok; // eslint-disable-line no-unused-expressions
+      })
+      .call(done);
   });
 });

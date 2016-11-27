@@ -9,7 +9,7 @@ const nav = require('./lib/nav/navigation.js')(client, config);
 const micis = require('./lib/auth/micis.js')(client);
 const ocoins = require('./lib/ocoins.js')(client);
 
-describe('ocoins', () => {
+describe('ocoins', function ocoinsTest() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {

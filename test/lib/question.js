@@ -1,12 +1,9 @@
+'use strict';
 
-
-/**
- */
-// test deps
-const should = require('should');
 const _ = require('lodash');
+const should = require('should');
 
-const getFormField = function (key) {
+const getFormField = (key) => {
   const exceptions = {
     questionId: 'question_ID',
     maxInstances: 'maxInstances',
@@ -28,38 +25,43 @@ const getFormField = function (key) {
     previousResponses: 'click',
     sectionId: 'selectByVisibleText',
     cannedTypeToggle: 'click',
-    _default: 'setValue',
+    _default: 'setValue', // eslint-disable-line no-underscore-dangle
   };
-  const generateSelector = function () {
+
+  const generateSelector = () => {
+    /* eslint-disable no-underscore-dangle */
     const selector = selectors[key] || selectors._default;
+    /* eslint-enable no-underscore-dangle */
     const selectorId = exceptions[key] || _.snakeCase(key);
     return selector.replace('<replace>', selectorId);
   };
   return {
     id: exceptions[key] || _.snakeCase(key),
     selector: generateSelector(),
+    /* eslint-disable no-underscore-dangle */
     action: actions[key] || actions._default,
+    /* eslint-enable no-underscore-dangle */
   };
 };
 
-// exports
-module.exports = function (client, config) {
+module.exports = (client) => {
   const me = {};
 
-  me.openQuestionCreator = function (done) {
+  me.openQuestionCreator = (done) => {
     const selector = '#asmtAddQuestion';
     return client
-            .scroll(selector, 0, -100)
-            .click(selector)
-            .waitForPaginationComplete(done);
+      .scroll(selector, 0, -100)
+      .click(selector)
+      .waitForPaginationComplete(done);
   };
-  me.verifyQuestionInInstrument = function (questionId, done) {
-    return client.isVisible(`#questionList_${questionId}`, done);
-  };
-  me.verifyQuestionNotInInstrument = function (questionId, done) {
-    const opposite = function (err, isVisible) {
+
+  me.verifyQuestionInInstrument = (questionId, done) => client
+    .isVisible(`#questionList_${questionId}`, done);
+
+  me.verifyQuestionNotInInstrument = (questionId, done) => {
+    const opposite = (err, isVisible) => {
       if (isVisible) {
-        throw new Error(`Expected question ${questionId}to NOT exist`);
+        throw new Error(`Expected question ${questionId} to NOT exist`);
       } else if (isVisible === false) {
         done();
       }
@@ -67,13 +69,16 @@ module.exports = function (client, config) {
         throw err;
       }
     };
+
     return client.isExisting(`#questionList_${questionId}`, opposite);
   };
-  me.hoverEdit = function (questionId, done) {
+
+  me.hoverEdit = (questionId, done) => {
     const hoverSelector = `#questionList_${questionId} .editQuestionButton`;
     return client.moveToObject(hoverSelector, done);
   };
-  me.duplicate = function (fromId, toId, done) {
+
+  me.duplicate = (fromId, toId, done) => {
     const clickSelector = `#questionList_${fromId} .duplicateQuestionButton`;
     return me.hoverEdit(fromId)
             .click(clickSelector)
@@ -86,34 +91,35 @@ module.exports = function (client, config) {
             .alertAccept()
             .waitForPaginationComplete(done);
   };
-  me.delete = function (questionId, done) {
+
+  me.delete = (questionId, done) => {
     const clickSelector = `#questionList_${questionId} .deleteQuestionButton`;
 
     return me.hoverEdit(questionId)
-            .click(clickSelector)
-            .pause(10000)
-            .click('input[value=Delete]')
-            .waitForPaginationComplete(done);
+      .click(clickSelector)
+      .pause(10000)
+      .click('input[value=Delete]')
+      .waitForPaginationComplete(done);
   };
 
-  me.create = function (options, done) {
-    const setValues = function () {
+  me.create = (options, done) => {
+    const setValues = () => {
       _.forEach(options, (option, key) => {
         const field = getFormField(key);
         client[field.action](field.selector, option);
       });
       return client;
     };
+
     return client
-            .call(setValues)
-            .scroll('[name=submitButton]', 0, -100)
-            .click('[name=submitButton]')
-            .waitForPaginationComplete(done);
+      .call(setValues)
+      .scroll('[name=submitButton]', 0, -100)
+      .click('[name=submitButton]')
+      .waitForPaginationComplete(done);
   };
-  me.goBackToSection = function (done) {
-    return client.click('.tclose')
-            .waitForPaginationComplete(done);
-  };
+
+  me.goBackToSection = done => client.click('.tclose')
+    .waitForPaginationComplete(done);
 
   return me;
 };

@@ -10,7 +10,7 @@ const manage = require('./lib/manage.js')(client, config);
 
 const micis = require('./lib/auth/micis.js')(client);
 
-describe('navigate to asmt and fill out asmts', () => {
+describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {
@@ -23,7 +23,7 @@ describe('navigate to asmt and fill out asmts', () => {
   });
 
   describe('asmt double entry without error', () => {
-        // define inputs
+    // define inputs
     const asmtDetails = {
       ursi: 'M06100119',
       studyId: 2319, // NI TEST

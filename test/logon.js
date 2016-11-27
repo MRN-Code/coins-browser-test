@@ -1,13 +1,12 @@
-
+'use strict';
 
 const config = require('config');
 const should = require('should');
 
 const client = require('./lib/client.js').client;
-
 const auth = require('./lib/auth/micis.js')(client, config);
 
-describe('micis logon', () => {
+describe('micis logon', function logon() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {
@@ -23,4 +22,3 @@ describe('micis logon', () => {
     done();
   });
 });
-

@@ -418,7 +418,7 @@ function goBack(callback) {
     .call(cb);
 }
 
-describe('Query Builder', () => {
+describe('Query Builder', function queryBuilder() {
   this.timeout(config.defaultTimeout);
 
   before('initialize', (done) => {

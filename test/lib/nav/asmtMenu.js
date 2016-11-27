@@ -1,4 +1,6 @@
+'use strict';
 
+const menu = require('./menu.js');
 
 const menuMap = [
   {
@@ -51,6 +53,4 @@ const menuMap = [
   },
 ];
 
-module.exports = function (client, config) {
-  return require('./menu.js')(client, config, menuMap);
-};
+module.exports = (client, config) => menu(client, config, menuMap);

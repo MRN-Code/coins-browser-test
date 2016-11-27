@@ -1,9 +1,9 @@
-
+'use strict';
 
 // webdriver deps
 const WebdriverIO = require('webdriverio');
-let paginationUtils;
 const config = require('config');
+
 const options = {
   desiredCapabilities: {
     browserName: config.get('browserName'),
@@ -12,7 +12,8 @@ const options = {
   port: config.get('port'),
 };
 const client = WebdriverIO.remote(options);
-paginationUtils = require('./../../util/pagination.js')(client);
+
+require('./../../util/pagination.js')(client);
 
 const clientReady = new Promise((resolve, reject) => {
   client.init((err) => {
@@ -23,11 +24,10 @@ const clientReady = new Promise((resolve, reject) => {
     }
   });
 }).catch((err) => {
-  console.error(err);
+  console.error(err); // eslint-disable-line no-console
   throw err;
 });
 
 module.exports.client = client;
 module.exports.client.clientReady = clientReady;
 module.exports.clientReady = clientReady;
-
