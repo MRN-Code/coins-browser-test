@@ -78,6 +78,7 @@ describe('Test data exchange functionality for cloning a request', function() {
       .click(titleElement)
       .setValue(titleInput, titleValue)
       .click(okButton)
+      .pause(500)
       .getText(titleElement)
       .then(returnedTitle => {
         returnedTitle.should.be.equal(titleValue)
