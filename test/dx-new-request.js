@@ -180,12 +180,44 @@ describe('Test data exchange functionality for a new request', function() {
         response.should.be.eql([ '3748', '2396', '3', '1386' ]);
       })
       .call(done)
+  });
 
+  it('should delete the Studies filter', function(done) {
+    const deleteButton = 'div.filter.StudiesFilter > a#filterDelete';
+    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
+
+    client
+      .waitForExist(deleteButton)
+      .click(deleteButton)
+      .pause(2000)
+      .getText(statistics)
+      .then(response => {
+        response.should.be.eql([ '1495', '1284', '2', '274' ]);
+      })
+      .call(done)
+  });
+
+  it('should delete the group', function(done) {
+    const deleteButton = 'div.group.andGroup.ui-droppable > a#groupDelete';
+    const confirmButton = 'input#deleteAll';
+    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
+
+    client
+      .waitForExist(deleteButton)
+      .click(deleteButton)
+      .waitForExist(confirmButton)
+      .click(confirmButton)
+      .pause(2000)
+      .getText(statistics)
+      .then(response => {
+        response.should.be.eql([ '384', '0', '1', '203' ]);
+      })
+      .call(done)
   });
 
   it('should send the request', function(done) {
     const sendRequest = 'input#requestSubmitButton';
-    const requestPopUp = '#ui-id-45 > ul.requestSourceList > h3';
+    const requestPopUp = '#ui-id-49 > ul.requestSourceList > h3';
 
     client
       .waitForExist(sendRequest)
