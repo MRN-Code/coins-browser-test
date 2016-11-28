@@ -215,9 +215,33 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done)
   });
 
+  it('should edit the MR filter', function(done) {
+    const editButton = 'div.filter.MRFilter > a#filterEdit';
+    const label = 'ul.attributeList > li:nth-child(4)';
+    const select = `${label} > div.attributeOptionContainer > select`;
+    const applyButton = 'div#ui-id-51 > input#applyButton';
+    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
+
+    client
+      .waitForExist(editButton)
+      .click(editButton)
+      .waitForExist(label)
+      .click(label)
+      .waitForExist(select)
+      .selectByValue(select, 'PITT Scanner')
+      .waitForExist(applyButton)
+      .click(applyButton)
+      .pause(2000)
+      .getText(statistics)
+      .then(response => {
+        response.should.be.eql([ '624', '0', '2', '183' ]);
+      })
+      .call(done)
+  });
+
   it('should send the request', function(done) {
     const sendRequest = 'input#requestSubmitButton';
-    const requestPopUp = '#ui-id-49 > ul.requestSourceList > h3';
+    const requestPopUp = '#ui-id-57 > ul.requestSourceList > h3';
 
     client
       .waitForExist(sendRequest)
