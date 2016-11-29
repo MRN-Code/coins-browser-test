@@ -18,17 +18,40 @@ describe('subject enroll', function() {
         });
     });
 
-    describe('enroll existing subject', function() {
+    describe('add subject form', function() {
         it('should be accessible', function(done) {
             nav.micisMenu
-                .clickNested('Enroll an Existing Subject')
+                .clickNested('Enter a New Subject')
                 .call(done);
         });
 
-       it('should lookup an existing URSI (NITEST URSI M06158639 >> BIOMARKERS)', function(done) {
-            subject.enroll.prepExisting('M06158639');
-            subject.enroll.submitExisting(done);
+        it('should be fill-out-able', function(done) {
+            // fill form
+            subject.new.fillForm();
+
+            // Change study id
+            client.selectByValue('#study_id', 7640); // Smoking
+
+            client.call(done);
         });
+        
+        it('should be submittable', function(done) {
+            subject.new.submit(done);
+        });
+        
     });
+
+    describe('verify subject form', function() {        
+        it('should be submittable', function(done) {
+            subject.new.verify(done);
+        });        
+    });
+
+    describe('handle new subject matches form', function() {
+        it('should be enroll with existing subject', function(done) {
+            subject.new.handleSubjectMatchesExisting(done);
+        });        
+    });
+    
 
 });
