@@ -21,31 +21,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     });
   });
 
-  it('should verify that [Previous Request Templates] have loaded', (done) => {
-    const previousRequestTemplates = '#requestMenu > option';
-
-    client
-      .pause(500)
-      .elements(previousRequestTemplates)
-      .then(response => {
-        response.value.length.should.be.greaterThan(1);
-      })
-      .call(done);
-  });
-
-  it('should verify that all 4 modality filters have loaded', (done) => {
-    const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable';
-    const filterContainer = 'div#filterContainer > div.statisticsLabel > div > label';
-
-    client
-      .waitForExist(mrFilter)
-      .getText(filterContainer)
-      .then(response => {
-        response.should.be.eql(['MR', 'Assessments', 'Studies', 'Subjects']);
-      })
-      .call(done);
-  });
-
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleInput = 'input#newRequestTitle';
