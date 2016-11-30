@@ -5,11 +5,11 @@ const nav = require('./lib/nav/navigation')(client, config);
 const micis = require('./lib/auth/micis')(client);
 const should = require('should');
 
-describe('Test data exchange functionality for a new request', function() {
+describe('Test data exchange functionality for a new request', function dxNewRequest() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', function(done) {
-    client.clientReady.then(function boot() {
+  before('initialize', (done) => {
+    client.clientReady.then(() => {
       if (!micis.loggedOn) {
         micis.logon();
       }
@@ -18,17 +18,18 @@ describe('Test data exchange functionality for a new request', function() {
     });
   });
 
-  it('should open Data Exchange', function(done) {
+  it('should open Data Exchange', (done) => {
     nav
       .micisMenu
       .clickNested('Browse Available Data')
       .call(done);
   });
 
-  it('should verify that [Previous Request Templates] have loaded', function(done) {
+  it('should verify that [Previous Request Templates] have loaded', (done) => {
     const previousRequestTemplates = '#requestMenu > option';
 
     client
+      .pause(500)
       .elements(previousRequestTemplates)
       .then(response => {
         response.value.length.should.be.greaterThan(1);
@@ -36,7 +37,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should verify that all 4 modality filters have loaded', function(done) {
+  it('should verify that all 4 modality filters have loaded', (done) => {
     const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable';
     const filterContainer = 'div#filterContainer > div.statisticsLabel > div > label';
 
@@ -49,7 +50,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should click on [Untitled Request] and add a new title', function(done) {
+  it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleInput = 'input#newRequestTitle';
     const titleValue = 'New Request Title Test';
@@ -69,7 +70,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should drag an MR filter into the request workspace', function(done) {
+  it('should drag an MR filter into the request workspace', (done) => {
     const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable > label';
     // TODO: requestWorkspace needs improvement, as sometimes the MR filter
     // gets dragged to the wrong location
@@ -95,7 +96,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should update the request title again', function(done) {
+  it('should update the request title again', (done) => {
     const titleElement = 'div#requestTitle';
     const titleInput = 'input#newRequestTitle';
     const titleValue = 'Second request title update';
@@ -115,7 +116,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should drag a Study filter into the request workspace', function(done) {
+  it('should drag a Study filter into the request workspace', (done) => {
     const studyFilter = 'div.draggable.filter.StudiesFilter.ui-draggable > label';
     const requestWorkspace = 'div#request > div > div.filter.MRFilter';
     const studyName = 'div#ui-id-21 > ul.attributeList > li.attributeItem';
@@ -139,7 +140,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should change the request workspace group to an [OR] group', function(done) {
+  it('should change the request workspace group to an [OR] group', (done) => {
     const switchButton = 'div#request > div a#groupSwitch';
     const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
@@ -154,7 +155,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done);
   });
 
-  it('should add another filter and a group', function(done) {
+  it('should add another filter and a group', (done) => {
     const andGroupPreMove = 'div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer';
     const requestWorkspace = 'div#request > div > div.filter.MRFilter';
     const subjectsFilter = 'div.draggable.filter.SubjectsFilter.ui-draggable > label';
@@ -182,7 +183,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done)
   });
 
-  it('should delete the Studies filter', function(done) {
+  it('should delete the Studies filter', (done) => {
     const deleteButton = 'div.filter.StudiesFilter > a#filterDelete';
     const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
@@ -197,7 +198,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done)
   });
 
-  it('should delete the group', function(done) {
+  it('should delete the group', (done) => {
     const deleteButton = 'div.group.andGroup.ui-droppable > a#groupDelete';
     const confirmButton = 'input#deleteAll';
     const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
@@ -215,7 +216,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done)
   });
 
-  it('should edit the MR filter', function(done) {
+  it('should edit the MR filter', (done) => {
     const editButton = 'div.filter.MRFilter > a#filterEdit';
     const label = 'ul.attributeList > li:nth-child(4)';
     const select = `${label} > div.attributeOptionContainer > select`;
@@ -239,7 +240,7 @@ describe('Test data exchange functionality for a new request', function() {
       .call(done)
   });
 
-  it('should send the request', function(done) {
+  it('should send the request', (done) => {
     const sendRequest = 'input#requestSubmitButton';
     const requestPopUp = '#ui-id-57 > ul.requestSourceList > h3';
 

@@ -5,11 +5,11 @@ const nav = require('./lib/nav/navigation')(client, config);
 const micis = require('./lib/auth/micis')(client);
 const should = require('should');
 
-describe('Test data exchange functionality for cloning a request', function() {
+describe('Test data exchange functionality for cloning a request', function dxClone() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', function(done) {
-    client.clientReady.then(function boot() {
+  before('initialize', (done) => {
+    client.clientReady.then(() => {
       if (!micis.loggedOn) {
         micis.logon();
       }
@@ -18,17 +18,18 @@ describe('Test data exchange functionality for cloning a request', function() {
     });
   });
 
-  it('should open Data Exchange', function(done) {
+  it('should open Data Exchange', (done) => {
     nav
       .micisMenu
       .clickNested('Browse Available Data')
       .call(done);
   });
 
-  it('should verify that [Previous Request Templates] have loaded', function(done) {
+  it('should verify that [Previous Request Templates] have loaded', (done) => {
     const previousRequestTemplates = '#requestMenu > option';
 
     client
+      .pause(500)
       .elements(previousRequestTemplates)
       .then(response => {
         response.value.length.should.be.greaterThan(1);
@@ -36,7 +37,7 @@ describe('Test data exchange functionality for cloning a request', function() {
       .call(done);
   });
 
-  it('should verify that all 4 modality filters have loaded', function(done) {
+  it('should verify that all 4 modality filters have loaded', (done) => {
     const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable';
     const filterContainer = 'div#filterContainer > div.statisticsLabel > div > label';
 
@@ -49,7 +50,7 @@ describe('Test data exchange functionality for cloning a request', function() {
       .call(done);
   });
 
-  it('should select a previous request template', function(done) {
+  it('should select a previous request template', (done) => {
     const select = 'select#requestMenu';
     const open = 'input#requestOpenButton';
     const cloneIt = 'div#requestStatusMessage > a.symlink';
@@ -68,7 +69,7 @@ describe('Test data exchange functionality for cloning a request', function() {
       .call(done);
   });
 
-  it('should click on [Untitled Request] and add a new title', function(done) {
+  it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleInput = 'input#newRequestTitle';
     const titleValue = 'Cloned Request Title';
@@ -86,7 +87,7 @@ describe('Test data exchange functionality for cloning a request', function() {
       .call(done);
   });
 
-  it('should send the request', function(done) {
+  it('should send the request', (done) => {
     const sendRequest = 'input#requestSubmitButton';
     const requestPopUp = '#ui-id-13 > ul.requestSourceList > h3';
 
