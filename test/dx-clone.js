@@ -14,15 +14,11 @@ describe('Test data exchange functionality for cloning a request', function dxCl
         micis.logon();
       }
 
-      client.call(done);
+      nav
+        .micisMenu
+        .clickNested('Browse Available Data')
+        .call(done);
     });
-  });
-
-  it('should open Data Exchange', (done) => {
-    nav
-      .micisMenu
-      .clickNested('Browse Available Data')
-      .call(done);
   });
 
   it('should verify that [Previous Request Templates] have loaded', (done) => {
