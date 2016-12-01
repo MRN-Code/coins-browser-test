@@ -397,14 +397,28 @@ var previewAndExport = function (options, callback) {
             .call(callback);
 };
 
-var goBack = function (callback) {
-    callback = _.isFunction(callback) ? callback : _.noop;
+/**
+ * Hide the Zendesk widget.
+ *
+ * This code is executed client-side via Webdriver.io's `execute`. {@link
+ * http://webdriver.io/api/protocol/execute.html}
+ */
+function hideZendeskWidget() {
+  var zendeskWidget = document.getElementById('launcher');
 
-    return client
+  if (zendeskWidget) {
+    zendeskWidget.hidden = true;
+  }
+}
+
+var goBack = function (callback) {
+    client
         .back()
         .waitForExist('#optListOfSubjects', 10000)
         .waitForVisible('#optListOfSubjects', 10000)
-        .call(callback);
+        .execute(hideZendeskWidget);
+
+    return client.call(_.isFunction(callback) ? callback : _.noop);
 };
 
 describe('Query Builder', function () {
@@ -416,7 +430,10 @@ describe('Query Builder', function () {
                 micis.logon();
             }
 
-            nav.goToQueryBuilder(done);
+            nav.goToQueryBuilder(() => {
+                client.execute(hideZendeskWidget);
+                client.call(done);
+            });
         });
     });
 
