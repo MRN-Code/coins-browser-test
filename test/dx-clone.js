@@ -22,11 +22,9 @@ describe('Test data exchange functionality for cloning a request', function dxCl
   });
 
   it('should verify that [Previous Request Templates] have loaded', (done) => {
-    const previousRequestTemplates = '#requestMenu > option';
-
     client
       .pause(500)
-      .elements(previousRequestTemplates)
+      .elements('#requestMenu > option')
       .then(response => {
         response.value.length.should.be.greaterThan(1);
       })
@@ -34,12 +32,9 @@ describe('Test data exchange functionality for cloning a request', function dxCl
   });
 
   it('should verify that all 4 modality filters have loaded', (done) => {
-    const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable';
-    const filterContainer = 'div#filterContainer > div.statisticsLabel > div > label';
-
     client
-      .waitForExist(mrFilter)
-      .getText(filterContainer)
+      .waitForExist('div.draggable.filter.MRFilter.ui-draggable')
+      .getText('div#filterContainer > div.statisticsLabel > div > label')
       .then(response => {
         response.should.be.eql(['MR', 'Assessments', 'Studies', 'Subjects']);
       })
@@ -48,17 +43,14 @@ describe('Test data exchange functionality for cloning a request', function dxCl
 
   it('should select a previous request template', (done) => {
     const select = 'select#requestMenu';
-    const open = 'input#requestOpenButton';
-    const cloneIt = 'div#requestStatusMessage > a.symlink';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
       .waitForExist(select)
       .selectByValue(select, 460)
-      .click(open)
+      .click('input#requestOpenButton')
       .pause(3000)
-      .click(cloneIt)
-      .getText(statistics)
+      .click('div#requestStatusMessage > a.symlink')
+      .getText('div#filterContainer > div.statisticsLabel > div.statisticsValue')
       .then(response => {
         response.should.be.eql([ '2253', '1112', '1', '1112' ]);
       })
@@ -67,13 +59,13 @@ describe('Test data exchange functionality for cloning a request', function dxCl
 
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
-    const titleInput = 'input#newRequestTitle';
     const titleValue = 'Cloned Request Title';
     const okButton = 'input#okButton';
 
     client
       .click(titleElement)
-      .setValue(titleInput, titleValue)
+      .setValue('input#newRequestTitle', titleValue)
+      .waitForExist(okButton)
       .click(okButton)
       .pause(500)
       .getText(titleElement)

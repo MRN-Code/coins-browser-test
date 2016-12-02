@@ -7,6 +7,7 @@ const should = require('should');
 
 describe('Test data exchange functionality for a new request', function dxNewRequest() {
   this.timeout(config.defaultTimeout);
+  const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
   before('initialize', (done) => {
     client.clientReady.then(() => {
@@ -23,14 +24,13 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
-    const titleInput = 'input#newRequestTitle';
     const titleValue = 'New Request Title Test';
     const okButton = 'input#okButton';
 
     client
       .waitForExist(titleElement)
       .click(titleElement)
-      .setValue(titleInput, titleValue)
+      .setValue('input#newRequestTitle', titleValue)
       .waitForExist(okButton)
       .click(okButton)
       .pause(500)
@@ -42,17 +42,14 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should drag an MR filter into the request workspace', (done) => {
-    const mrFilter = 'div.draggable.filter.MRFilter.ui-draggable > label';
-    // TODO: requestWorkspace needs improvement, as sometimes the MR filter
+    // TODO: the first drag and drop needs improvement, as sometimes the MR filter
     // gets dragged to the wrong location
-    const requestWorkspace = 'div.group.andGroup.ui-droppable > a#groupSwitch';
     const label = 'ul.attributeList > li:nth-child(3)';
     const select = `${label} > div.attributeOptionContainer > select`;
     const applyButton = 'input#applyButton';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
-      .dragAndDrop(mrFilter, requestWorkspace)
+      .dragAndDrop('div.draggable.filter.MRFilter.ui-draggable > label', 'div.group.andGroup.ui-droppable > a#groupSwitch')
       .waitForExist(label)
       .click(label)
       .waitForExist(select)
@@ -69,14 +66,13 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should update the request title again', (done) => {
     const titleElement = 'div#requestTitle';
-    const titleInput = 'input#newRequestTitle';
     const titleValue = 'Second request title update';
     const okButton = 'input#okButton';
 
     client
       .waitForExist(titleElement)
       .click(titleElement)
-      .setValue(titleInput, titleValue)
+      .setValue('input#newRequestTitle', titleValue)
       .waitForExist(okButton)
       .click(okButton)
       .pause(500)
@@ -88,15 +84,12 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should drag a Study filter into the request workspace', (done) => {
-    const studyFilter = 'div.draggable.filter.StudiesFilter.ui-draggable > label';
-    const requestWorkspace = 'div#request > div > div.filter.MRFilter';
     const studyName = 'div#ui-id-21 > ul.attributeList > li.attributeItem';
     const select = `${studyName} > div > select`;
     const applyButton = 'div#ui-id-23 > input#applyButton';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
-      .dragAndDrop(studyFilter, requestWorkspace)
+      .dragAndDrop('div.draggable.filter.StudiesFilter.ui-draggable > label', 'div#request > div > div.filter.MRFilter')
       .waitForExist(studyName)
       .click(studyName)
       .waitForExist(select)
@@ -113,7 +106,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should change the request workspace group to an [OR] group', (done) => {
     const switchButton = 'div#request > div a#groupSwitch';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
       .waitForExist(switchButton)
@@ -127,19 +119,14 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should add another filter and a group', (done) => {
-    const andGroupPreMove = 'div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer';
-    const requestWorkspace = 'div#request > div > div.filter.MRFilter';
-    const subjectsFilter = 'div.draggable.filter.SubjectsFilter.ui-draggable > label';
-    const andGroupPostMove = 'div#request > div > div.group.andGroup.ui-droppable';
     const subjectType = 'div#ui-id-37 > ul.attributeList > li:nth-child(1)';
     const select = `${subjectType} > div > select`;
     const applyButton = 'div#ui-id-39 > input#applyButton';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
-      .dragAndDrop(andGroupPreMove, requestWorkspace)
+      .dragAndDrop('div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer', 'div#request > div > div.filter.MRFilter')
       .pause(1000)
-      .dragAndDrop(subjectsFilter, andGroupPostMove)
+      .dragAndDrop('div.draggable.filter.SubjectsFilter.ui-draggable > label', 'div#request > div > div.group.andGroup.ui-droppable')
       .waitForExist(subjectType)
       .click(subjectType)
       .waitForExist(select)
@@ -156,7 +143,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should delete the Studies filter', (done) => {
     const deleteButton = 'div.filter.StudiesFilter > a#filterDelete';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
       .waitForExist(deleteButton)
@@ -172,7 +158,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should delete the group', (done) => {
     const deleteButton = 'div.group.andGroup.ui-droppable > a#groupDelete';
     const confirmButton = 'input#deleteAll';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
       .waitForExist(deleteButton)
@@ -192,7 +177,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     const label = 'ul.attributeList > li:nth-child(4)';
     const select = `${label} > div.attributeOptionContainer > select`;
     const applyButton = 'div#ui-id-51 > input#applyButton';
-    const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
     client
       .waitForExist(editButton)
