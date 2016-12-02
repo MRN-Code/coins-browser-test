@@ -76,6 +76,11 @@ describe('Test data exchange functionality for cloning a request', function dxCl
   });
 
   it('should send the request', (done) => {
+    // TODO: referencing elements based on their incrementing numeric id is currently stable,
+    // but could cause problems in the future. I attempted to reference these requestPopUp vars
+    // using the div class instead, but could not get it to work. The returned value was an
+    // array and pseudo selectors were not grabbing the correct array index.  Maybe this can
+    // be made more robust with future versions of webdriverio.
     const sendRequest = 'input#requestSubmitButton';
     const requestPopUp = '#ui-id-13 > ul.requestSourceList > h3';
 
