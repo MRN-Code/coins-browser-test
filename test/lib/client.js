@@ -6,7 +6,14 @@ var paginationUtils;
 var config = require('config');
 var options = {
     desiredCapabilities: {
-        browserName: config.get('browserName')
+        browserName: config.get('browserName'),
+        chromeOptions: {
+            /**
+             * Disable the Push Notifications API.
+             * {@link http://peter.sh/experiments/chromium-command-line-switches/}
+             */
+            args: ['--disable-notifications'],
+        },
     },
     host: config.get('host'),
     port: config.get('port')
