@@ -1,9 +1,14 @@
 # coins-browser-test
 Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriverio**-wrapped-**selenium** unit tests!
 
+# Pre-requisites
+  - Newer version of Chrome (50+) or headless chrome
+  - Linux/OSX laptop (or server w/ headless)
+  - Java 8+
+
 # Setup
 
-You need [Node.js](https://nodejs.org/en/) and npm (packaged with recent versions of Node.js) installed on your machine.
+You need [Node.js](https://nodejs.org/en/) and npm (packaged with recent versions of Node.js) installed on your local machine.
 
 1. Clone the repository:
 
