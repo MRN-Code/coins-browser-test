@@ -7,7 +7,8 @@ var menuMap = [
             {text: "Enter a New Subject"},
             {text: 'Enroll an Existing Subject'},
             {text: "Merge Subjects"},
-            {text: "Look Up a Subject"}
+            {text: "Look Up a Subject"},
+            {text: "Import Participants from CSV"}
         ]
     },
     {
