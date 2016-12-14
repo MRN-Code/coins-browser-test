@@ -151,6 +151,15 @@ describe('navigate to asmt and fill out asmts', function() {
             manage.fillAsmtSearchCriteria(asmtDetails, done);
         });
 
+        /** 
+         * We did not create a profile for the browser to NOT ASK BEFORE DOWNLOADING.
+         * So, in order for this test to be successful, you need to make sure the popup window
+         * not shown up. To do this, try manually downloading the file in the testing browser,
+         * when the window pops up for you to confirm the download, check the checkbox saying 
+         * "Do this automatically for files like this from now on" and click "OK" to download 
+         * the data. Once this is done, this test should be able to pass. This only needs to 
+         * be done once in the testing browser.
+         */
         it ('should select all assessments and download them', function(done) {
             manage.downloadAsmt(done);
         });
