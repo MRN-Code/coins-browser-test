@@ -49,8 +49,8 @@ describe('Add subject tags', function () {
                 .setValue('#ursi', sampleUrsi)
                 .click('#frmFindSubject .ui-button-success')
                 .waitForPaginationComplete()
-                .waitForText('=Subject Tags')
-                .click('=Subject Tags')
+                .waitForExist('#button-extideditor')
+                .click('#button-extideditor')
                 .waitForPaginationComplete()
                 .call(done);
         });
