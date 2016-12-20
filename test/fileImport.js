@@ -8,7 +8,7 @@ const client = require('./lib/client.js').client;
 const nav = require('./lib/nav/navigation.js')(client, config);
 const micis = require('./lib/auth/micis.js')(client);
 
-describe('Doing various imports', function() {
+describe('Perform various imports and verify that they function correctly', function() {
     this.timeout(config.defaultTimeout);
 
     before('initialize', function(done) {
