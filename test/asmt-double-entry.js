@@ -13,6 +13,46 @@ var manage = require('./lib/manage.js')(client, config);
 
 var micis = require('./lib/auth/micis.js')(client);
 
+/**
+ * Random Time Generator
+ *
+ * Returns a time between 00:00 and 23:59
+ * @return {String} 24-format HH:MM
+ */
+const getRandomTime = () => {
+  // Minute: 00-59
+  let min = Math.floor(Math.random() * 59).toString();
+  min = min.length === 1 ? `0${min}` : min;
+
+  // Hour: 00-23
+  let hour = Math.floor(Math.random() * 23).toString();
+  hour = hour.length === 1 ? `0${hour}` : hour;
+
+  return `${hour}:${min}`;
+}
+
+/**
+ * Random Date Generator
+ *
+ * Returns a date between 01/01/1900 and 12/28/1980
+ * @return {String} MM/DD/YYYY
+ */
+const getRandomDate = () => {
+  // Day: 01 - 28
+  let day = Math.floor(Math.random() * 27 + 1).toString();
+  day = day.length === 1 ? `0${day}` : day;
+
+  // Month: 01 - 12
+  let month = Math.floor(Math.random() * 11 + 1).toString();
+  month = month.length === 1 ? `0${month}` : month;
+
+  // Year: 00 - 80
+  let year = Math.floor(Math.random() * 80).toString();
+  year = year.length === 1 ? `0${year}` : year;
+
+  return `${month}/${day}/19${year}`;
+}
+
 describe('navigate to asmt and fill out asmts', function() {
     this.timeout(config.defaultTimeout);
 
@@ -34,8 +74,8 @@ describe('navigate to asmt and fill out asmts', function() {
             instrumentId: 26363, // Calculation Test
             segmentInterval: 'v3', // can vary this: visit1, v1, v2, v3, v4
             sourceType: '5',  // can vary this: 3, 4, 5, 6, 7, 8, 9
-            assessmentDate: '12/24/1900', // don't change this Date, or need to make sure it's unique in resume queue
-            assessmentStartTime: '10:22',
+            assessmentDate: getRandomDate(),
+            assessmentStartTime: getRandomTime(),
             rater1: 1341, // Abeer Ayaz
             rater2: 1162, // Abigail Quish
             siteId: '7', // MRN (default)
@@ -62,7 +102,7 @@ describe('navigate to asmt and fill out asmts', function() {
             nav.asmtMenu
                 .clickNested('New Assessment', done);
         });
-        
+
         it ('should not see AASE instrument in the instrument list', function(done) {
             // 1995, 31563 are instrument ids for AASE instruments
             client.isExisting('select#instrument_id option[value="1995"]').should.be.fulfilledWith(false);
@@ -89,7 +129,7 @@ describe('navigate to asmt and fill out asmts', function() {
             // fill cover sheet part 2
             dataEntry.fillCoverSheetPart2(asmtDetails, done);
         });
-        
+
         it ('should partially fill in assessment, then save and escape', function(done) {
             // partially fill in asmt, save, escape
             dataEntry.partiallyFillCalTestAsmt(asmtFirstEntry, done);
@@ -151,13 +191,13 @@ describe('navigate to asmt and fill out asmts', function() {
             manage.fillAsmtSearchCriteria(asmtDetails, done);
         });
 
-        /** 
+        /**
          * We did not create a profile for the browser to NOT ASK BEFORE DOWNLOADING.
          * So, in order for this test to be successful, you need to make sure the popup window
          * not shown up. To do this, try manually downloading the file in the testing browser,
-         * when the window pops up for you to confirm the download, check the checkbox saying 
-         * "Do this automatically for files like this from now on" and click "OK" to download 
-         * the data. Once this is done, this test should be able to pass. This only needs to 
+         * when the window pops up for you to confirm the download, check the checkbox saying
+         * "Do this automatically for files like this from now on" and click "OK" to download
+         * the data. Once this is done, this test should be able to pass. This only needs to
          * be done once in the testing browser.
          */
         it ('should select all assessments and download them', function(done) {
@@ -199,8 +239,8 @@ describe('navigate to asmt and fill out asmts', function() {
             instrumentId: 26363, // Calculation Test
             segmentInterval: 'v2', // can vary this: visit1, v1, v2, v3, v4
             sourceType: '8',  // can vary this: 3, 4, 5, 6, 7, 8, 9
-            assessmentDate: '10/22/1953',
-            assessmentStartTime: '11:22',
+            assessmentDate: getRandomDate(),
+            assessmentStartTime: getRandomTime(),
             rater1: 1341, // Abeer Ayaz
             rater2: 1162, // Abigail Quish
             siteId: '7', // MRN (default)
@@ -306,4 +346,3 @@ describe('navigate to asmt and fill out asmts', function() {
     });
 
 });
-
