@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const config = require('config');
 const should = require('should');
-const homedir = require('homedir');
+const path = require('path');
 
 const client = require('./lib/client.js').client;
 const nav = require('./lib/nav/navigation.js')(client, config);
@@ -43,7 +43,10 @@ describe('Perform various imports and verify that they function correctly', func
 
         it ('Should fill in the inst prefix and upload file', function(done) {
             client.setValue('input#questPrefix', 'QWEQWEQWE')
-                .chooseFile('input#file', homedir() + '/Downloads/COINS_TEST/Adverse_Events_Log_formatted.csv')
+                .chooseFile('input#file', path.join(
+                    __dirname,
+                    'upload_test_files/Adverse_Events_Log_formatted.csv')
+                )
                 .waitForPaginationComplete(done);
 
         });
