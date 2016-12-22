@@ -25,30 +25,45 @@ describe('Perform various imports and verify that they function correctly', func
             nav.micisMenu.clickNested('Import Participants from CSV', done);
         });
         
+        it ('Should upload file', function(done) {
+            client
+                // This click action is a hack to activate the 'input[name=userfile]' element
+                // Otherwise the selenium will not be able to see the element
+                .click('input#upload')
+                .chooseFile('input[name=userfile]', path.join(
+                    __dirname,
+                    'upload_test_files/participant_import_formatted.csv'
+                ))
+                .waitForPaginationComplete(done);
+        });
+
+        it ('Should see the upload is successful', function(done) {
+            client
+                .getText('div.boxHeader > span')
+                     .should.be.fulfilledWith('Participants Imported!')
+                .call(done);
+        });
     });
 
-    describe('Import assessments', function(done) {
-
-    });
-
-    describe('Import instruments', function(done) {
+    describe('Import instruments and assessments', function(done) {
         it ('Should go to asmt and select NITEST (study_id 2319)', function(done) {
             nav.gotoAsmt();
             nav.selectAsmtStudy(2319, done);
         });
 
+        // Import instruments
         it ('Should navigate to Admin > Import Instruments', function(done) {
             nav.asmtMenu.clickNested('Import Instruments', done);
         });
 
         it ('Should fill in the inst prefix and upload file', function(done) {
-            client.setValue('input#questPrefix', 'QWEQWEQWE')
+            client
+                .setValue('input#questPrefix', 'QIWEQWEQWE')
                 .chooseFile('input#file', path.join(
                     __dirname,
                     'upload_test_files/Adverse_Events_Log_formatted.csv')
                 )
                 .waitForPaginationComplete(done);
-
         });
 
         it ('Should see the upload is successful', function(done) {
@@ -56,6 +71,32 @@ describe('Perform various imports and verify that they function correctly', func
                 .then(response => {
                     response.should.containEql('Instrument successfully added');
                 })
+                .call(done);
+        });
+
+        // Import assessments
+        it ('Should navigate to Admin > Import Assessments', function(done) {
+            nav.asmtMenu.clickNested('Import Assessments', done);
+        });
+
+        it ('Should upload assessments', function(done) {
+            client.selectByValue('select#instrument_id', 24063)
+                // interval value could be updated for multiple tests during dev.
+                .selectByValue('select#visit_interval', 'v2')
+                // This click action is a hack to activate the 'input[name=userfile]' element
+                // Otherwise the selenium will not be able to see the element
+                .click('input#upload')
+                .chooseFile('input[name=userfile]', path.join(
+                    __dirname,
+                    'upload_test_files/NITEST_STOP-BANG_template.csv'
+                ))
+                .waitForPaginationComplete(done);
+        });
+
+        it ('Should see the upload is successful', function(done) {
+            client.isExisting('table#new_asmts').should.be.fulfilledWith(true)
+                .getText('div#new_asmts_info')
+                    .should.be.fulfilledWith('Showing 1 to 2 of 2 entries')
                 .call(done);
         });
     });
