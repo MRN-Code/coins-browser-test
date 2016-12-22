@@ -103,7 +103,7 @@ describe('navigate to asmt and fill out asmts', function() {
                 .clickNested('New Assessment', done);
         });
 
-        it ('should not see AASE instrument in the instrument list', function(done) {
+        it ('should verify that the AASE instrument is hidden from Data Entry (because it is a hidden instrument)', function(done) {
             // 1995 is instrument id for AASE instruments
             client.isExisting('select#instrument_id option[value="1995"]').should.be.fulfilledWith(false);
             client.call(done);
@@ -114,7 +114,7 @@ describe('navigate to asmt and fill out asmts', function() {
             dataEntry.selectInstrument(asmtDetails.instrumentId, done);
         });
 
-        it ('should not see specialvisit option in visit dropdown list', function(done) {
+        it ('should verify that the specialvisit segment_interval is hidden from Data Entry (because it is a hidden visit)', function(done) {
             client.isExisting('select#segment_interval option[value="specialvisit"]').should.be.fulfilledWith(false);
             client.call(done);
         });
@@ -193,7 +193,7 @@ describe('navigate to asmt and fill out asmts', function() {
         /**
          * We did not create a profile for the browser to NOT ASK BEFORE DOWNLOADING.
          * So, in order for this test to be successful, you need to make sure the popup window
-         * not shown up. To do this, try manually downloading the file in the testing browser,
+         * does not show up. To do this, try manually downloading the file in the testing browser,
          * when the window pops up for you to confirm the download, check the checkbox saying
          * "Do this automatically for files like this from now on" and click "OK" to download
          * the data. Once this is done, this test should be able to pass. This only needs to
