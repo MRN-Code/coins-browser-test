@@ -104,9 +104,8 @@ describe('navigate to asmt and fill out asmts', function() {
         });
 
         it ('should not see AASE instrument in the instrument list', function(done) {
-            // 1995, 31563 are instrument ids for AASE instruments
+            // 1995 is instrument id for AASE instruments
             client.isExisting('select#instrument_id option[value="1995"]').should.be.fulfilledWith(false);
-            client.isExisting('select#instrument_id option[value="31563"]').should.be.fulfilledWith(false);
             client.call(done);
         });
 
