@@ -1,5 +1,4 @@
 "use strict";
-var should = require('should');
 var _ = require('lodash');
 
 // exports
@@ -61,6 +60,37 @@ module.exports = function(client, config) {
     me.clickCoverSheetNextButton = function(done) {
         return client
             .click('button[name=update]')
+            .waitForPaginationComplete(done);
+    };
+
+    // Partially fill in the asmt and save then escape
+    me.partiallyFillCalTestAsmt = function(details, done) {
+        return client
+            .setValue('textarea[name=asmt-Testcal_1-1]', details.asmtTestcal11)
+            .setValue('textarea[name=asmt-Testcal_2-1]', details.asmtTestcal21)
+            .click('div[id=asmtSave]')
+            .pause(3000)
+            /*
+            .waitUtil(function() {
+                return this.getText('div[id=asmtSave]') === 'Saved';
+            }, 3000, 'Error saving asmt responses')
+            */
+            .click('div[id=asmtEscape]')
+            .waitForPaginationComplete(done);
+    };
+
+    // Resume data entry
+    me.resumeEntry = function(asmtDate, done) {
+        return client
+            // We will rely on a special asmt date to fetch the correct record in the table
+            .setValue('input[aria-controls=my_asmts]', asmtDate)
+            .click('#my_asmts tr.odd td:nth-last-child(1) .simLink')
+            .waitForPaginationComplete(done);
+    };
+
+    me.enterResumedEntry = function(done) {
+        return client
+            .click('button[id=start_entry]')
             .waitForPaginationComplete(done);
     };
 

@@ -67,6 +67,16 @@ module.exports = function(client, config) {
             .waitForPaginationComplete(done);
     };
 
+    me.downloadAsmt = function(done) {
+        return client
+            .click('input.select-all')
+            .click('div#assessment-options')
+            .click('input[id=dl_asmts]')
+            // pause 7s to wait for download finish
+            .pause(7000)
+            .call(done);
+    };
+
     return me;
 
 };
