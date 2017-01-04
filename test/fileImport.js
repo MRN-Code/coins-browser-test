@@ -21,12 +21,14 @@ describe('Perform various imports and verify that they function correctly', func
     });
 
     describe('Import subjects', function(done) {
-        it ('Should navigate to Subjects > Import Participants from CSV', function(done) {
-            nav.micisMenu.clickNested('Import Participants from CSV', done);
+        it ('Should navigate to Subjects > Import Participants', function(done) {
+            nav.micisMenu.clickNested('Import Participants', done);
         });
         
         it ('Should upload file', function(done) {
             client
+                .selectByValue('select#study_id', 2319)
+                .waitForValue('select#subject_type_id', 3000)
                 // This click action is a hack to activate the 'input[name=userfile]' element
                 // Otherwise the selenium will not be able to see the element
                 .click('input#upload')

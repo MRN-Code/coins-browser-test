@@ -1,6 +1,6 @@
-Import ID,Site ID,Suffix,First Name,Middle Name,Last Name,Birthdate,Gender(M/F),Address Line 1,Address Line 2,City,State,Zip,Country,Notes,Email Address,Subject Agrees to Share Data (Y/N/U),Subject Type ID,Consent Date,Area Code1,Phone1,Ext1,Note1,Area Code2,Phone2,Ext2,Note2,Ethnicity,American Indian/Alaska Native,Asian,Native Hawaiian or Other Pacific Islander,Black or African American,White
-Required(R),R,Optional(O),R,O,R,R,R,R,O,R,R,R,R,O,R,R,R,R,R,R,O,O,O,O,O,O,R,O,O,O,O,O
-1,7,,First1,,Last1,12/1/1972,M,At MRN,,Albuquerque,NM,87106,USA,,,U,9501,10/25/2014,505,555-5555,,,,,,,0,,,,,X
-2,7,,First2,,Last2,1/1/1990,M,At MRN,,Albuquerque,NM,87106,USA,,,Y,9501,10/26/2014,505,555-5555,,,,,,,1,X,X,,,
-3,7,,First3,,Last3,10/1/1958,F,At MRN,,Albuquerque,NM,87106,USA,,,N,9501,10/27/2014,505,555-5555,,,,,,,1,X,,X,,
-4,7,,First4,,Last4,8/1/1983,F,At MRN,,Albuquerque,NM,87106,USA,,,U,9501,10/28/2014,505,555-5555,,,,,,,0,,,,X,
+Import ID	Suffix	First Name	Middle Name	Last Name	Birthdate	Gender(M/F)	Address Line 1	Address Line 2	City	State	Zip	Country	Notes	Email Address	Subject Agrees to Share Data (Y/N/U)	Consent Date	Area Code1	Phone1	Ext1	Note1	Area Code2	Phone2	Ext2	Note2	Ethnicity	American Indian/Alaska Native	Asian	Native Hawaiian or Other Pacific Islander	Black or African American	White
+Required(R)	Optional(O)	R	O	R	R	R	R	O	R	R	R	R	O	R	R	R	R	R	O	O	O	O	O	O	R	O	O	O	O	O
+1		First1		Last1	12/1/1972	M	At MRN		Albuquerque	NM	87106	USA			U	10/25/2014	505	555-5555							0					X
+2		First2		Last2	1/1/1990	M	At MRN		Albuquerque	NM	87106	USA			Y	10/26/2014	505	555-5555							1	X	X			
+3		First3		Last3	10/1/1958	F	At MRN		Albuquerque	NM	87106	USA			N	10/27/2014	505	555-5555							1	X		X		
+4		First4		Last4	8/1/1983	F	At MRN		Albuquerque	NM	87106	USA			U	10/28/2014	505	555-5555							0				X	
