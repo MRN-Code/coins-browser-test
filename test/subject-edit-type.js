@@ -48,16 +48,18 @@ describe('Edit subject type', function () {
                 .click('#frmFindSubject .ui-button-success')
                 .waitForPaginationComplete()
                 .pause(200)
-                .waitForText('=Study Enrollment')
-                .click('=Study Enrollment')
+                .waitForExist('#button-enrollmenteditor') // 'Study Enrollment' button
+                .click('#button-enrollmenteditor')
                 .waitForPaginationComplete()
+                .waitForExist('#multi_enroll_next') // DataTables 'Next' button
+                .click('#multi_enroll_next')
                 /**
                  * Click a the "Change" button to edit the participant's
                  * study-level details (step 4). Choose "NITEST" as it has
                  * several non-desctructive test subject types.
                  */
                 .click(
-                    '//td/a[text()="[99-998]: NITEST"]/../..//input[@type="button"]',
+                    '//td/a[text()="[99-998]: NITEST"]/../..//form/a',
                     function (err) {
                         if (err) {
                             throw err;
