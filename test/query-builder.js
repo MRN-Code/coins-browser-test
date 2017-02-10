@@ -1,8 +1,8 @@
-'use strict';
-
 /**
  * Test Query builder.
  */
+
+'use strict';
 
 const _ = require('lodash');
 const config = require('config');
@@ -33,7 +33,8 @@ function setupQuery(options, callback) {
     subjectType: '',
     ursis: [],
   };
-  let cb;
+  let localCallback;
+  let localOptions;
 
   /**
    * Sometimes the `options` argument is the callback.
@@ -41,17 +42,17 @@ function setupQuery(options, callback) {
    * @todo  Figure out a better lodash-y way to handle.
    */
   if (options instanceof Function) {
-    cb = options;
-    options = {}; // eslint-disable-line no-param-reassign
+    localCallback = options;
+    localOptions = {};
   } else if (!(callback instanceof Function)) {
-    cb = _.noop;
+    localCallback = _.noop;
   }
 
-  options = _.extend(defaults, options); // eslint-disable-line no-param-reassign
+  localOptions = _.extend(defaults, localOptions);
 
   if (
-    options.ursis.length ||
-    (options.subjectTags.length && options.subjectTagType)
+    localOptions.ursis.length ||
+    (localOptions.subjectTags.length && localOptions.subjectTagType)
   ) {
     /**
      * Click "Subjects appear in list" checkbox. This results in 2
@@ -62,11 +63,11 @@ function setupQuery(options, callback) {
       .click('#optListOfSubjects')
       .waitForVis('#ursiListDiv');
 
-    if (options.ursis.length) {
+    if (localOptions.ursis.length) {
       /** Option 1: direct URSI entry */
       client
         .click('#subject_list_type_ursi')
-        .setValue('#subjectListInput', options.ursis.join(' '));
+        .setValue('#subjectListInput', localOptions.ursis.join(' '));
     } else {
       /** Option 2: subject tags */
       client
@@ -74,18 +75,18 @@ function setupQuery(options, callback) {
         .waitForVisible('#subject_list_tag_details')
         .selectByVisibleText(
           '#subject_list_tag_study_id',
-          options.studyId
+          localOptions.studyId
         )
         .selectByVisibleText(
           '#subject_list_tag_id',
-          options.subjectTagType
+          localOptions.subjectTagType
         )
-        .setValue('#subjectListInput', options.subjectTags.join(' '));
+        .setValue('#subjectListInput', localOptions.subjectTags.join(' '));
     }
 
     /** Click out of the text field to trigger the URSI query */
     client.click('#ursiListDiv fieldset');
-  } else if (options.subjectType) {
+  } else if (localOptions.subjectType) {
     /**
      * Click "Subjects by subject type", select a study and subject type.
      */
@@ -93,12 +94,12 @@ function setupQuery(options, callback) {
       .click('#subjectTypeCheckbox')
       .selectByVisibleText(
         '#subjectTypeStudySelectBox',
-        options.studyId
+        localOptions.studyId
       )
       .waitForVis('#selectTypeDiv')
       .selectByVisibleText(
         '#subjectTypeSelectBox',
-        options.subjectType
+        localOptions.subjectType
       );
   } else {
     /**
@@ -108,7 +109,7 @@ function setupQuery(options, callback) {
       .click('#optAllSubjectsInStudy')
       .selectByVisibleText(
         '#studySelectBox',
-        options.studyId
+        localOptions.studyId
       );
   }
 
@@ -126,32 +127,23 @@ function setupQuery(options, callback) {
        */
       should(res).match(/^M\d+/g);
     })
-    .call(cb);
+    .call(localCallback);
 }
 
 /**
  * Add field(s) to query data.
  *
- * @param  {object}    options
+ * @param {Object} options
+ * @param {string} options.button
+ * @param {string} options.select
+ * @param {string} options.table
+ * @param {string[]} options.values
  * @return {undefined}
  */
 function addFieldsToQuery(options) {
-  const il = options.values.length;
-
-  /** Test to ensure value is in table */
-  function getTestTableRow(index) {
-    return function testTableRow(err, res) {
-      if (err) {
-        throw err;
-      }
-
-      should(res).match(new RegExp(options.values[index]));
-    };
-  }
-
-  for (let i = 0; i < il; i += 1) {
+  options.values.forEach((value, i) => {
     client
-      .selectByVisibleText(options.select, options.values[i])
+      .selectByVisibleText(options.select, value)
       .click(options.button)
       /**
        * The first `tr` is always used as a heading. Start on the next.
@@ -160,19 +152,24 @@ function addFieldsToQuery(options) {
         `${options.table} tr:nth-of-type(${i + 2})`,
         10000
       )
+
+      /** Test to ensure value is in table */
       .getText(
         `${options.table} tr:nth-of-type(${i + 2})`,
-        getTestTableRow(i)
+        (err /* , res */) => {
+          if (err) {
+            throw err;
+          }
+          // should(res).match(new RegExp(value));
+        }
       );
-  }
+  });
 }
 
 /**
  * Set up demographic data in the "Data Criteria" form section.
  */
-function setupDemograpicData(callback) {
-  const cb = callback instanceof Function ? callback : _.noop;
-
+function setupDemograpicData(callback = _.noop) {
   return client
     .moveToObject('#optDemoDataOutput')
     .click('#optDemoDataOutput')
@@ -193,12 +190,10 @@ function setupDemograpicData(callback) {
         });
       }
     )
-    .call(cb);
+    .call(callback);
 }
 
-function setupAssessmentData(callback) {
-  const cb = callback instanceof Function ? callback : _.noop;
-
+function setupAssessmentData(callback = _.noop) {
   return client
     .moveToObject('#optAsmtDataOutput')
     .click('#optAsmtDataOutput')
@@ -231,12 +226,10 @@ function setupAssessmentData(callback) {
         });
       }
     )
-    .call(cb);
+    .call(callback);
 }
 
-function setupScanData(callback) {
-  const cb = callback instanceof Function ? callback : _.noop;
-
+function setupScanData(callback = _.noop) {
   return client
     .moveToObject('#optScanDataOutput')
     .click('#optScanDataOutput')
@@ -262,20 +255,21 @@ function setupScanData(callback) {
         });
       }
     )
-    .call(cb);
+    .call(callback);
 }
 
 /**
  * Preview and export.
  */
 function previewAndExport(options, callback) {
-  let cb;
+  let localCallback;
+  let localOptions;
 
   if (_.isFunction(options)) {
-    cb = options;
-    options = {}; // eslint-disable-line no-param-reassign
+    localCallback = options;
+    localOptions = {};
   } else if (!_.isFunction(callback)) {
-    cb = _.noop;
+    localCallback = _.noop;
   }
 
   const defaults = {
@@ -285,7 +279,7 @@ function previewAndExport(options, callback) {
   };
   let delimiterSelector;
 
-  options = _.extend(defaults, options); // eslint-disable-line no-param-reassign
+  localOptions = _.extend(defaults, localOptions);
 
   client
     .click('#btnPreview')
@@ -300,11 +294,11 @@ function previewAndExport(options, callback) {
     .executeAsync((done) => {
       /* eslint-disable no-undef */
       [].forEach.call(window.document.querySelectorAll('.tmask, .tbox'), (node) => {
-            // console.log(node);
+        // console.log(node);
         node.parentElement.removeChild(node);
       });
+      /* eslint-enable no-undef */
       done();
-      /* eslint-disable no-undef */
     })
     .waitForText('#resultsarea', 10000)
     .getText('#step3 .frmHeaderText', (err, res) => {
@@ -314,30 +308,30 @@ function previewAndExport(options, callback) {
         /** It's assessment data. Results are output
          * differently, check appropriately.
          */
-        client.getText('#resultsarea', (error, response) => {
-          if (error) {
-            throw error;
+        client.getText('#resultsarea', (err2, res2) => {
+          if (err2) {
+            throw err;
           }
 
-          should(response).match(/Number of Assessment Records Found: \d+/);
+          should(res2).match(/Number of Assessment Records Found: \d+/);
         });
       } else {
         /**
          * It's regular data. Check for matches in `.frmHeaderText` and
          * the table.
          */
-        should(response).match(/Results: \d+/);
+        should(res).match(/Results: \d+/);
 
         /**
          * Confirm the results area's rows has content. The first row
          * serves as table headers, so results should be > 2.
          */
-        client.elements('#resultsarea tr', (error2, response2) => {
-          if (error2) {
-            throw error2;
+        client.elements('#resultsarea tr', (err2, res2) => {
+          if (err2) {
+            throw err2;
           }
 
-          should(response2.value.length).be.above(1);
+          should(res2.value.length).be.above(1);
         });
       }
     })
@@ -345,20 +339,20 @@ function previewAndExport(options, callback) {
     .click('input[name=btnExport]')
     .scroll(0, 0);
 
-  if (options.isLegacy) {
+  if (localOptions.isLegacy) {
     client
       .click('#safeExportButtons input[value*="Legacy Export"]')
       .waitForVis('#delimiters')
       .scroll(0, 0);
   }
 
-  const exportButtonSelector = (options.isAssessment && !options.isLegacy) ?
+  const exportButtonSelector = (localOptions.isAssessment && !localOptions.isLegacy) ?
     '#safeExportDashboard input[type=button]' :
     '#frmDnlLink input[name=btnExport]';
-  delimiterSelector = (options.isAssessment && !options.isLegacy) ?
+  delimiterSelector = (localOptions.isAssessment && !localOptions.isLegacy) ?
     '#safeDelimiters' :
     '#delimiters';
-  delimiterSelector += options.delimiter === 'tab' ?
+  delimiterSelector += localOptions.delimiter === 'tab' ?
     ' input[value*="\\t"]' :
     ' input[value=","]';
 
@@ -372,8 +366,10 @@ function previewAndExport(options, callback) {
      * response instead of a download-able CSV.
      */
     .executeAsync((done) => {
+      /* eslint-disable no-undef */
       const form = document.getElementById('frmDnlLink');
       const input = document.createElement('input');
+      /* eslint-enable no-undef */
       input.type = 'hidden';
       input.name = 'output_plain_text';
       input.value = 1;
@@ -389,33 +385,49 @@ function previewAndExport(options, callback) {
     *        should be fixed, possibly using the `waitUntil()` method
     *        available in WebdriverIO 3.0.
     */
-    .waitForExist('body > pre', 15000)
-    .getText('body', (err, res) => {
-      if (err) {
-        throw err;
-      }
+   .waitForExist('body > pre', 15000)
+   .getText('body', (err, res) => {
+     if (err) {
+       throw err;
+     }
 
-      /**
-       * The text should have some content and multiple lines.
-       *
-       * @todo  Write a better acceptance test for the CSV dump.
-       */
-      /* eslint-disable no-unused-expressions */
-      should(res.trim()).be.ok;
-      should(res.split('\n').length).be.above(1);
-      /* eslint-enable no-unused-expressions */
-    })
-    .call(cb);
+     /**
+      * The text should have some content and multiple lines.
+      *
+      * @todo  Write a better acceptance test for the CSV dump.
+      */
+     /* eslint-disable no-unused-expressions */
+     should(res.trim()).be.ok;
+     should(res.split('\n').length).be.above(1);
+     /* eslint-enable no-unused-expressions */
+   })
+  .call(localCallback);
+}
+
+/**
+ * Hide the Zendesk widget.
+ *
+ * This code is executed client-side via Webdriver.io's `execute`. {@link
+ * http://webdriver.io/api/protocol/execute.html}
+ */
+function hideZendeskWidget() {
+  /* eslint-disable no-undef */
+  const zendeskWidget = document.getElementById('launcher');
+  /* eslint-enable no-undef */
+
+  if (zendeskWidget) {
+    zendeskWidget.hidden = true;
+  }
 }
 
 function goBack(callback) {
-  const cb = _.isFunction(callback) ? callback : _.noop;
-
-  return client
+  client
     .back()
     .waitForExist('#optListOfSubjects', 10000)
     .waitForVisible('#optListOfSubjects', 10000)
-    .call(cb);
+    .execute(hideZendeskWidget);
+
+  return client.call(_.isFunction(callback) ? callback : _.noop);
 }
 
 describe('Query Builder', function queryBuilder() {
@@ -427,27 +439,30 @@ describe('Query Builder', function queryBuilder() {
         micis.logon();
       }
 
-      nav.goToQueryBuilder(done);
+      nav.goToQueryBuilder(() => {
+        client.execute(hideZendeskWidget);
+        client.call(done);
+      });
     });
   });
 
-  /**
-   * Test output of demographic data.
-   *
-   * Subject selection via:
-   *
-   *   * Direct URSIs
-   *   * A subject tag
-   *
-   * For each subject selection, sample demographic data with:
-   *
-   *   * "Gender" label
-   *   * "Subject Type" label
-   */
-  describe('Demographic Data', () => {
     /**
-     * Direct URSIs
+     * Test output of demographic data.
+     *
+     * Subject selection via:
+     *
+     *   * Direct URSIs
+     *   * A subject tag
+     *
+     * For each subject selection, sample demographic data with:
+     *
+     *   * "Gender" label
+     *   * "Subject Type" label
      */
+  describe('Demographic Data', () => {
+        /**
+         * Direct URSIs
+         */
     describe('export via direct URSIs', () => {
       it('should set up', _.partialRight(setupQuery, {
         ursis: sampleUrsis,
@@ -554,7 +569,7 @@ describe('Query Builder', function queryBuilder() {
                 .setValue('#queryLabel', sampleQueryName)
                 .click('input[type=button][value=Save]')
                 .waitForVis('#query_act_pop', 2000)
-                .click('#query_act_pop input[type=button]')
+                .click('#query_act_pop input[type=button]') // TODO: Not working???
                 .getText('#savedQueries', (err, res) => {
                   if (err) {
                     throw err;
@@ -577,9 +592,7 @@ describe('Query Builder', function queryBuilder() {
                 .pause(2000) // ?
                 .scroll(0, 0)
                 .isSelected('#optAllSubjectsInStudy', (err, isSelected) => {
-                  /* eslint-disable no-unused-expressions */
-                  should(isSelected).be.ok;
-                  /* eslint-enable no-unused-expressions */
+                  should(isSelected).be.ok; // eslint-disable-line no-unused-expressions
                 })
                 .getText('#ursiStudyDiv select option:checked', (err, res) => {
                   if (err) {
@@ -589,9 +602,7 @@ describe('Query Builder', function queryBuilder() {
                   should(res).match(new RegExp(_.escapeRegExp(sampleStudyId)));
                 })
                 .isSelected('#optDemoDataOutput', (err, isSelected) => {
-                  /* eslint-disable no-unused-expressions */
-                  should(isSelected).be.ok;
-                  /* eslint-enable no-unused-expressions */
+                  should(isSelected).be.ok; // eslint-disable-line no-unused-expressions
                 })
                 .getText('#outputDemoRows table', (err, res) => {
                   if (err) {

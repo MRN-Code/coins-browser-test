@@ -1,0 +1,95 @@
+Instrument Label,Instrument Description,Instrument Version ,Display Type,Max Instances/Visit,Section Label,Section SA Label,Section Description,Section SA Description,Questions Per Page,Question Label,Self-Assessment Label,Question Description,Display Response Label First (Y or N),Max Instances,Response Label,Response Description,Response Value
+Adverse Events Log,Adverse Events Log,1,1,1,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Adverse Events Log</div></span>","<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Adverse Events Log</div></span>",,,8,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Has the participant had any adverse events (AE) during this study?</div></span>",,,N,1,No,,0
+   ,,,,,,,,,,,,,,,Yes,,1
+   ,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>List adverse event.</div></span>",,,N,1,,,
+   ,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Severity</div></span>",,,N,1,Mild,,0
+,,,,,,,,,,,,,,,Moderate,,1
+,,,,,,,,,,,,,,,Severe,,2
+,,,,,,,,,,,,,,,"Worse than severe, or life threatening",,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Study Intervention Relationship</div></span>",,,N,1,Unrelated,,0
+,,,,,,,,,,,,,,,Possibly related,,1
+,,,,,,,,,,,,,,,Probably related,,2
+,,,,,,,,,,,,,,,Definitely related,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Action Taken Regarding Study Intervention</div></span>",,,N,1,None,,1
+,,,,,,,,,,,,,,,Discontinued permanently,,2
+,,,,,,,,,,,,,,,Discontinued temporarily,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Outcome of adverse event</div></span>",,,N,1,"Resolved, no sequel",,1
+,,,,,,,,,,,,,,,"Adverse event still present, no treatment",,2
+,,,,,,,,,,,,,,,"Adverse event still present, being treated",,3
+,,,,,,,,,,,,,,,"Residual efects present, not treated",,4
+,,,,,,,,,,,,,,,"Residual effects presemt, treated",,5
+,,,,,,,,,,,,,,,Death,,6
+,,,,,,,,,,,,,,,Unknown,,7
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Expected</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Serious</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,I,,,,7,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>List adverse event.</div></span>",,,N,1,,,
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Severity</div></span>",,,N,1,Mild,,0
+,,,,,,,,,,,,,,,Moderate,,1
+,,,,,,,,,,,,,,,Severe,,2
+,,,,,,,,,,,,,,,"Worse than severe, or life threatening",,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Study Intervention Relationship</div></span>",,,N,1,Unrelated,,0
+,,,,,,,,,,,,,,,Possibly related,,1
+,,,,,,,,,,,,,,,Probably related,,2
+,,,,,,,,,,,,,,,Definitely related,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Action Taken Regarding Study Intervention</div></span>",,,N,1,None,,1
+,,,,,,,,,,,,,,,Discontinued permanently,,2
+,,,,,,,,,,,,,,,Discontinued temporarily,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Outcome of adverse event</div></span>",,,N,1,"Resolved, no sequel",,1
+,,,,,,,,,,,,,,,"Adverse event still present, no treatment",,2
+,,,,,,,,,,,,,,,"Adverse event still present, being treated",,3
+,,,,,,,,,,,,,,,"Residual efects present, not treated",,4
+,,,,,,,,,,,,,,,"Residual effects presemt, treated",,5
+,,,,,,,,,,,,,,,Death,,6
+,,,,,,,,,,,,,,,Unknown,,7
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Expected</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Serious</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,II,,,,7,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>List adverse event.</div></span>",,,N,1,,,
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Severity</div></span>",,,N,1,Mild,,0
+,,,,,,,,,,,,,,,Moderate,,1
+,,,,,,,,,,,,,,,Severe,,2
+,,,,,,,,,,,,,,,"Worse than severe, or life threatening",,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Study Intervention Relationship</div></span>",,,N,1,Unrelated,,0
+,,,,,,,,,,,,,,,Possibly related,,1
+,,,,,,,,,,,,,,,Probably related,,2
+,,,,,,,,,,,,,,,Definitely related,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Action Taken Regarding Study Intervention</div></span>",,,N,1,None,,1
+,,,,,,,,,,,,,,,Discontinued permanently,,2
+,,,,,,,,,,,,,,,Discontinued temporarily,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Outcome of adverse event</div></span>",,,N,1,"Resolved, no sequel",,1
+,,,,,,,,,,,,,,,"Adverse event still present, no treatment",,2
+,,,,,,,,,,,,,,,"Adverse event still present, being treated",,3
+,,,,,,,,,,,,,,,"Residual efects present, not treated",,4
+,,,,,,,,,,,,,,,"Residual effects presemt, treated",,5
+,,,,,,,,,,,,,,,Death,,6
+,,,,,,,,,,,,,,,Unknown,,7
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Expected</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Serious</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,III,,,,7,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>List adverse event.</div></span>",,,N,1,,,
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Severity</div></span>",,,N,1,Mild,,0
+,,,,,,,,,,,,,,,Moderate,,1
+,,,,,,,,,,,,,,,Severe,,2
+,,,,,,,,,,,,,,,"Worse than severe, or life threatening",,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Study Intervention Relationship</div></span>",,,N,1,Unrelated,,0
+,,,,,,,,,,,,,,,Possibly related,,1
+,,,,,,,,,,,,,,,Probably related,,2
+,,,,,,,,,,,,,,,Definitely related,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Action Taken Regarding Study Intervention</div></span>",,,N,1,None,,1
+,,,,,,,,,,,,,,,Discontinued permanently,,2
+,,,,,,,,,,,,,,,Discontinued temporarily,,3
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Outcome of adverse event</div></span>",,,N,1,"Resolved, no sequel",,1
+,,,,,,,,,,,,,,,"Adverse event still present, no treatment",,2
+,,,,,,,,,,,,,,,"Adverse event still present, being treated",,3
+,,,,,,,,,,,,,,,"Residual efects present, not treated",,4
+,,,,,,,,,,,,,,,"Residual effects presemt, treated",,5
+,,,,,,,,,,,,,,,Death,,6
+,,,,,,,,,,,,,,,Unknown,,7
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Expected</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1
+,,,,,,,,,,"<span style=""font-weight:normal;font-family: Arial;""><div align = 'left'>Serious</div></span>",,,N,1,No,,0
+,,,,,,,,,,,,,,,Yes,,1

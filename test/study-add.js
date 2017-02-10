@@ -150,70 +150,70 @@ describe('Add a new study', function studyAdd() {
          * to the text values they should match (`match`).
          */
     const labelMatches = [{
-      label: 'Study Name',
+      label: 'Study Name:',
       match: sampleData.label,
     }, {
-      label: 'IRB Title (formal title)',
+      label: 'IRB Title (formal title):',
       match: sampleData.title,
     }, {
-      label: 'Study Archive Directory',
+      label: 'Study Archive Directory:',
       match: sampleData.archiveDirectory,
     }, {
-      label: 'Principal Investigator',
+      label: 'Principal Investigator:',
       match: sampleData.pi.split(', ').reverse().join(' '),
     }, {
-      label: 'Co-Investigator',
+      label: 'Co-Investigator:',
       match: sampleData.coInvestigator.split(', ').reverse().join(' '),
     }, {
-      label: 'Site',
+      label: 'Site:',
       match: sampleData.sideId,
     }, {
-      label: 'IRB Number',
+      label: 'IRB Number:',
       match: sampleData.irbNumber,
     }, {
-      label: 'Internal Study Number',
+      label: 'Internal Study Number:',
       match: sampleData.internalStudyNumber,
     }, {
-      label: 'IRB Consent Date',
+      label: 'IRB Consent Date:',
       match: sampleData.approvalDate,
     }, {
-      label: 'Expiration date',
+      label: 'Expiration Date:',
       match: sampleData.expirationDate,
     }, {
-      label: 'Approved number of Participants',
+      label: 'Approved Number of Participants:',
       match: sampleData.maxEnrollment,
     }, {
-      label: 'Allows URSI Sharing',
+      label: 'Allows URSI Sharing:',
       match: sampleData.studySharing,
     }, {
-      label: 'Sponsor',
+      label: 'Sponsor:',
       match: sampleData.sponsor,
     }, {
-      label: 'Grant Number',
+      label: 'Grant Number:',
       match: sampleData.grantNumber,
     }, {
-      label: 'URL Reference',
+      label: 'URL Reference:',
       match: sampleData.urlReference,
     }, {
-      label: 'URL Description',
+      label: 'URL Description:',
       match: sampleData.urlDescription,
     }, {
-      label: 'Status',
+      label: 'Status:',
       match: sampleData.status,
     }, {
       label: 'Default Radiologist:',
       match: sampleData.defaultRadiologist,
     }, {
-      label: 'Primary Research Area',
+      label: 'Primary Research Area:',
       match: sampleData.primaryResearchArea,
     }, {
-      label: 'Secondary Research Area',
+      label: 'Secondary Research Area:',
       match: sampleData.secondaryResearchArea,
     }, {
-      label: 'Comments/Notes',
+      label: 'Comments/Notes:',
       match: sampleData.description,
     }, {
-      label: 'Study CSS URL',
+      label: 'Study CSS URL:',
       match: sampleData.cssUrl,
     }];
 

@@ -10,6 +10,7 @@ const menuMap = [
             { text: 'Enroll an Existing Subject' },
             { text: 'Merge Subjects' },
             { text: 'Look Up a Subject' },
+            { text: 'Import Participants' },
     ],
   },
   {
@@ -28,3 +29,4 @@ const menuMap = [
 ];
 
 module.exports = (client, config) => menu(client, config, menuMap);
+

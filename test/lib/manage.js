@@ -28,11 +28,11 @@ module.exports = (client) => {
 
   me.verifyAutoCalcResponseExists = done => client
     .getHTML('div#page', (err, html) => {
-        // 1) grab html from the page
-        // 2) search for 10.760204081633
+      // 1) grab html from the page
+      // 2) search for 10.760204081633
       const n = html.search('10.760204081633');
 
-        // 3) assert that the text we are searching for actually exists
+      // 3) assert that the text we are searching for actually exists
       n.should.not.equal(-1);
     })
     .call(done);
@@ -56,6 +56,14 @@ module.exports = (client) => {
     .click('input[value=">>>"]')
     .click('input[value="Resolve"]')
     .waitForPaginationComplete(done);
+
+  me.downloadAsmt = done => client
+    .click('input.select-all')
+    .click('div#assessment-options')
+    .click('input[id=dl_asmts]')
+    // pause 7s to wait for download finish
+    .pause(7000)
+    .call(done);
 
   return me;
 };

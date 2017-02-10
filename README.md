@@ -1,18 +1,26 @@
 # coins-browser-test
 Front End Automated Page Script Tests for COINS.  **mocha**-wrapped-**webdriverio**-wrapped-**selenium** unit tests!
 
+# Prerequisites
+  - Newer version of Chrome (50+) or headless chrome
+  - Linux/OSX laptop (or server w/ headless)
+  - Java 8+ (e.g. 1.8.x)
+    - Check current version of java
+      - `java -version`
+    - Update to latest version (OSX laptop)
+      - `brew update`
+      - `brew cask install java`
+
 # Setup
 
 You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes with Node.js) installed on your machine.
 
 1. Clone the repository:
-
   ```shell
   git clone git@github.com:MRN-Code/coins-browser-test.git
   ```
 
 2. Install _coins-browser-test_ dependencies:
-
   ```shell
   cd coins-browser-test
   npm install
@@ -31,18 +39,16 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
   Or, use Selenium’s link: http://www.seleniumhq.org/download/
 
 3. Install [mocha](https://mochajs.org/) globally:
-
   ```shell
   npm install -g mocha@2.5.3
   ```
 
   You’ll **need version 2**; versions 3+ contain incompatibilities with _coins-browser-test_.
+
 4. Copy `config/default.json.example` to `config/default.json`. Update all fields to match your configuration.
 
-# Usage - Running Tests
-
+# Usage: Running Tests
 1. Start the Selenium standalone server:
-
   ```shell
   npm start
   ```
@@ -54,8 +60,7 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
 
 <img src="https://raw.githubusercontent.com/MRN-Code/coins-selenium/master/img/test_example_output.png" height="200"  >
 
-# Usage - re-using the web browser client
-
+# Usage: Re-Using the Web Browser Client
 In most cases, we will want to run all of our tests in a single browser instance.
 For example, we will want to start a browser, login to COINS, then navigate to ASMT, then select a study, then create an instrument, etc...
 
@@ -87,7 +92,7 @@ describe('micis logon', function() {
 });
 ```
 
-# Usage - Navigating within COINS
+# Usage: Navigating within COINS
 COINS is a single page app of sorts, and utilizes its own home-grown pagination system.
 As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**.
 To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page.
@@ -119,14 +124,14 @@ it ('should go to asmt and select study_id 1234', function(done) {
 });
 ```
 
-## Clicking on menu links:
+## Clicking on Menu Links:
 Use either micisMenu.js or asmtMenu.js in `test/lib/nav/`. The `menuMap` in each of these files still needs to be built up, but I will leave it up to us to build it up as needed, rather than building them all at once.  Example:
 
 ```js
     nav.asmtMenu.clickNested('Create Instrument', done);
 ```
 
-# Usage - Designing Tests
+# Usage: Designing Tests
 1. There are two components to a test:
     1. Browser actions defined in `test/lib`
     1. Mocha test suites that use the browser actions (defined in `test/*`)
@@ -158,4 +163,3 @@ Write your tests as **mocha unit tests**, with the actual browser driver functio
 
 # ToDo
 1. Put selenium server on lintcoin
-
