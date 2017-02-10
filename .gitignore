@@ -1,7 +1,6 @@
 config/*.json
 selenium-server-standalone-*
-html-report/*
-node_modules/*
-!node_modules/coins
-chromedriver
+node_modules
 .DS_Store
+*.log
+chromedriver

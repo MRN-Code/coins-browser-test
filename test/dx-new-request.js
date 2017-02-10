@@ -1,4 +1,5 @@
 'use strict';
+
 const config = require('config');
 const client = require('./lib/client').client;
 const nav = require('./lib/nav/navigation')(client, config);
@@ -35,8 +36,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(okButton)
       .pause(500)
       .getText(titleElement)
-      .then(returnedTitle => {
-        returnedTitle.should.be.equal(titleValue)
+      .then((returnedTitle) => {
+        returnedTitle.should.be.equal(titleValue);
       })
       .call(done);
   });
@@ -58,8 +59,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(applyButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '384', '0', '1', '203' ]);
+      .then((response) => {
+        response.should.be.eql(['384', '0', '1', '203']);
       })
       .call(done);
   });
@@ -77,8 +78,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(okButton)
       .pause(500)
       .getText(titleElement)
-      .then(returnedTitle => {
-        returnedTitle.should.be.equal(titleValue)
+      .then((returnedTitle) => {
+        returnedTitle.should.be.equal(titleValue);
       })
       .call(done);
   });
@@ -98,8 +99,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(applyButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '0', '0', '0', '0' ]);
+      .then((response) => {
+        response.should.be.eql(['0', '0', '0', '0']);
       })
       .call(done);
   });
@@ -112,8 +113,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(switchButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '2637', '1112', '2', '1315' ]);
+      .then((response) => {
+        response.should.be.eql(['2637', '1112', '2', '1315']);
       })
       .call(done);
   });
@@ -135,10 +136,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(applyButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '3748', '2396', '3', '1386' ]);
+      .then((response) => {
+        response.should.be.eql(['3748', '2396', '3', '1386']);
       })
-      .call(done)
+      .call(done);
   });
 
   it('should delete the Studies filter', (done) => {
@@ -149,10 +150,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(deleteButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '1495', '1284', '2', '274' ]);
+      .then((response) => {
+        response.should.be.eql(['1495', '1284', '2', '274']);
       })
-      .call(done)
+      .call(done);
   });
 
   it('should delete the group', (done) => {
@@ -166,10 +167,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(confirmButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '384', '0', '1', '203' ]);
+      .then((response) => {
+        response.should.be.eql(['384', '0', '1', '203']);
       })
-      .call(done)
+      .call(done);
   });
 
   it('should edit the MR filter', (done) => {
@@ -189,10 +190,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(applyButton)
       .pause(2000)
       .getText(statistics)
-      .then(response => {
-        response.should.be.eql([ '624', '0', '2', '183' ]);
+      .then((response) => {
+        response.should.be.eql(['624', '0', '2', '183']);
       })
-      .call(done)
+      .call(done);
   });
 
   it('should send the request', (done) => {
@@ -205,10 +206,9 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .pause(3000)
       .waitForExist(requestPopUp)
       .getText(requestPopUp)
-      .then(response => {
+      .then((response) => {
         response.should.be.equal('This request is for the following data/studies');
       })
-      .call(done)
+      .call(done);
   });
-
 });

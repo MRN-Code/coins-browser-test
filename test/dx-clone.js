@@ -1,4 +1,5 @@
 'use strict';
+
 const config = require('config');
 const client = require('./lib/client').client;
 const nav = require('./lib/nav/navigation')(client, config);
@@ -25,7 +26,7 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     client
       .pause(500)
       .elements('#requestMenu > option')
-      .then(response => {
+      .then((response) => {
         response.value.length.should.be.greaterThan(1);
       })
       .call(done);
@@ -35,7 +36,7 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     client
       .waitForExist('div.draggable.filter.MRFilter.ui-draggable')
       .getText('div#filterContainer > div.statisticsLabel > div > label')
-      .then(response => {
+      .then((response) => {
         response.should.be.eql(['MR', 'Assessments', 'Studies', 'Subjects']);
       })
       .call(done);
@@ -51,8 +52,8 @@ describe('Test data exchange functionality for cloning a request', function dxCl
       .pause(3000)
       .click('div#requestStatusMessage > a.symlink')
       .getText('div#filterContainer > div.statisticsLabel > div.statisticsValue')
-      .then(response => {
-        response.should.be.eql([ '2253', '1112', '1', '1112' ]);
+      .then((response) => {
+        response.should.be.eql(['2253', '1112', '1', '1112']);
       })
       .call(done);
   });
@@ -69,8 +70,8 @@ describe('Test data exchange functionality for cloning a request', function dxCl
       .click(okButton)
       .pause(500)
       .getText(titleElement)
-      .then(returnedTitle => {
-        returnedTitle.should.be.equal(titleValue)
+      .then((returnedTitle) => {
+        returnedTitle.should.be.equal(titleValue);
       })
       .call(done);
   });
@@ -90,10 +91,9 @@ describe('Test data exchange functionality for cloning a request', function dxCl
       .pause(3000)
       .waitForExist(requestPopUp)
       .getText(requestPopUp)
-      .then(response => {
+      .then((response) => {
         response.should.be.equal('This request is for the following data/studies');
       })
-      .call(done)
+      .call(done);
   });
-
 });
