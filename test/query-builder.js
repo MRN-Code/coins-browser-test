@@ -7,6 +7,7 @@
 const _ = require('lodash');
 const config = require('config');
 const client = require('./lib/client').client;
+const hideZendeskWidget = require('./lib/hide-zendesk-widget.js');
 const nav = require('./lib/nav/navigation')(client, config);
 const micis = require('./lib/auth/micis')(client);
 const should = require('should');
@@ -402,22 +403,6 @@ function previewAndExport(options, callback) {
      /* eslint-enable no-unused-expressions */
    })
   .call(localCallback);
-}
-
-/**
- * Hide the Zendesk widget.
- *
- * This code is executed client-side via Webdriver.io's `execute`. {@link
- * http://webdriver.io/api/protocol/execute.html}
- */
-function hideZendeskWidget() {
-  /* eslint-disable no-undef */
-  const zendeskWidget = document.getElementById('launcher');
-  /* eslint-enable no-undef */
-
-  if (zendeskWidget) {
-    zendeskWidget.hidden = true;
-  }
 }
 
 function goBack(callback) {
