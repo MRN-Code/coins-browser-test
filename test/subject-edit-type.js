@@ -20,6 +20,7 @@
 const _ = require('lodash');
 const config = require('config');
 const client = require('./lib/client.js').client;
+const hideZendeskWidget = require('./lib/hide-zendesk-widget.js');
 const micis = require('./lib/auth/micis.js')(client);
 const nav = require('./lib/nav/navigation.js')(client, config);
 const should = require('should');
@@ -54,6 +55,7 @@ describe('Edit subject type', function subjectEditType() {
           .waitForPaginationComplete()
           .waitForExist('#multi_enroll_next') // DataTables 'Next' button
           .click('#multi_enroll_next')
+          .execute(hideZendeskWidget)
           /**
            * Click a the "Change" button to edit the participant's
            * study-level details (step 4). Choose "NITEST" as it has
