@@ -1,6 +1,10 @@
-var vargscb = require('vargs-callback');
-var config = require('config');
-var _ = require('lodash');
+'use strict';
+
+/* eslint-env browser */
+
+const vargscb = require('vargs-callback');
+const config = require('config');
+const _ = require('lodash');
 
 /**
  * Pagination Utilities
@@ -21,43 +25,45 @@ var _ = require('lodash');
  *   as the last parameter. Since we have optional parameters, we will use the vargs-callback
  *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
-var waitForCondition = function(condition, conditionArgs, options, cb) {
-    options = options || {};
-    if (!_.isArray(conditionArgs)) {
-        conditionArgs = [conditionArgs];
+function waitForCondition(condition, conditionArgs, options, cb) {
+  options = options || {}; // eslint-disable-line no-param-reassign
+  if (!_.isArray(conditionArgs)) {
+    conditionArgs = [conditionArgs]; // eslint-disable-line no-param-reassign
+  }
+  const timeout = options.timeout || config.defaultTimeout;
+  const interval = options.interval || 500;
+
+  const startTime = new Date();
+  const self = this;
+  function exec() {
+    function pollF(err, ret) {
+      const duration = +new Date() - startTime;
+      if (err) {
+        cb(err);
+      }
+      if (ret.value) {
+        cb();
+      } else {
+        if (duration > timeout) {
+          /* eslint-disable no-console */
+          console.log(timeout);
+          console.log(duration);
+          /* eslint-enable no-console */
+
+          /* eslint-disable no-param-reassign */
+          err = new Error(`waitForCondition timeout of ${timeout} exceeded`);
+          cb(err);
+          /* eslint-enable no-param-reassign */
+        }
+        exec();
+      }
     }
-    var timeout = options.timeout || config.defaultTimeout;
-    var interval = options.interval || 500;
-
-    var startTime = new Date();
-    var self = this;
-    var exec = function() {
-        var executeArgs;
-        var pollF = function(err, ret) {
-            var duration = +new Date() - startTime;
-            if (err) {
-                cb(err);
-            }
-            if (ret.value) {
-                cb();
-            } else {
-                if (duration > timeout) {
-                    console.log(timeout);
-                    console.log(duration);
-
-                    err = new Error('waitForCondition timeout of ' + timeout + ' exceeded');
-                    cb(err);
-                    return;
-                }
-                return exec();
-            }
-        };
-        executeArgs = _.flatten([condition, conditionArgs, pollF]);
-        return self.pause(interval).execute.apply(self, executeArgs);
-    };
-    // call exec to set off the recursive waiting
-    return exec();
-};
+    const executeArgs = _.flatten([condition, conditionArgs, pollF]);
+    return self.pause(interval).execute.apply(self, executeArgs);
+  }
+  // call exec to set off the recursive waiting
+  return exec();
+}
 
 
 /**
@@ -70,20 +76,19 @@ var waitForCondition = function(condition, conditionArgs, options, cb) {
  *   as the last parameter. Since we have optional parameters, we will use the vargs-callback
  *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
-var waitForPaginationComplete = function(timeout, cb) {
-    timeout = timeout || config.defaultTimeout;
-    // function to be executed in browser
-    var checkBrowserPaginationComplete = function() {
-        if (window.coinsUtils && window.coinsUtils.seleniumUtils) {
-            if (window.coinsUtils.seleniumUtils.testNetworkAndPageReady instanceof Function) {
-                return window.coinsUtils.seleniumUtils.testNetworkAndPageReady();
-            }
-        }
-        return false; //not ready yet
-    };
-    return this.waitForCondition(checkBrowserPaginationComplete, null, {timeout: timeout}, cb);
-};
-
+function waitForPaginationComplete(timeout, cb) {
+  timeout = timeout || config.defaultTimeout; // eslint-disable-line no-param-reassign
+  // function to be executed in browser
+  function checkBrowserPaginationComplete() {
+    if (window.coinsUtils && window.coinsUtils.seleniumUtils) {
+      if (window.coinsUtils.seleniumUtils.testNetworkAndPageReady instanceof Function) {
+        return window.coinsUtils.seleniumUtils.testNetworkAndPageReady();
+      }
+    }
+    return false; // not ready yet
+  }
+  return this.waitForCondition(checkBrowserPaginationComplete, null, { timeout }, cb);
+}
 
 
 /**
@@ -93,21 +98,21 @@ var waitForPaginationComplete = function(timeout, cb) {
  * @param  {Function} cb      internally populated by webdriverio. do not use
  * @return {WebDriverIO}
  */
-var waitForVis = function(sell, timeout, cb) {
-    timeout = timeout || config.defaultTimeout;
-    // function to be executed in browser
-    var testForVis = function(sell) {
-        var el = window.document.querySelector(sell);
-        return (el ? el.offsetParent !== null : false);
-    };
-    return this.waitForCondition(testForVis, sell, {timeout: timeout}, cb);
-};
+function waitForVis(sell, timeout, cb) {
+  timeout = timeout || config.defaultTimeout; // eslint-disable-line no-param-reassign
+  // function to be executed in browser
+  function testForVis(selector) {
+    const el = window.document.querySelector(selector);
+    return (el ? el.offsetParent !== null : false);
+  }
+  return this.waitForCondition(testForVis, sell, { timeout }, cb);
+}
 
 
 // exports;
-module.exports = function(client) {
-    client.addCommand('waitForCondition', vargscb(waitForCondition));
-    client.addCommand('waitForPaginationComplete', vargscb(waitForPaginationComplete));
-    client.addCommand('waitForVis', vargscb(waitForVis));
-    return client;
+module.exports = function pagination(client) {
+  client.addCommand('waitForCondition', vargscb(waitForCondition));
+  client.addCommand('waitForPaginationComplete', vargscb(waitForPaginationComplete));
+  client.addCommand('waitForVis', vargscb(waitForVis));
+  return client;
 };

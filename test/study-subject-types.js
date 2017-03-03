@@ -1,4 +1,5 @@
-/* jshint expr: true */
+'use strict';
+
 /* global coinsUtils */
 
 /**
@@ -19,13 +20,11 @@
  * 11. Undo edit???
  */
 
-'use strict';
-
-var config = require('config');
-var client = require('./lib/client.js').client;
-var micis = require('./lib/auth/micis.js')(client);
-var should = require('should'); // jshint ignore:line
-var study = require('./lib/study.js')(client, config);
+const config = require('config');
+const client = require('./lib/client.js').client;
+const micis = require('./lib/auth/micis.js')(client);
+const should = require('should'); // jshint ignore:line
+const study = require('./lib/study.js')(client, config);
 
 /**
  * Target subject type label.
@@ -35,14 +34,14 @@ var study = require('./lib/study.js')(client, config);
  *
  * @const {string}
  */
-var targetSubjectTypeLabel = 'Testing';
+const targetSubjectTypeLabel = 'Testing';
 
 /**
  * Test subject type values.
  *
  * @type {Object}
  */
-var testSubjectType = {
+const testSubjectType = {
   label: Math.random().toString(),
   description: Math.random().toString(),
 };
@@ -54,7 +53,7 @@ var testSubjectType = {
  * @returns {string} XPath selector
  */
 function getEditLinkSelector(text) {
-    return '//td[text()="' + text + '"]/../td/a';
+  return `//td[text()="${text}"]/../td/a`;
 }
 
 /**
@@ -63,150 +62,150 @@ function getEditLinkSelector(text) {
  * @param {string} label
  * @returns {(string|undefined)}
  */
-function findNotifyItem(label) {
-    if (
-        'notify' in coinsUtils &&
-        'queue' in coinsUtils.notify &&
-        Array.isArray(coinsUtils.notify.queue)
-    ) {
-        var item = coinsUtils.notify.queue.find(function findItem(item) {
-            return item.body.indexOf(label) > -1;
-        });
+function findNotifyItem(label) { // eslint-disable-line consistent-return
+  var notifyItem; // eslint-disable-line no-var
 
-        if (item) {
-            return item.body;
-        }
+  if (
+    'notify' in coinsUtils &&
+    'queue' in coinsUtils.notify &&
+    Array.isArray(coinsUtils.notify.queue)
+  ) {
+    notifyItem = coinsUtils.notify.queue.find(item => item.body.indexOf(label) > -1);
+
+    if (notifyItem) {
+      return notifyItem.body;
     }
+  }
 }
 
-describe('Edit study subject type', function editStudySubjectType() {
-    /**
-     * Description control selector for the 'edit subject type' form.
-     *
-     * @const {string}
-     */
-    var descriptionSelector = 'textarea[name=description]';
+describe('Edit study subject type', function studySubjectTypes() {
+  /**
+   * Description control selector for the 'edit subject type' form.
+   *
+   * @const {string}
+   */
+  const descriptionSelector = 'textarea[name=description]';
 
-    /**
-     * Label (name) control selector for the 'edit subject type' form.
-     *
-     * @const {string}
-     */
-    var labelSelector = 'input[name=label]';
+  /**
+   * Label (name) control selector for the 'edit subject type' form.
+   *
+   * @const {string}
+   */
+  const labelSelector = 'input[name=label]';
 
-    this.timeout(config.defaultTimeout);
+  this.timeout(config.defaultTimeout);
 
-    before('initialize', function initialize(done) {
-        client.clientReady.then(function clientReadyCallback() {
-            if (!micis.loggedOn) {
-                micis.logon();
-            }
+  before('initialize', (done) => {
+    client.clientReady.then(() => {
+      if (!micis.loggedOn) {
+        micis.logon();
+      }
 
-            study
-                .goToView('NITEST')
-                .waitForPaginationComplete()
-                .call(done);
-        });
+      study
+        .goToView('NITEST')
+        .waitForPaginationComplete()
+        .call(done);
     });
+  });
 
-    it('should navigate to types list', function navigateToTypesList(done) {
-        client
+  it('should navigate to types list', (done) => {
+    client
             .click('input[value="Edit Subject Types"]')
             .waitForPaginationComplete()
             .call(done);
-    });
+  });
 
-    it('should edit a subject type', function editSubjectType(done) {
-        var linkSelector = getEditLinkSelector(targetSubjectTypeLabel);
+  it('should edit a subject type', (done) => {
+    const linkSelector = getEditLinkSelector(targetSubjectTypeLabel);
 
-        client
-            .click(linkSelector)
-            .waitForPaginationComplete()
-            .setValue(labelSelector, testSubjectType.label)
-            .setValue(descriptionSelector, testSubjectType.description)
-            .click('input[type=button][name=DoUpdate]')
-            .waitForPaginationComplete()
-            .execute(
-                findNotifyItem,
-                testSubjectType.label,
-                function validateConfirmMessage(err, res) {
-                    var text = res.value;
+    client
+      .click(linkSelector)
+      .waitForPaginationComplete()
+      .setValue(labelSelector, testSubjectType.label)
+      .setValue(descriptionSelector, testSubjectType.description)
+      .click('input[type=button][name=DoUpdate]')
+      .waitForPaginationComplete()
+      .execute(
+          findNotifyItem,
+          testSubjectType.label,
+          (err, res) => {
+            const text = res.value;
 
-                    if (err) {
-                        throw err;
-                    }
+            if (err) {
+              throw err;
+            }
 
-                    text.should.match(new RegExp(testSubjectType.label));
-                }
-            )
-            .call(done);
-    });
+            text.should.match(new RegExp(testSubjectType.label));
+          }
+      )
+      .call(done);
+  });
 
-    it(
-        'should reflect changes in list and form',
-        function reflectChangesInList(done) {
-            var linkSelector = getEditLinkSelector(testSubjectType.label);
+  it(
+    'should reflect changes in list and form',
+    (done) => {
+      const linkSelector = getEditLinkSelector(testSubjectType.label);
 
-            study
-                .goToView('NITEST')
-                .waitForPaginationComplete()
-                .click('input[value="Edit Subject Types"]')
-                .waitForPaginationComplete()
-                .getText(
-                    '.box-container .coins-datatable',
-                    function validateList(err, text) {
-                        if (err) {
-                            throw err;
-                        }
+      study
+        .goToView('NITEST')
+        .waitForPaginationComplete()
+        .click('input[value="Edit Subject Types"]')
+        .waitForPaginationComplete()
+        .getText(
+          '.box-container .coins-datatable',
+          (err, text) => {
+            if (err) {
+              throw err;
+            }
 
-                        text.should.match(new RegExp(testSubjectType.label));
-                    }
-                )
-                .click(linkSelector)
-                .waitForPaginationComplete()
-                .getValue(
-                    labelSelector,
-                    function validateLabelControl(err, value) {
-                        if (err) {
-                            throw err;
-                        }
+            text.should.match(new RegExp(testSubjectType.label));
+          }
+        )
+        .click(linkSelector)
+        .waitForPaginationComplete()
+        .getValue(
+          labelSelector,
+          (err, value) => {
+            if (err) {
+              throw err;
+            }
 
-                        value.should.be.equal(testSubjectType.label);
-                    }
-                )
-                .getValue(
-                    descriptionSelector,
-                    function validateDescriptionControl(err, value) {
-                        if (err) {
-                            throw err;
-                        }
+            value.should.be.equal(testSubjectType.label);
+          }
+        )
+        .getValue(
+          descriptionSelector,
+          (err, value) => {
+            if (err) {
+              throw err;
+            }
 
-                        value.should.be.equal(testSubjectType.description);
-                    }
-                )
-                .call(done);
+            value.should.be.equal(testSubjectType.description);
+          }
+        )
+        .call(done);
+    }
+  );
+
+  it('should reset subject type', (done) => {
+    client
+      .setValue(labelSelector, targetSubjectTypeLabel)
+      .setValue(descriptionSelector, targetSubjectTypeLabel)
+      .click('input[type=button][name=DoUpdate]')
+      .waitForPaginationComplete()
+      .execute(
+        findNotifyItem,
+        targetSubjectTypeLabel,
+        (err, res) => {
+          const text = res.value;
+
+          if (err) {
+            throw err;
+          }
+
+          text.should.match(new RegExp(targetSubjectTypeLabel));
         }
-    );
-
-    it('should reset subject type', function resetSubjectType(done) {
-        client
-            .setValue(labelSelector, targetSubjectTypeLabel)
-            .setValue(descriptionSelector, targetSubjectTypeLabel)
-            .click('input[type=button][name=DoUpdate]')
-            .waitForPaginationComplete()
-            .execute(
-                findNotifyItem,
-                targetSubjectTypeLabel,
-                function validateConfirmMessage(err, res) {
-                    var text = res.value;
-
-                    if (err) {
-                        throw err;
-                    }
-
-                    text.should.match(new RegExp(targetSubjectTypeLabel));
-                }
-            )
-            .call(done);
-    });
+      )
+      .call(done);
+  });
 });

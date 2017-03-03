@@ -1,54 +1,48 @@
-"use strict";
+'use strict';
 
-// exports
-module.exports = function(client, config) {
-    var me = {};
+const asmtMenu = require('./asmtMenu.js');
+const micisMenu = require('./micisMenu.js');
 
-    // disable COINS navigation alerts when changing pages
-    me.disableNavigationAlert = function() {
-        return client.execute(function _disableNavigationAlert() {
-            if (window.preventExitPopup === undefined) {
-                window.alert('EXPECTED `preventExitPopup` set in pagination.js');
-            }
-            window.preventExitPopup = true;
-        });
-    };
+module.exports = (client, config) => {
+  const me = {};
 
-    me.micisMenu = require('./micisMenu.js')(client, config);
-    me.asmtMenu = require('./asmtMenu.js')(client, config);
+  // disable COINS navigation alerts when changing pages
+  /* global window */
+  me.disableNavigationAlert = () => client.execute(() => {
+    if (window.preventExitPopup === undefined) {
+      /* eslint-disable no-alert */
+      window.alert('EXPECTED `preventExitPopup` set in pagination.js');
+      /* eslint-enable no-alert */
+    }
+    window.preventExitPopup = true;
+  });
 
-    me.hoverHome = function(done) {
-        return client
-            .moveToObject('a.primary-nav-menu-button')
-            .click('=Menu', done);
-    };
+  me.micisMenu = micisMenu(client, config);
+  me.asmtMenu = asmtMenu(client, config);
 
-    me.gotoAsmt = function(done) {
-        return client
-            .call(me.hoverHome)
-            .click('=ASMT')
-            .waitForPaginationComplete(done);
-    };
+  me.hoverHome = done => client
+    .moveToObject('a.primary-nav-menu-button')
+    .click('=Menu', done);
 
-    me.gotoOcoins = function(done) {
-        return client.url('https://' + config.origin + '/micis/index.php?subsite=ocoins_beta')
-            .waitForPaginationComplete(done);
-    };
+  me.gotoAsmt = done => client
+    .call(me.hoverHome)
+    .click('=ASMT')
+    .waitForPaginationComplete(done);
 
-    me.goToQueryBuilder = function (done) {
-        return client
-            .scroll(0, 0)
-            .call(me.hoverHome)
-            .click('=Query Builder')
-            .waitForPaginationComplete(done);
-    };
+  me.gotoOcoins = done => client
+    .url(`https://${config.origin}/micis/index.php?subsite=ocoins_beta`)
+    .waitForPaginationComplete(done);
 
-    me.selectAsmtStudy = function(studyId, done) {
-        return client
-            .waitForPaginationComplete()
-            .selectByValue('#asmt_study_id', studyId)
-            .waitForPaginationComplete(done);
-    };
+  me.goToQueryBuilder = done => client
+    .scroll(0, 0)
+    .call(me.hoverHome)
+    .click('=Query Builder')
+    .waitForPaginationComplete(done);
 
-    return me;
+  me.selectAsmtStudy = (studyId, done) => client
+    .waitForPaginationComplete()
+    .selectByValue('#asmt_study_id', studyId)
+    .waitForPaginationComplete(done);
+
+  return me;
 };

@@ -1,41 +1,40 @@
-"use strict";
-// webdriver deps
-var WebdriverIO = require('webdriverio');
-var Promise = require('rsvp').Promise; // jshint ignore:line
-var paginationUtils;
-var config = require('config');
-var options = {
-    desiredCapabilities: {
-        browserName: config.get('browserName'),
-        chromeOptions: {
-            /**
-             * Disable the Push Notifications API.
-             * {@link http://peter.sh/experiments/chromium-command-line-switches/}
-             */
-            args: ['--disable-notifications'],
-        },
-    },
-    host: config.get('host'),
-    port: config.get('port')
-};
-var client = WebdriverIO.remote(options);
-paginationUtils = require('./../../util/pagination.js')(client);
+'use strict';
 
-var clientReady = new Promise(function (resolve, reject) {
-    client.init(function(err) {
-        if(!err) {
-            resolve();
-        } else {
-            reject(err);
-        }
-    });
-}).catch(function(err) {
-    console.error(err);
-    throw err;
+// webdriver deps
+const WebdriverIO = require('webdriverio');
+const config = require('config');
+
+const options = {
+  desiredCapabilities: {
+    browserName: config.get('browserName'),
+    chromeOptions: {
+      /**
+       * Disable the Push Notifications API.
+       * {@link http://peter.sh/experiments/chromium-command-line-switches/}
+       */
+      args: ['--disable-notifications'],
+    },
+  },
+  host: config.get('host'),
+  port: config.get('port'),
+};
+const client = WebdriverIO.remote(options);
+
+require('./../../util/pagination.js')(client);
+
+const clientReady = new Promise((resolve, reject) => {
+  client.init((err) => {
+    if (!err) {
+      resolve();
+    } else {
+      reject(err);
+    }
+  });
+}).catch((err) => {
+  console.error(err); // eslint-disable-line no-console
+  throw err;
 });
 
 module.exports.client = client;
 module.exports.client.clientReady = clientReady;
 module.exports.clientReady = clientReady;
-
-
