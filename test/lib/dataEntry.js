@@ -79,6 +79,19 @@ module.exports = function(client, config) {
             .waitForPaginationComplete(done);
     };
 
+    me.completePartialCalTestAsmt = function(details, done) {
+        return client
+            .setValue('textarea[name=asmt-Testcal_3-1]', details.asmtTestcal31)
+            .selectByValue('#asmt-Testcal_5-1', details.asmtTestcal51)
+            // if we dont do this pause, then an error gets thrown saying
+            // parent.sharedFns.printQuestionMedia is not a function
+            // TODO: need to update so that we dynamically check if printQuestionMedia is a function
+            // or not, RATHER than using this 3500ms pause - not ideal.
+            .pause(3500)
+            .click('div[id=asmtComplete_bottom]')
+            .waitForPaginationComplete(done);
+    };
+
     // Resume data entry
     me.resumeEntry = function(asmtDate, done) {
         return client

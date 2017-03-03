@@ -152,7 +152,7 @@ describe('navigate to asmt and fill out asmts', function() {
 
         it ('should fill in assessment first entry', function(done) {
             // fill assessment 1 First Entry
-            dataEntry.fillCalculationTestAsmt(asmtFirstEntry, done);
+            dataEntry.completePartialCalTestAsmt(asmtFirstEntry, done);
         });
 
         it ('should begin a new assessment', function(done) {
