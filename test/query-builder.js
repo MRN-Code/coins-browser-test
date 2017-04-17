@@ -211,22 +211,13 @@ function setupAssessmentData(callback = _.noop) {
       '#asmtDataDiv select[name=selInstrument]',
       'simple test'
     )
-    .waitForExist(
-      'select[name=selField] option:nth-child(2)',
-      5000,
-      (err) => {
-        if (err) {
-          throw err;
-        }
-
-        addFieldsToQuery({
-          select: 'select[name=selField]',
-          button: '#btnAddList',
-          values: ['All Fields'],
-          table: '#outputRows',
-        });
-      }
-    )
+    .waitForExist('select[name=selField] option:nth-child(2)', 5000)
+    .pause(500, () => addFieldsToQuery({
+      select: 'select[name=selField]',
+      button: '#btnAddList',
+      values: ['All Fields'],
+      table: '#outputRows',
+    }))
     .call(callback);
 }
 
