@@ -132,7 +132,7 @@ describe('Study details', function studyDetails() {
 
     it('should display', (done) => {
       client
-        .elements('.box-container > table tr', (err, res) => {
+        .elements('#list_access tbody tr', (err, res) => {
           if (err) {
             throw err;
           }
