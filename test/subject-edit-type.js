@@ -53,8 +53,9 @@ describe('Edit subject type', function subjectEditType() {
           .waitForExist('#button-enrollmenteditor') // 'Study Enrollment' button
           .click('#button-enrollmenteditor')
           .waitForPaginationComplete()
-          .waitForExist('#multi_enroll_next') // DataTables 'Next' button
-          .click('#multi_enroll_next')
+          // Uncomment if `sampleUrsi` appears in the second DataTables page:
+          // .waitForExist('#multi_enroll_next') // DataTables 'Next' button
+          // .click('#multi_enroll_next')
           .execute(hideZendeskWidget)
           /**
            * Click a the "Change" button to edit the participant's
