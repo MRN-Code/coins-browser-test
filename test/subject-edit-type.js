@@ -62,7 +62,7 @@ describe('Edit subject type', function subjectEditType() {
            * several non-desctructive test subject types.
            */
           .click(
-              '//td/a[text()="[99-998]: NITEST"]/../..//form/a',
+              '//td/a[text()="NITEST"]/../..//form/a',
               (err) => {
                 if (err) {
                   throw err;
