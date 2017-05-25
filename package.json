@@ -4,10 +4,10 @@
   "description": "suite of browser tests for COINS",
   "main": "index.js",
   "scripts": {
-    "clean": "rm selenium-server-standalone-3.0.1.jar",
-    "install": "stat selenium-server-standalone-3.0.1.jar || curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar",
+    "clean": "rm selenium-server-standalone-3.4.0.jar",
+    "install": "stat selenium-server-standalone-3.4.0.jar || curl -O https://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar",
     "lint": "eslint test util",
-    "start": "java -Dwebdriver.chrome.driver=node_modules/chromedriver/bin/chromedriver -jar selenium-server-standalone-3.0.1.jar -port 4441"
+    "start": "java -Dwebdriver.chrome.driver=node_modules/chromedriver/bin/chromedriver -jar selenium-server-standalone-3.4.0.jar -port 4444"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/MRN-Code/coins-selenium",
   "dependencies": {
-    "chromedriver": "^2.25.1",
+    "chromedriver": "^2.29.0",
     "config": "^1.10.0",
     "glob": "^7.1.1",
     "homedir": "^0.6.0",
