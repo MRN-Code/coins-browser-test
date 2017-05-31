@@ -153,7 +153,7 @@ describe('Add a new study', function studyAdd() {
       label: 'Study Name:',
       match: sampleData.label,
     }, {
-      label: 'IRB Title (formal title):',
+      label: 'IRB Study Title (formal title):',
       match: sampleData.title,
     }, {
       label: 'Study Archive Directory:',
