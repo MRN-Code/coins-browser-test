@@ -8,5 +8,6 @@
         "pw": "yourPassword"
     },
     "host": "localhost",
-    "port": 4441
+    "port": 4441,
+    "shlogin": "<encrypted username> <encrypted password>"
 }
