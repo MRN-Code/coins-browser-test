@@ -1,7 +1,6 @@
 'use strict';
 
 // test deps
-const vargscb = require('vargs-callback');
 const config = require('config');
 const client = require('../client.js').client;
 const nav = require('../nav/navigation.js')(client, config);
@@ -30,29 +29,23 @@ module.exports = (configuredClient) => {
   };
 
   /**
-   * log onto COINS
-   * @param url {string} The string to navigate to (should redirect to a CAS login page).
-   * @param done {function} a mochajs function to call when login is successful
-   * TODO update to be compatible with portals as well
+   * Log in to COINS.
+   *
+   * @todo update to be compatible with portals as well
+   *
+   * @param {Function} [done] Function to execute once logon is complete
    */
-  me.logon = vargscb((url, done) => {
+  me.logon = (done) => {
     const callback = done || noop;
-    const targetUrl = url || `https://${config.origin}/micis/index.php`;
 
-    configuredClient.url(targetUrl);
+    configuredClient.url(`https://${config.origin}`);
 
     if (!me.loggedOn) {
       configuredClient
-        .waitFor('.coins-logon-widget-form')
-        .setValue(
-          '.coins-logon-widget-form input[name=username]',
-          config.auth.un
-        )
-        .setValue(
-          '.coins-logon-widget-form input[name=password]',
-          config.auth.pw
-        )
-        .click('.coins-logon-widget-form button[type=submit]') // TODO: update to use data-selector instead
+        .waitForVisible('.modal form')
+        .setValue('.modal form input[name=username]', config.auth.un)
+        .setValue('.modal form input[name=password]', config.auth.pw)
+        .click('.modal form button[type=submit]')
         .waitForPaginationComplete()
         .getCookie('MICIS', (err, cookie) => {
           if (cookie) {
@@ -66,7 +59,7 @@ module.exports = (configuredClient) => {
     return nav
       .disableNavigationAlert()
       .call(callback);
-  });
+  };
 
   return me;
 };
