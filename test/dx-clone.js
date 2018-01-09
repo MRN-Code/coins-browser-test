@@ -61,7 +61,7 @@ describe('Test data exchange functionality for cloning a request', function dxCl
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'Cloned Request Title';
-    const okButton = 'input#okButton';
+    const okButton = 'button#okButton';
 
     client
       .click(titleElement)

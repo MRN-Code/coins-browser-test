@@ -26,7 +26,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'New Request Title Test';
-    const okButton = 'input#okButton';
+    const okButton = 'button#okButton';
 
     client
       .waitForExist(titleElement)
@@ -68,7 +68,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should update the request title again', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'Second request title update';
-    const okButton = 'input#okButton';
+    const okButton = 'button#okButton';
 
     client
       .waitForExist(titleElement)
