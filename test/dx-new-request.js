@@ -139,7 +139,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .pause(2000)
       .getText(statistics)
       .then((response) => {
-        response.should.be.eql(['3748', '1730', '3', '1385']);
+        response.should.be.eql(['3748', '1556', '3', '1385']);
       })
       .call(done);
   });
@@ -153,7 +153,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .pause(2000)
       .getText(statistics)
       .then((response) => {
-        response.should.be.eql(['1495', '618', '2', '273']);
+        response.should.be.eql(['1495', '444', '2', '273']);
       })
       .call(done);
   });
