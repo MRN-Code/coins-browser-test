@@ -83,7 +83,8 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     // array and pseudo selectors were not grabbing the correct array index.  Maybe this can
     // be made more robust with future versions of webdriverio.
     const sendRequest = 'input#requestSubmitButton';
-    const requestPopUp = '#ui-id-13 > ul.requestSourceList > h3';
+    const activeForm = 'div.ui-dialog:not([style*="display: none"]) > div';
+    const requestPopUp = `${activeForm} > ul.requestSourceList > h3`;
 
     client
       .waitForExist(sendRequest)

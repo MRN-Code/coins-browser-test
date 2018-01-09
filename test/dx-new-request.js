@@ -85,9 +85,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should drag a Study filter into the request workspace', (done) => {
-    const studyName = 'div#ui-id-21 > ul.attributeList > li.attributeItem';
+    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
+    const studyName = `${activeFilterForm} > ul.attributeList > li.attributeItem`;
     const select = `${studyName} > div > select`;
-    const applyButton = 'div#ui-id-23 > input#applyButton';
+    const applyButton = `${activeFilterForm} > input#applyButton`;
 
     client
       .dragAndDrop('div.draggable.filter.StudiesFilter.ui-draggable > label', 'div#request > div > div.filter.MRFilter')
@@ -120,9 +121,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should add another filter and a group', (done) => {
-    const subjectType = 'div#ui-id-37 > ul.attributeList > li:nth-child(1)';
+    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
+    const subjectType = `${activeFilterForm} > ul.attributeList > li:nth-child(1)`;
     const select = `${subjectType} > div > select`;
-    const applyButton = 'div#ui-id-39 > input#applyButton';
+    const applyButton = `${activeFilterForm} > input#applyButton`;
 
     client
       .dragAndDrop('div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer', 'div#request > div > div.filter.MRFilter')
@@ -175,9 +177,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should edit the MR filter', (done) => {
     const editButton = 'div.filter.MRFilter > a.editButton';
-    const label = 'ul.attributeList > li:nth-child(4)';
+    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
+    const label = `${activeFilterForm} > ul.attributeList > li:nth-child(4)`;
     const select = `${label} > div.attributeOptionContainer > select`;
-    const applyButton = 'div#ui-id-51 > input#applyButton';
+    const applyButton = `${activeFilterForm} > input#applyButton`;
 
     client
       .waitForExist(editButton)
@@ -198,7 +201,8 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should send the request', (done) => {
     const sendRequest = 'input#requestSubmitButton';
-    const requestPopUp = '#ui-id-57 > ul.requestSourceList > h3';
+    const activeForm = 'div.ui-dialog:not([style*="display: none"]) > div';
+    const requestPopUp = `${activeForm} > ul.requestSourceList > h3`;
 
     client
       .waitForExist(sendRequest)
