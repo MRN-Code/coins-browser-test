@@ -22,10 +22,10 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     });
   });
 
-  it('should verify that [Previous Request Templates] have loaded', (done) => {
+  it('should verify that [Open Previous Request Templates] have loaded', (done) => {
     client
       .pause(500)
-      .elements('#requestMenu > option')
+      .elements('#requestMenu option')
       .then((response) => {
         response.value.length.should.be.greaterThan(1);
       })
@@ -42,12 +42,12 @@ describe('Test data exchange functionality for cloning a request', function dxCl
       .call(done);
   });
 
-  it('should select a previous request template', (done) => {
-    const select = 'select#requestMenu';
+  it('should load a Public Templates', (done) => {
+    const publicTemplates = 'select#requestMenu > optgroup[label="Public Templates"]';
 
     client
-      .waitForExist(select)
-      .selectByValue(select, 460)
+      .waitForExist(publicTemplates)
+      .selectByValue(publicTemplates, 460)
       .click('input#requestOpenButton')
       .pause(3000)
       .click('div#requestStatusMessage > a.symlink')
@@ -61,7 +61,7 @@ describe('Test data exchange functionality for cloning a request', function dxCl
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'Cloned Request Title';
-    const okButton = 'input#okButton';
+    const okButton = 'button#okButton';
 
     client
       .click(titleElement)
@@ -83,7 +83,8 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     // array and pseudo selectors were not grabbing the correct array index.  Maybe this can
     // be made more robust with future versions of webdriverio.
     const sendRequest = 'input#requestSubmitButton';
-    const requestPopUp = '#ui-id-13 > ul.requestSourceList > h3';
+    const activeForm = 'div.ui-dialog:not([style*="display: none"]) > div';
+    const requestPopUp = `${activeForm} > ul.requestSourceList > h3`;
 
     client
       .waitForExist(sendRequest)
