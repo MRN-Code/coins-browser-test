@@ -26,7 +26,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should click on [Untitled Request] and add a new title', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'New Request Title Test';
-    const okButton = 'button#okButton';
+    const okButton = 'input#okButton';
 
     client
       .waitForExist(titleElement)
@@ -50,7 +50,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     const applyButton = 'input#applyButton';
 
     client
-      .dragAndDrop('div.draggable.filter.MRFilter.ui-draggable > label', 'div.group.andGroup.ui-droppable > a.closeButton')
+      .dragAndDrop('div.draggable.filter.MRFilter.ui-draggable > label', 'div.group.andGroup.ui-droppable > a#groupSwitch')
       .waitForExist(label)
       .click(label)
       .waitForExist(select)
@@ -68,7 +68,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should update the request title again', (done) => {
     const titleElement = 'div#requestTitle';
     const titleValue = 'Second request title update';
-    const okButton = 'button#okButton';
+    const okButton = 'input#okButton';
 
     client
       .waitForExist(titleElement)
@@ -85,10 +85,9 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should drag a Study filter into the request workspace', (done) => {
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const studyName = `${activeFilterForm} > ul.attributeList > li.attributeItem`;
+    const studyName = 'div#ui-id-21 > ul.attributeList > li.attributeItem';
     const select = `${studyName} > div > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
+    const applyButton = 'div#ui-id-23 > input#applyButton';
 
     client
       .dragAndDrop('div.draggable.filter.StudiesFilter.ui-draggable > label', 'div#request > div > div.filter.MRFilter')
@@ -107,7 +106,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should change the request workspace group to an [OR] group', (done) => {
-    const switchButton = 'div#request > div > label.groupSwitch';
+    const switchButton = 'div#request > div a#groupSwitch';
 
     client
       .waitForExist(switchButton)
@@ -121,10 +120,9 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should add another filter and a group', (done) => {
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const subjectType = `${activeFilterForm} > ul.attributeList > li:nth-child(1)`;
+    const subjectType = 'div#ui-id-37 > ul.attributeList > li:nth-child(1)';
     const select = `${subjectType} > div > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
+    const applyButton = 'div#ui-id-39 > input#applyButton';
 
     client
       .dragAndDrop('div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer', 'div#request > div > div.filter.MRFilter')
@@ -139,13 +137,13 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .pause(2000)
       .getText(statistics)
       .then((response) => {
-        response.should.be.eql(['3748', '1556', '3', '1385']);
+        response.should.be.eql(['3748', '1730', '3', '1385']);
       })
       .call(done);
   });
 
   it('should delete the Studies filter', (done) => {
-    const deleteButton = 'div.filter.StudiesFilter > a.closeButton';
+    const deleteButton = 'div.filter.StudiesFilter > a#filterDelete';
 
     client
       .waitForExist(deleteButton)
@@ -153,13 +151,13 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .pause(2000)
       .getText(statistics)
       .then((response) => {
-        response.should.be.eql(['1495', '444', '2', '273']);
+        response.should.be.eql(['1495', '618', '2', '273']);
       })
       .call(done);
   });
 
   it('should delete the group', (done) => {
-    const deleteButton = 'div.group.andGroup.ui-droppable > a.closeButton';
+    const deleteButton = 'div.group.andGroup.ui-droppable > a#groupDelete';
     const confirmButton = 'input#deleteAll';
 
     client
@@ -176,11 +174,10 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should edit the MR filter', (done) => {
-    const editButton = 'div.filter.MRFilter > a.editButton';
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const label = `${activeFilterForm} > ul.attributeList > li:nth-child(4)`;
+    const editButton = 'div.filter.MRFilter > a#filterEdit';
+    const label = 'ul.attributeList > li:nth-child(4)';
     const select = `${label} > div.attributeOptionContainer > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
+    const applyButton = 'div#ui-id-51 > input#applyButton';
 
     client
       .waitForExist(editButton)
@@ -201,8 +198,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should send the request', (done) => {
     const sendRequest = 'input#requestSubmitButton';
-    const activeForm = 'div.ui-dialog:not([style*="display: none"]) > div';
-    const requestPopUp = `${activeForm} > ul.requestSourceList > h3`;
+    const requestPopUp = '#ui-id-57 > ul.requestSourceList > h3';
 
     client
       .waitForExist(sendRequest)
