@@ -83,6 +83,7 @@ describe('Perform various imports and verify that they function correctly', func
 
     it('Should upload assessments', (done) => {
       client.selectByValue('select#instrument_id', 24063)
+        .click('#single_visit_radio')
         // interval value could be updated for multiple tests during dev.
         .selectByValue('select#visit_interval', 'v2')
         // This click action is a hack to activate the 'input[name=userfile]' element
