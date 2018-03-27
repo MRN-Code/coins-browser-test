@@ -42,7 +42,7 @@ module.exports = (configuredClient) => {
 
     if (!me.loggedOn) {
       configuredClient
-        .waitForVisible('.modal form')
+        .waitForExist('input[name=password]', 3000)
         .setValue('.modal form input[name=username]', config.auth.un)
         .setValue('.modal form input[name=password]', config.auth.pw)
         .click('.modal form button[type=submit]')
