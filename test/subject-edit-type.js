@@ -25,7 +25,7 @@ const micis = require('./lib/auth/micis.js')(client);
 const nav = require('./lib/nav/navigation.js')(client, config);
 const should = require('should');
 
-const sampleUrsi = 'M87161657';
+const sampleUrsi = 'M87163331';
 const sampleNote = `Test: ${Date.now()}`;
 let sampleType;
 
