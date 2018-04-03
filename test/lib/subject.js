@@ -18,12 +18,6 @@ module.exports = (client) => {
     .setValue('input[name=Suffix]', 'testSuffix')
     .setValue('input[name=BirthDate]', '10/10/2010')
     .click('#GenderF')
-    .selectByVisibleText('select[name=ethnicity]', 'Unknown')
-    .click('#racCat1')
-    .click('#racCat2')
-    .click('#racCat3')
-    .click('#racCat4')
-    .click('#racCat5')
     .setValue('input[name=Line1]', 'testAddressLine1')
     .setValue('input[name=Line2]', 'testAddressLine2')
     .setValue('input[name=City]', 'testCity')
@@ -52,6 +46,12 @@ module.exports = (client) => {
     .waitForVis('#site_id', 8000)
     .moveToObject('#site_id')
     .selectByValue('#site_id', 7)
+    .selectByVisibleText('select[name=ethnicity]', 'Unknown')
+    .click('#racCat1')
+    .click('#racCat2')
+    .click('#racCat3')
+    .click('#racCat4')
+    .click('#racCat5')
     .moveToObject('#first_name_at_birth', (err) => {
       if (err) { return; } // not an RDoC study
       return client // eslint-disable-line consistent-return
