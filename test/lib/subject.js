@@ -18,12 +18,6 @@ module.exports = (client) => {
     .setValue('input[name=Suffix]', 'testSuffix')
     .setValue('input[name=BirthDate]', '10/10/2010')
     .click('#GenderF')
-    .selectByVisibleText('select[name=ethnicity]', 'Unknown')
-    .click('#racCat1')
-    .click('#racCat2')
-    .click('#racCat3')
-    .click('#racCat4')
-    .click('#racCat5')
     .setValue('input[name=Line1]', 'testAddressLine1')
     .setValue('input[name=Line2]', 'testAddressLine2')
     .setValue('input[name=City]', 'testCity')
@@ -52,6 +46,12 @@ module.exports = (client) => {
     .waitForVis('#site_id', 8000)
     .moveToObject('#site_id')
     .selectByValue('#site_id', 7)
+    .selectByVisibleText('select[name=ethnicity]', 'Unknown')
+    .click('#racCat1')
+    .click('#racCat2')
+    .click('#racCat3')
+    .click('#racCat4')
+    .click('#racCat5')
     .moveToObject('#first_name_at_birth', (err) => {
       if (err) { return; } // not an RDoC study
       return client // eslint-disable-line consistent-return
@@ -130,7 +130,7 @@ module.exports = (client) => {
     .call(done);
   /* eslint-enable no-underscore-dangle */
 
-  me.new.handleSubjectMatchesExisting = () => {
+  me.new.handleSubjectMatchesExisting = (done) => {
     client
       .scroll(0, 0)
       .setValue('.coins-datatable-wrapper input[type=search]', 'testaddressline1')
@@ -139,12 +139,15 @@ module.exports = (client) => {
 
     // Create/Re-use
     if (Date.now() % 2 === 0) {
-      client.click('#page-container > div.boxBody > div > a:nth-child(2)');
+      client.click('input[type=button][value=\'Reuse URSI\']');
     } else {
-      client.click('#page-container > div.boxBody > div > a:nth-child(5)');
+      client.click('input[type=button][value=\'Create New URSI\']');
     }
 
-    client.click('input[type=button][value=Continue]');
+    client
+      .pause(1000)
+      .click('input[type=button][value=Continue]')
+      .call(done);
   };
 
   me.enroll.submitExisting = (done = noop) => client
