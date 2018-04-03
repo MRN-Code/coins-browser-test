@@ -130,7 +130,7 @@ module.exports = (client) => {
     .call(done);
   /* eslint-enable no-underscore-dangle */
 
-  me.new.handleSubjectMatchesExisting = () => {
+  me.new.handleSubjectMatchesExisting = (done) => {
     client
       .scroll(0, 0)
       .setValue('.coins-datatable-wrapper input[type=search]', 'testaddressline1')
@@ -139,12 +139,15 @@ module.exports = (client) => {
 
     // Create/Re-use
     if (Date.now() % 2 === 0) {
-      client.click('#page-container > div.boxBody > div > a:nth-child(2)');
+      client.click('input[type=button][value=\'Reuse URSI\']');
     } else {
-      client.click('#page-container > div.boxBody > div > a:nth-child(5)');
+      client.click('input[type=button][value=\'Create New URSI\']');
     }
 
-    client.click('input[type=button][value=Continue]');
+    client
+      .pause(1000)
+      .click('input[type=button][value=Continue]')
+      .call(done);
   };
 
   me.enroll.submitExisting = (done = noop) => client
