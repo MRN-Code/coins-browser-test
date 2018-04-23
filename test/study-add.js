@@ -77,7 +77,7 @@ describe('Add a new study', function studyAdd() {
             })
             .call(done);
   });
-
+  console.log(sampleData);
     /**
      * Fill out the form using `sampleData` (step #2).
      */
@@ -86,6 +86,8 @@ describe('Add a new study', function studyAdd() {
             .setValue('input[name=label]', sampleData.label)
             .setValue('input[name=hrrc_title]', sampleData.title)
             .setValue('input[name=study_dir_name]', sampleData.archiveDirectory)
+            .click('//*[@id="frmAdd"]/table[1]/tbody/tr[6]/td[2]/input')
+            .click('//*[@id="frmAdd"]/table[1]/tbody/tr[7]/td[2]/input')
             .selectByVisibleText('select[name=pi_id]', sampleData.pi)
             .selectByVisibleText('select[name=co_pi_id]', sampleData.coInvestigator)
             .selectByVisibleText('select[name=site_id]', sampleData.sideId)
