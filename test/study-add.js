@@ -77,7 +77,6 @@ describe('Add a new study', function studyAdd() {
             })
             .call(done);
   });
-  console.log(sampleData);
     /**
      * Fill out the form using `sampleData` (step #2).
      */
