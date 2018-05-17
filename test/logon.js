@@ -1,24 +1,15 @@
 'use strict';
 
-const config = require('config');
-const should = require('should');
+/* globals browser */
 
-const client = require('./lib/client.js').client;
-const auth = require('./lib/auth/micis.js')(client, config);
+const config = require('config');
+
+const auth = require('./lib/auth/micis.js')(browser, config);
 
 describe('micis logon', function logon() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-        // wait for client to be ready before testing
-    client.clientReady.then(done);
-  });
-
-  it('should logon', (done) => {
-    auth.logon(done);
-  });
-
-  it('should set auth cookies', (done) => {
-    done();
+  it('should logon', () => {
+    auth.logon();
   });
 });

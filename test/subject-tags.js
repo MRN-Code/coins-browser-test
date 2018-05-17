@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals browser should */
+
 /**
  * Test creating, updating and deleting subject tags.
  *
@@ -17,10 +19,8 @@
 
 const randomNumber = require('lodash/random');
 const config = require('config');
-const client = require('./lib/client.js').client;
-const micis = require('./lib/auth/micis.js')(client);
-const nav = require('./lib/nav/navigation.js')(client, config);
-const should = require('should');
+const micis = require('./lib/auth/micis.js')(browser);
+const nav = require('./lib/nav/navigation.js')(browser, config);
 
 const sampleUrsi = 'M87161657';
 const sampleTags = [{
@@ -38,41 +38,33 @@ describe('Add subject tags', function subjectTags() {
    */
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) {
-        micis.logon();
-      }
-
-      nav.micisMenu
-        .clickNested('Look Up a Subject')
-        .setValue('#ursi', sampleUrsi)
-        .click('#frmFindSubject .ui-button-success')
-        .waitForPaginationComplete()
-        .waitForExist('#button-extideditor')
-        .click('#button-extideditor')
-        .waitForPaginationComplete()
-        .call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) {
+      micis.logon();
+    }
+    nav.micisMenu
+      .clickNested('Look Up a Subject')
+      .setValue('#ursi', sampleUrsi)
+      .click('#frmFindSubject .ui-button-success')
+      .waitForPaginationComplete()
+      .waitForExist('#button-extideditor');
+    browser
+      .click('#button-extideditor')
+      .waitForPaginationComplete();
   });
 
-  it('should show a new tags form', (done) => {
-    client.element('#addextFrm', (err) => {
-      if (err) {
-        throw err;
-      }
-
-      client.call(done);
-    });
+  it('should show a new tags form', () => {
+    const elem = browser.element('#addextFrm');
+    elem.should.be.ok;// eslint-disable-line no-unused-expressions
   });
 
-  it('should accept new tags', (done) => {
+  it('should accept new tags', () => {
     /**
      * Iterate over `sampleTags`, input properties into the appropriate
      * form elements, and save.
      */
     sampleTags.forEach((tag) => {
-      client
+      browser
         .selectByVisibleText(
           '#addextFrm select[name=subject_tag_id]',
           tag.type
@@ -87,38 +79,30 @@ describe('Add subject tags', function subjectTags() {
         .click('#addextFrm input[type=button]')
         .waitForPaginationComplete();
     });
-
-    client.call(done);
   });
 
   /**
    * Confirm the freshly created tags exist in subject's tag table.
    */
-  it('should save new tags', (done) => {
-    client
-      .pause(500)
-      .getText('#subject_tags_table tbody', (err, res) => {
-        if (err) {
-          throw err;
-        }
+  it('should save new tags', () => {
+    browser.pause(500);
+    const res = browser.getText('#subject_tags_table tbody');
 
-        /**
-         * Iterate over the table's rows and find those containing
-         * data from `sampleTags`.
-         */
-        const matches = res.split(/\n/).filter(row => sampleTags.some(tag => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1));
+    /**
+     * Iterate over the table's rows and find those containing
+     * data from `sampleTags`.
+     */
+    const matches = res.split(/\n/).filter(row => sampleTags.some(tag => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1));
 
-        /* eslint-disable no-unused-expressions */
-        should(matches.length === sampleTags.length).be.ok;
-        /* eslint-enable no-unused-expressions */
-      })
-      .call(done);
+    /* eslint-disable no-unused-expressions */
+    should(matches.length === sampleTags.length).be.ok;
+    /* eslint-enable no-unused-expressions */
   });
 
-  it('should save tag edits', (done) => {
+  it('should save tag edits', () => {
     const tag = sampleTags[0];
 
-    client
+    browser
       .click(`//td[text()="${tag.value}"]/..//input[@type="button"]`)
       .waitForPaginationComplete()
       /**
@@ -128,20 +112,18 @@ describe('Add subject tags', function subjectTags() {
       .setValue('#editExtIdFrm input[name=value]', tag.value += '_edit')
       .click('#editExtIdFrm input[name=doChange]')
       .waitForPaginationComplete()
-      .waitForText('#subject_tags_table tbody', 1000)
-      .getText('#subject_tags_table tbody', (err, res) => {
-        const hasMatch = res.split(/\n/).some(row => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1);
+      .waitForText('#subject_tags_table tbody', 1000);
 
-        /* eslint-disable no-unused-expressions */
-        should(hasMatch).be.ok;
-        /* eslint-enable no-unused-expressions */
-      })
-      .call(done);
+    const res = browser.getText('#subject_tags_table tbody');
+    const hasMatch = res.split(/\n/).some(row => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1);
+    /* eslint-disable no-unused-expressions */
+    should(hasMatch).be.ok;
+    /* eslint-enable no-unused-expressions */
   });
 
-  it('should remove deleted tags', (done) => {
+  it('should remove deleted tags', () => {
     sampleTags.forEach((tag) => {
-      client
+      browser
         /**
          * @todo Refactor this click-through to tag edit page into a
          *       helper.
@@ -149,37 +131,27 @@ describe('Add subject tags', function subjectTags() {
         .click(`//td[text()="${tag.value}"]/..//input[@type="button"]`)
         .waitForPaginationComplete()
         .click('#editExtIdFrm input[name=doRemove]')
-        .waitForPaginationComplete()
-        /**
-         * Confirm tag's value is no longer in the subject's tags table.
-         */
-        .getText('#subject_tags_table tbody', (err, res) => {
-          /**
-           * When a subject only has one tag the `#subject_tags_table`
-           * doesn't exist. Instead, an edit for the single tag is
-           * populated. Make sure this form's data doesn't match the
-           * tag's value.
-           */
-          if (err && err.message.indexOf('NoSuchElement') !== -1) {
-            client.getValue('#editExtIdFrm input[name=value]', (error, response) => {
-              if (error) {
-                throw error;
-              }
-
-              /* eslint-disable no-unused-expressions */
-              should(response.indexOf(tag.value) === -1).be.ok;
-              /* eslint-enable no-unused-expressions */
-            });
-          } else if (err) {
-            throw err;
-          } else {
-            /* eslint-disable no-unused-expressions */
-            should(res.indexOf(tag.value) === -1).be.ok;
-            /* eslint-enable no-unused-expressions */
-          }
-        });
+        .waitForPaginationComplete();
+      /**
+       * Confirm tag's value is no longer in the subject's tags table.
+       */
+      const res = browser.getText('#subject_tags_table tbody');
+      /* eslint-enable no-unused-expressions */
+      /**
+       * When a subject only has one tag the `#subject_tags_table`
+       * doesn't exist. Instead, an edit for the single tag is
+       * populated. Make sure this form's data doesn't match the
+       * tag's value.
+       */
+      if (!res) {
+        const response = browser.getValue('#editExtIdFrm input[name=value]');
+        /* eslint-disable no-unused-expressions */
+        should(response.indexOf(tag.value) === -1).be.ok;
+      } else {
+        /* eslint-disable no-unused-expressions */
+        should(res.indexOf(tag.value) === -1).be.ok;
+        /* eslint-enable no-unused-expressions */
+      }
     });
-
-    client.call(done);
   });
 });

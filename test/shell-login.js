@@ -70,7 +70,6 @@ describe('shell login', function shellLoginTest() {
           .some(c => c.includes('CAS_Auth_User'))
           .should.be.true();
         body.should.equal('LOGGED_IN');
-
         done();
       }
     );

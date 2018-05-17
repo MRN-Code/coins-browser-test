@@ -1,55 +1,46 @@
 'use strict';
 
+/* globals browser */
+
 const config = require('config');
-const should = require('should');
-
-const client = require('./lib/client.js').client;
-const nav = require('./lib/nav/navigation.js')(client, config);
-const subject = require('./lib/subject.js')(client, config);
-
-const micis = require('./lib/auth/micis.js')(client);
+const nav = require('./lib/nav/navigation.js')(browser, config);
+const subject = require('./lib/subject.js')(browser, config);
+const micis = require('./lib/auth/micis.js')(browser);
 
 describe('subject enroll', function subjectEnroll() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) { micis.logon(); }
-      client.call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) { micis.logon(); }
   });
 
   describe('add subject form', () => {
-    it('should be accessible', (done) => {
+    it('should be accessible', () => {
       nav.micisMenu
-        .clickNested('Enter a New Subject')
-        .call(done);
+        .clickNested('Enter a New Subject');
     });
 
-    it('should be fill-out-able', (done) => {
+    it('should be fill-out-able', () => {
       // fill form
       subject.new.fillForm();
-
       // Change study id
-      client.selectByValue('#study_id', 7640); // Smoking
-
-      client.call(done);
+      browser.selectByValue('#study_id', 7640); // Smoking
     });
 
-    it('should be submittable', (done) => {
-      subject.new.submit(done);
+    it('should be submittable', () => {
+      subject.new.submit();
     });
   });
 
   describe('verify subject form', () => {
-    it('should be submittable', (done) => {
-      subject.new.verify(done);
+    it('should be submittable', () => {
+      subject.new.verify();
     });
   });
 
   describe('handle new subject matches form', () => {
-    it('should be enroll with existing subject', (done) => {
-      subject.new.handleSubjectMatchesExisting(done);
+    it('should be enroll with existing subject', () => {
+      subject.new.handleSubjectMatchesExisting();
     });
   });
 });

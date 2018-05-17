@@ -1,88 +1,82 @@
 'use strict';
 
+/* globals browser */
+
 const config = require('config');
-const should = require('should');
 const path = require('path');
 
-const client = require('./lib/client.js').client;
-const nav = require('./lib/nav/navigation.js')(client, config);
-const micis = require('./lib/auth/micis.js')(client);
+const nav = require('./lib/nav/navigation.js')(browser, config);
+const micis = require('./lib/auth/micis.js')(browser);
 
 describe('Perform various imports and verify that they function correctly', function fileImport() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) {
-        micis.logon();
-      }
-      client.call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) {
+      micis.logon();
+    }
   });
 
   describe('Import subjects', () => {
-    it('Should navigate to Subjects > Import Participants', (done) => {
-      nav.micisMenu.clickNested('Import Participants', done);
+    it('Should navigate to Subjects > Import Participants', () => {
+      nav.micisMenu.clickNested('Import Participants');
     });
 
-    it('Should upload file', (done) => {
-      client
+    it('Should upload file', () => {
+      browser
         .selectByValue('select#study_id', 2319)
-        .waitForValue('select#subject_type_id', 3000)
-        // This click action is a hack to activate the 'input[name=userfile]' element
-        // Otherwise the selenium will not be able to see the element
-        .click('input#upload')
+        .waitForValue('select#subject_type_id', 3000);
+      // This click action is a hack to activate the 'input[name=userfile]' element
+      // Otherwise the selenium will not be able to see the element
+      browser.click('input#upload')
         .chooseFile('input[name=userfile]', path.join(
           __dirname,
           'upload_test_files/participant_import_formatted.csv'
         ))
-        .waitForPaginationComplete(done);
+        .waitForPaginationComplete();
     });
 
-    it('Should see the upload is successful', (done) => {
-      client
+    it('Should see the upload is successful', () => {
+      browser.waitForValue('div.boxHeader > span', 4000);
+      browser.waitForPaginationComplete(10000);
+      browser
         .getText('div.boxHeader > span')
-           .should.be.fulfilledWith('Participants Imported!')
-        .call(done);
+        .should.be.a.String().and.match('Participants Imported!');
     });
   });
 
   describe('Import instruments and assessments', () => {
-    it('Should go to asmt and select NITEST (study_id 2319)', (done) => {
+    it('Should go to asmt and select NITEST (study_id 2319)', () => {
       nav.gotoAsmt();
-      nav.selectAsmtStudy(2319, done);
+      nav.selectAsmtStudy(2319);
     });
 
     // Import instruments
-    it('Should navigate to Admin > Import Instruments', (done) => {
-      nav.asmtMenu.clickNested('Import Instruments', done);
+    it('Should navigate to Admin > Import Instruments', () => {
+      nav.asmtMenu.clickNested('Import Instruments');
     });
 
-    it('Should fill in the inst prefix and upload file', (done) => {
-      client
+    it('Should fill in the inst prefix and upload file', () => {
+      browser
         .setValue('input#questPrefix', 'QIWEQWEQWE')
         .chooseFile('input#file', path.join(
           __dirname,
-          'upload_test_files/Adverse_Events_Log_formatted.csv')
-        )
-        .waitForPaginationComplete(done);
+          'upload_test_files/Adverse_Events_Log_formatted.csv'))
+        .waitForPaginationComplete();
     });
 
-    it('Should see the upload is successful', (done) => {
-      client.getText('div#page-container')
-        .then((response) => {
-          response.should.containEql('Instrument successfully added');
-        })
-        .call(done);
+    it('Should see the upload is successful', () => {
+      browser.waitForPaginationComplete(10000);
+      browser.getText('div#page-container').should.containEql('Instrument successfully added');
     });
 
     // Import assessments
-    it('Should navigate to Admin > Import Assessments', (done) => {
-      nav.asmtMenu.clickNested('Import Assessments', done);
+    it('Should navigate to Admin > Import Assessments', () => {
+      nav.asmtMenu.clickNested('Import Assessments');
     });
 
-    it('Should upload assessments', (done) => {
-      client.selectByValue('select#instrument_id', 24063)
+    it('Should upload assessments', () => {
+      browser.selectByValue('select#instrument_id', 24063)
         .click('#single_visit_radio')
         // interval value could be updated for multiple tests during dev.
         .selectByValue('select#visit_interval', 'v2')
@@ -93,14 +87,13 @@ describe('Perform various imports and verify that they function correctly', func
           __dirname,
           'upload_test_files/NITEST_STOP-BANG_template.csv'
         ))
-        .waitForPaginationComplete(done);
+        .waitForPaginationComplete();
     });
 
-    it('Should see the upload is successful', (done) => {
-      client.isExisting('table#new_asmts').should.be.fulfilledWith(true)
-        .getText('div#new_asmts_info')
-            .should.be.fulfilledWith('Showing 1 to 2 of 2 entries')
-        .call(done);
+    it('Should see the upload is successful', () => {
+      browser.waitForPaginationComplete(10000);
+      browser.isExisting('table#new_asmts').should.be.ok;// eslint-disable-line no-unused-expressions
+      browser.getText('div#new_asmts_info').should.containEql('Showing 1 to 2 of 2 entries');
     });
   });
 });
