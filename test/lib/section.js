@@ -16,7 +16,6 @@
  * than one is specified, the last one specified will be used.
  */
 
-const should = require('should');
 const _ = require('lodash');
 
 const getFormField = (key) => {
@@ -39,32 +38,29 @@ module.exports = (client) => {
   const me = {};
   const formSelector = '#instrument_add_edit_new_section';
 
-  me.openSectionEditor = (done) => {
+  me.openSectionEditor = () => {
     const selector = 'div.simLink[title="Edit Section Sort Order"]';
-    return client.click(selector)
+    client.click(selector)
       .waitForPaginationComplete()
-      .pause(1000)
-      .isVisible(formSelector, done);
+      .pause(1000);
+    return client.isVisible(formSelector);
   };
 
-  me.create = (options, done) => {
-    const setValues = () => {
-      _.forEach(options, (option, key) => {
-        const field = getFormField(key);
-        client[field.action](field.selector, option);
-      });
-      return client;
-    };
+  me.create = (options) => {
+    _.forEach(options, (option, key) => {
+      const field = getFormField(key);
+      client[field.action](field.selector, option);
+    });
 
-    return client
-      .call(setValues)
+    client
       .click('#addSectionIcon')
       .waitForPaginationComplete()
-      .waitForVis(formSelector, 4000, done);
+      .waitForVis(formSelector, 4000);
+    return client;
   };
 
-  me.closeSectionEditor = done => client.click('.tclose')
-    .waitForPaginationComplete(done);
+  me.closeSectionEditor = () => client.click('.tclose')
+    .waitForPaginationComplete();
 
   return me;
 };

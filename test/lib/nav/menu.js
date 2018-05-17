@@ -12,8 +12,6 @@
  */
 
 
-const _ = require('lodash');
-
 module.exports = (client, config, menuMap) => {
   const me = {};
 
@@ -33,9 +31,7 @@ module.exports = (client, config, menuMap) => {
     return menuMap.filter(findTextRecursive);
   };
 
-  me.clickNested = (text, done) => {
-    const callback = done || _.noop;
-
+  me.clickNested = (text) => {
     // Get top level menu item
     const parent = me.findLink(text)[0];
     // Ensure that top level menu item can be located
@@ -49,8 +45,7 @@ module.exports = (client, config, menuMap) => {
       .click(`=${parent.text}`)
       .click(`=${text}`)
       .waitForPaginationComplete()
-      .click('.site-header') // Close the menu by clicking the banner
-      .call(callback);
+      .click('.site-header'); // Close the menu by clicking the banne
   };
 
   return me;

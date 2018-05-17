@@ -4,7 +4,6 @@
 const config = require('config');
 const client = require('../client.js').client;
 const nav = require('../nav/navigation.js')(client, config);
-const noop = require('lodash/noop');
 
 /**
  * Browser actions for authenticating with MICIS
@@ -14,8 +13,12 @@ module.exports = (configuredClient) => {
   const me = {};
   /* eslint-disable no-underscore-dangle,no-param-reassign */
   Object.defineProperty(me, 'loggedOn', {
-    get() { return configuredClient._loggedOnMicis; },
-    set(x) { configuredClient._loggedOnMicis = x; },
+    get() {
+      return configuredClient._loggedOnMicis;
+    },
+    set(x) {
+      configuredClient._loggedOnMicis = x;
+    },
   });
   /* eslint-enable no-underscore-dangle,no-param-reassign */
 
@@ -25,7 +28,7 @@ module.exports = (configuredClient) => {
    */
   me.logout = () => {
     me.loggedOn = false;
-    return configuredClient.url(`https://${config.origin}/micis/logout.php`);
+    return configuredClient.url('/micis/logout.php');
   };
 
   /**
@@ -35,32 +38,28 @@ module.exports = (configuredClient) => {
    *
    * @param {Function} [done] Function to execute once logon is complete
    */
-  me.logon = (done) => {
-    const callback = done || noop;
-
-    configuredClient.url(`https://${config.origin}`);
+  me.logon = () => {
+    configuredClient.url('/');
 
     if (!me.loggedOn) {
+      configuredClient.element('input[name=password]').waitForExist();
       configuredClient
-        .waitForExist('input[name=password]', 3000)
         .setValue('.modal form input[name=username]', config.auth.un)
         .setValue('.modal form input[name=password]', config.auth.pw)
         .click('.modal form button[type=submit]')
-        .waitForPaginationComplete()
-        .getCookie('MICIS', (err, cookie) => {
-          if (cookie) {
-            me.loggedOn = cookie;
-          } else {
-            throw new Error('micis cookie not found');
-          }
-        });
+        .waitForVisible('input[name=password]', 5000, true); // wait untill redirect //Fix the pagination
+      configuredClient.waitForPaginationComplete();
+      const cookie = configuredClient.getCookie('MICIS');
+      if (cookie) {
+        me.loggedOn = cookie;
+      } else {
+        throw new Error('micis cookie not found');
+      }
     }
 
     return nav
-      .disableNavigationAlert()
-      .call(callback);
+      .disableNavigationAlert();
   };
 
   return me;
 };
-

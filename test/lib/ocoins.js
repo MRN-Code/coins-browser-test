@@ -29,7 +29,7 @@ module.exports = (client) => {
 
   me.configure.clickCacheFirstRow = () => {
     const path = '//table[@id=\'ocoins_study_config_table\']/tbody/tr/td/button';
-    return client
+    client
       .moveToObject(path)
       .click(path)
       .waitForExist('#study_cache_details_container', 10000);
@@ -37,12 +37,12 @@ module.exports = (client) => {
 
   me.configure.deleteFirstRow = () => {
     const path = '//button[./*[contains(., \'Delete\')]]';
-    return client
+    client
       .moveToObject(path)
       .click(path)
       .click('//div[contains(@class, \'ui-dialog\')]/button[contains(., \'Delete\')]')
-      .pause(1100) // wait for fade to finish
-      .waitForVis('#ocoins_study_config_table_wrapper', 20000);
+      .pause(1100); // wait for fade to finish
+    client.waitForVis('#ocoins_study_config_table_wrapper', 20000);
   };
 
   me.configure.clickCacheDataEntry = () => {
@@ -55,12 +55,14 @@ module.exports = (client) => {
     return me.configure.clickCacheModeButton(path);
   };
 
-  me.configure.clickCacheModeButton = path => client
-    .moveToObject(path)
-    .waitForEnabled(path, 10000)
-    .click(path)
-    .waitForExist('//button[./*[contains(., \'Delete\')]]', 60000);
-
+  me.configure.clickCacheModeButton = (path) => {
+    client
+      .moveToObject(path)
+      .waitForEnabled(path, 10000);
+    client
+      .click(path)
+      .waitForExist('//button[./*[contains(., \'Delete\')]]', 60000);
+  };
   me.configure.deleteStudy = () => {
     me.configure.filterByName('RioArribaCo');
     me.configure.deleteFirstRow();
@@ -74,8 +76,8 @@ module.exports = (client) => {
    */
   me.configure.filterByName = (name) => {
     const path = '#ocoins_study_config_table_filter input[type=search]';
+    client.waitForVis(path);
     return client
-      .waitForVis(path)
       .moveToObject(path)
       .setValue(path, name);
   };
@@ -104,9 +106,9 @@ module.exports = (client) => {
       return;
     } else if (window.__purgedOcoinsDbs) {
       delete window.__purgedOcoinsDbs;
+
       return true; // eslint-disable-line consistent-return
     }
-
     dbc = new window.OCoinsDBClient();
     window.__purgingOcoinsDbs = dbc.clear(true).then(() => {
       delete window.__purgingOcoinsDbs;
@@ -118,7 +120,9 @@ module.exports = (client) => {
       });
     });
     /* eslint-enable no-underscore-dangle */
-  }, null, 10000);
+  }, null, {
+    timeout: 10000,
+  });
 
   me.app.waitForBootstrapped = () => client.pause(3000);
 

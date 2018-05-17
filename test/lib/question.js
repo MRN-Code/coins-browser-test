@@ -47,79 +47,68 @@ const getFormField = (key) => {
 module.exports = (client) => {
   const me = {};
 
-  me.openQuestionCreator = (done) => {
+  me.openQuestionCreator = () => {
     const selector = '#asmtAddQuestion';
     return client
       .scroll(selector, 0, -100)
       .click(selector)
-      .waitForPaginationComplete(done);
+      .waitForPaginationComplete();
   };
 
-  me.verifyQuestionInInstrument = (questionId, done) => client
-    .isVisible(`#questionList_${questionId}`, done);
+  me.verifyQuestionInInstrument = questionId => client
+    .isVisible(`#questionList_${questionId}`);
 
-  me.verifyQuestionNotInInstrument = (questionId, done) => {
-    const opposite = (err, isVisible) => {
-      if (isVisible) {
-        throw new Error(`Expected question ${questionId} to NOT exist`);
-      } else if (isVisible === false) {
-        done();
-      }
-      if (err) {
-        throw err;
-      }
-    };
-
-    return client.isExisting(`#questionList_${questionId}`, opposite);
+  me.verifyQuestionNotInInstrument = (questionId) => {
+    const isVisible = client.isExisting(`#questionList_${questionId}`);
+    if (isVisible) {
+      throw new Error(`Expected question ${questionId} to NOT exist`);
+    }
+    return client;
   };
 
-  me.hoverEdit = (questionId, done) => {
+  me.hoverEdit = (questionId) => {
     const hoverSelector = `#questionList_${questionId} .editQuestionButton`;
-    return client.moveToObject(hoverSelector, done);
+    return client.moveToObject(hoverSelector);
   };
 
-  me.duplicate = (fromId, toId, done) => {
+  me.duplicate = (fromId, toId) => {
     const clickSelector = `#questionList_${fromId} .duplicateQuestionButton`;
-    return me.hoverEdit(fromId)
-            .click(clickSelector)
-            .pause(1500)
-            .setValue('input[name=question_id]', toId)
-            .click('.tcontent')
-            .pause(1500)
-            .click('input[value=Duplicate]')
-            .pause(1500)
-            .alertAccept()
-            .waitForPaginationComplete(done);
+    me.hoverEdit(fromId)
+      .click(clickSelector)
+      .pause(1500);
+    client.setValue('input[name=question_id]', toId)
+      .click('.tcontent')
+      .pause(1500);
+    client.click('input[value=Duplicate]')
+      .pause(1500);
+    return client.alertAccept()
+      .waitForPaginationComplete();
   };
 
-  me.delete = (questionId, done) => {
+  me.delete = (questionId) => {
     const clickSelector = `#questionList_${questionId} .deleteQuestionButton`;
 
     return me.hoverEdit(questionId)
       .click(clickSelector)
       .pause(10000)
       .click('input[value=Delete]')
-      .waitForPaginationComplete(done);
+      .waitForPaginationComplete();
   };
 
-  me.create = (options, done) => {
-    const setValues = () => {
-      _.forEach(options, (option, key) => {
-        const field = getFormField(key);
-        client[field.action](field.selector, option);
-      });
-      return client;
-    };
+  me.create = (options) => {
+    _.forEach(options, (option, key) => {
+      const field = getFormField(key);
+      client[field.action](field.selector, option);
+    });
 
     return client
-      .call(setValues)
       .scroll('[name=submitButton]', 0, -100)
       .click('[name=submitButton]')
-      .waitForPaginationComplete(done);
+      .waitForPaginationComplete();
   };
 
-  me.goBackToSection = done => client.click('.tclose')
-    .waitForPaginationComplete(done);
+  me.goBackToSection = () => client.click('.tclose')
+    .waitForPaginationComplete();
 
   return me;
 };
