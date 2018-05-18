@@ -35,9 +35,9 @@ module.exports = (client) => {
       .click('#context_site') // subject tag context === site
       .moveToObject('#study_id')
       .selectByValue('#study_id', 2319); // NITEST
-    if (client.alertText()) {
+      /* @todo: if (client.alertText()) {
       client.alertDismiss();
-    }
+      }*/
     client.waitForVis('#site_id', 8000);
     client.moveToObject('#site_id')
       .selectByValue('#site_id', 7)
@@ -80,8 +80,10 @@ module.exports = (client) => {
 
   /* eslint-disable no-underscore-dangle */
   me.new._handleSubjectMatchesClick = () => {
-    client.pause(200);
-    client.moveToObject('#verify_add_new_subject')
+    client
+      .element('#verify_add_new_subject').scroll();
+    //  .pause(1000);
+    client
       .click('#verify_add_new_subject')
       .pause(10);
   };
@@ -102,7 +104,8 @@ module.exports = (client) => {
         .pause(50);
       client.click('#confirm_new_subject_confirmed');
     }
-    client.waitForPaginationComplete().pause(200);
+    client.waitForPaginationComplete();
+    client.pause(200);
     const isExisting = client.isExisting('#new_ursi');
     if (!isExisting) {
       throw new Error('Submit verify subject did not detect that it made it to new URSI page.');
