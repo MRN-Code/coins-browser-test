@@ -31,7 +31,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .setValue('input#newRequestTitle', titleValue)
       .waitForExist(okButton);
     browser.click(okButton).pause(500);
-    browser.getText(titleElement).should.be.equal(titleValue);
+    browser.customGetText(titleElement).should.be.equal(titleValue);
   });
 
   it('should drag an MR filter into the request workspace', () => {
@@ -53,7 +53,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(applyButton)
       .pause(2000);
-    browser.getText(statistics).should.be.eql(['384', '0', '1', '203']);// eslint-disable-line no-unused-expressions
+    browser.customGetText(statistics).should.be.eql(['384', '0', '1', '203']);// eslint-disable-line no-unused-expressions
   });
 
   it('should update the request title again', () => {
@@ -69,7 +69,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(okButton)
       .pause(500);
-    browser.getText(titleElement).should.be.equal(titleValue);
+    browser.customGetText(titleElement).should.be.equal(titleValue);
   });
 
   it('should drag a Study filter into the request workspace', () => {
@@ -90,14 +90,14 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(applyButton)
       .pause(2000);
-    browser.getText(statistics).should.be.eql(['0', '0', '0', '0']);
+    browser.customGetText(statistics).should.be.eql(['0', '0', '0', '0']);
   });
 
   it('should change the request workspace group to an [OR] group', () => {
     const switchButton = 'div#request > div > label.groupSwitch';
     browser.waitForExist(switchButton);
     browser.click(switchButton).pause(2000);
-    browser.getText(statistics).should.be.eql(['2637', '1112', '2', '1315']);
+    browser.customGetText(statistics).should.be.eql(['2637', '1112', '2', '1315']);
   });
 
   it('should add another filter and a group', () => {
@@ -121,7 +121,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(applyButton)
       .pause(2000);
-    browser.getText(statistics).should.be.eql(['3748', '1556', '3', '1385']);
+    browser.customGetText(statistics).should.be.eql(['3748', '1556', '3', '1385']);
   });
 
   it('should delete the Studies filter', () => {
@@ -131,7 +131,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(deleteButton)
       .pause(2000);
-    browser.getText(statistics).should.be.eql(['1495', '444', '2', '273']);
+    browser.customGetText(statistics).should.be.eql(['1495', '444', '2', '273']);
   });
 
   it('should delete the group', () => {
@@ -141,7 +141,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser.waitForExist(deleteButton);
     browser.click(deleteButton).waitForExist(confirmButton);
     browser.click(confirmButton).pause(2000);
-    browser.getText(statistics).should.be.eql(['384', '0', '1', '203']);
+    browser.customGetText(statistics).should.be.eql(['384', '0', '1', '203']);
   });
 
   it('should edit the MR filter', () => {
@@ -163,7 +163,7 @@ describe('Test data exchange functionality for a new request', function dxNewReq
     browser
       .click(applyButton)
       .pause(2000);
-    browser.getText(statistics).should.be.eql(['624', '0', '2', '183']);
+    browser.customGetText(statistics).should.be.eql(['624', '0', '2', '183']);
   });
 
   it('should send the request', () => {
@@ -177,6 +177,6 @@ describe('Test data exchange functionality for a new request', function dxNewReq
       .click(sendRequest)
       .pause(3000);
     browser.waitForExist(requestPopUp);
-    browser.getText(requestPopUp).should.be.equal('This request is for the following data/studies');
+    browser.customGetText(requestPopUp).should.be.equal('This request is for the following data/studies');
   });
 });

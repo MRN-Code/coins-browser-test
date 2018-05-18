@@ -6,6 +6,7 @@ const config = require('config');
 const nav = require('./lib/nav/navigation')(browser, config);
 const micis = require('./lib/auth/micis')(browser);
 
+
 describe('Test data exchange functionality for cloning a request', function dxClone() {
   this.timeout(config.defaultTimeout);
 
@@ -20,13 +21,14 @@ describe('Test data exchange functionality for cloning a request', function dxCl
 
   it('should verify that [Open Previous Request Templates] have loaded', () => {
     browser.pause(500);
+    browser.waitForPaginationComplete();
     const response = browser.elements('#requestMenu option');
     response.value.length.should.be.greaterThan(1);
   });
 
   it('should verify that all 4 modality filters have loaded', () => {
     browser.waitForExist('div.draggable.filter.MRFilter.ui-draggable');
-    const response = browser.getText('div#filterContainer > div.statisticsLabel > div > label');
+    const response = browser.customGetText('div#filterContainer > div.statisticsLabel > div > label');
     response.should.be.eql(['MR', 'Assessments', 'Studies', 'Subjects']);
   });
 
@@ -38,8 +40,10 @@ describe('Test data exchange functionality for cloning a request', function dxCl
       .selectByValue(publicTemplates, 460)
       .click('input#requestOpenButton')
       .pause(3000);
+    browser.waitForPaginationComplete();
     browser.click('div#requestStatusMessage > a.symlink');
-    const response = browser.getText('div#filterContainer > div.statisticsLabel > div.statisticsValue');
+    browser.waitForPaginationComplete();
+    const response = browser.customGetText('div#filterContainer > div.statisticsLabel > div.statisticsValue');
     response.should.be.eql(['2253', '1112', '1', '1112']);
   });
 
@@ -55,6 +59,7 @@ describe('Test data exchange functionality for cloning a request', function dxCl
     browser
       .click(okButton)
       .pause(500);
+    browser.waitForPaginationComplete();
     const returnedTitle = browser.getText(titleElement);
     returnedTitle.should.be.equal(titleValue);
   });
