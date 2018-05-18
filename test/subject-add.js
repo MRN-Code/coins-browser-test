@@ -35,7 +35,7 @@ describe('subject', function subjectAdd() {
     });
 
     it('should not have a hidden subject type ("Special") as a subject type', () => {
-      browser.selectByVisibleText('#subject_type_id', 'Special').should.not.be.ok;// eslint-disable-line no-unused-expressions
+      browser.isVisible("select#subject_type_id > option[value='Special']").should.not.be.ok;// eslint-disable-line no-unused-expressions
       // test good and bogus values pre submit
       // submit
     });
@@ -71,6 +71,7 @@ describe('subject', function subjectAdd() {
 
     it('should be able to lookup ursi just added', () => {
       const ursi = subject.new.newUrsis[0];
+      browser.waitForPaginationComplete(); // Probably loading overlay blocking nav click.
       nav.micisMenu.clickNested('Look Up a Subject');
       subject.lookup.existing(ursi);
     });
