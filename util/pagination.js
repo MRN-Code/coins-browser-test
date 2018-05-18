@@ -56,7 +56,9 @@ function waitForPaginationComplete(timeout) {
     }
     return false; // not ready yet
   }
-  return this.waitForCondition(checkBrowserPaginationComplete, null, { timeout });
+  return this.waitForCondition(checkBrowserPaginationComplete, null, {
+    timeout,
+  });
 }
 
 
@@ -74,14 +76,33 @@ function waitForVis(sell, timeout, cb) {
     const el = window.document.querySelector(selector);
     return (el ? el.offsetParent !== null : false);
   }
-  this.waitForCondition(testForVis, sell, { timeout }, cb);
+  this.waitForCondition(testForVis, sell, {
+    timeout,
+  }, cb);
 }
-
+/** Selenium issue:getText fails because of many parallel connections.
+ * https://github.com/webdriverio/webdriverio/issues/2406
+ * should use this func where getText() fails with server excepetion
+ * @param {string} selector  css selectors
+ * @return {string}  text
+ */
+function customGetText(selector) {
+  const {
+    value: elements,
+  } = this.elements(selector);
+  if (elements.length === 1) return (this.elementIdText(elements[0].ELEMENT)).value;
+  const text = [];
+  _.forEach(elements, (elem) => {
+    text.push((this.elementIdText(elem.ELEMENT)).value);
+  });
+  return text;
+}
 
 // exports;
 module.exports = function pagination(client) {
   client.addCommand('waitForCondition', vargscb(waitForCondition));
   client.addCommand('waitForPaginationComplete', vargscb(waitForPaginationComplete));
   client.addCommand('waitForVis', vargscb(waitForVis));
+  client.addCommand('customGetText', vargscb(customGetText));
   return client;
 };
