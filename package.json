@@ -4,10 +4,8 @@
   "description": "suite of browser tests for COINS",
   "main": "index.js",
   "scripts": {
-    "clean": "rm selenium-server-standalone-3.0.1.jar",
-    "install": "stat selenium-server-standalone-3.0.1.jar || curl -O https://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar",
     "lint": "eslint test util",
-    "start": "java -Dwebdriver.chrome.driver=node_modules/chromedriver/bin/chromedriver -jar selenium-server-standalone-3.0.1.jar -port 4441"
+    "start": "./node_modules/.bin/wdio wdio.conf.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +32,11 @@
     "request": "^2.81.0",
     "should": "*",
     "vargs-callback": "^0.2.4",
-    "webdriverio": "~2.4.5"
+    "mocha": "^3.5.3",
+    "wdio-mocha-framework": "^0.5.13",
+    "wdio-selenium-standalone-service": "0.0.9",
+    "wdio-spec-reporter": "^0.1.2",
+    "webdriverio": "^4.10.2"
   },
   "private": true,
   "devDependencies": {
