@@ -37,7 +37,7 @@ describe('Perform various imports and verify that they function correctly', func
     });
 
     it('Should see the upload is successful', () => {
-      browser.waitForValue('div.boxHeader > span', 4000);
+      browser.pause(500);
       browser.waitForPaginationComplete(10000);
       browser
         .getText('div.boxHeader > span')
