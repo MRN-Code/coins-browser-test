@@ -102,3 +102,4 @@ Write your tests as **mocha unit tests**, with the actual browser driver functio
 
 # ToDo
 1. Put selenium server on lintcoin
+2. Fix moveToObject deprecation warnings
