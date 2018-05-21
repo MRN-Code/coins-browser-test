@@ -70,7 +70,8 @@ describe('Add subject tags', function subjectTags() {
           tag.type
         )
         .setValue('#addextFrm input[name=value]', tag.value)
-        .moveToObject('#addextFrm input[value=study]')
+        .element('#addextFrm input[value=study]')
+        .scroll()
         .click('#addextFrm input[value=study]')
         .selectByVisibleText(
           '#addextFrm select[name=tag_study]',

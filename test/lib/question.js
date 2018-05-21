@@ -50,7 +50,8 @@ module.exports = (client) => {
   me.openQuestionCreator = () => {
     const selector = '#asmtAddQuestion';
     return client
-      .scroll(selector, 0, -100)
+      .element(selector)
+      .scroll()
       .click(selector)
       .waitForPaginationComplete();
   };
@@ -68,7 +69,7 @@ module.exports = (client) => {
 
   me.hoverEdit = (questionId) => {
     const hoverSelector = `#questionList_${questionId} .editQuestionButton`;
-    return client.moveToObject(hoverSelector);
+    return client.element(hoverSelector).scroll();
   };
 
   me.duplicate = (fromId, toId) => {
@@ -102,7 +103,8 @@ module.exports = (client) => {
     });
 
     return client
-      .scroll('[name=submitButton]', 0, -100)
+      .element('[name=submitButton]')
+      .scroll()
       .click('[name=submitButton]')
       .waitForPaginationComplete();
   };

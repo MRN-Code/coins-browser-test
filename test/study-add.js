@@ -105,7 +105,8 @@ describe('Add a new study', function studyAdd() {
    */
   it('should save new study', () => {
     browser
-      .moveToObject('input[name=DoAdd]')
+      .element('input[name=DoAdd]')
+      .scroll()
       .click('input[name=DoAdd]')
       .waitForPaginationComplete()
       .waitForExist('.confirmMsg', 1500);

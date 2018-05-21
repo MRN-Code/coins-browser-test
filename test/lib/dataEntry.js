@@ -46,7 +46,7 @@ module.exports = (client) => {
   me.beginNewAssessment = () => {
     const selector = 'button[id="new_asmt_bottom"]';
     return client
-      .scroll(selector, 0, 0)
+      .element(selector).scroll()
       .click(selector)
       .waitForPaginationComplete();
   };

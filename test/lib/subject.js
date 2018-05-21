@@ -33,13 +33,16 @@ module.exports = (client) => {
       .selectByValue('#subject_tag_id', 1) // U.S. SSN
       .setValue('#value', 1112223333) // subject tag value
       .click('#context_site') // subject tag context === site
-      .moveToObject('#study_id')
+      .element('#study_id')
+      .scroll()
       .selectByValue('#study_id', 2319); // NITEST
       /* @todo: if (client.alertText()) {
       client.alertDismiss();
       }*/
     client.waitForVis('#site_id', 8000);
-    client.moveToObject('#site_id')
+    client
+      .element('#site_id')
+      .scroll()
       .selectByValue('#site_id', 7)
       .selectByVisibleText('select[name=ethnicity]', 'Unknown')
       .click('#racCat1')
@@ -47,7 +50,8 @@ module.exports = (client) => {
       .click('#racCat3')
       .click('#racCat4')
       .click('#racCat5')
-      .moveToObject('#first_name_at_birth')
+      .element('#first_name_at_birth')
+      .scroll()
       // not an RDoC study
       // eslint-disable-line consistent-return
       .setValue('#first_name_at_birth', 'testFirstNameAtBirth')
@@ -61,7 +65,9 @@ module.exports = (client) => {
   };
   me.new.submit = () => {
     client.pause(1000);
-    client.scroll('#submit_new_subject')
+    client
+      .element('#submit_new_subject')
+      .scroll()
       .click('#submit_new_subject')
       .waitForPaginationComplete()
       .pause(100);
@@ -73,7 +79,9 @@ module.exports = (client) => {
 
   me.new.verify = () => {
     client.pause(200);
-    client.moveToObject('[value="Add >"]')
+    client
+      .element('[value="Add >"]')
+      .scroll()
       .click('[value="Add >"]')
       .waitForPaginationComplete();
   };
@@ -99,7 +107,9 @@ module.exports = (client) => {
       if (isVisible2) {
         throw new Error('#confirm_new_subject_declined should not be visible');
       }
-      client.moveToObject('#verify_add_new_subject')
+      client
+        .element('#verify_add_new_subject')
+        .scroll()
         .click('#verify_add_new_subject')
         .pause(50);
       client.click('#confirm_new_subject_confirmed');
@@ -138,7 +148,9 @@ module.exports = (client) => {
 
   me.enroll.submitExisting = () => {
     client.pause(1000);
-    client.moveToObject('#enroll_subject_submit')
+    client
+      .element('#enroll_subject_submit')
+      .scroll()
       .click('#enroll_subject_submit')
       .waitForPaginationComplete();
     // .scroll('.confirmMsg')

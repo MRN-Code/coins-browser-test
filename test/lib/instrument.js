@@ -72,9 +72,10 @@ module.exports = (client) => {
     const xPathNavSelector = '//*[@id="asmtPageNav"]';
     const xPathSelector = `${xPathNavSelector}//li[normalize-space(.) = "${sectionLabel}"]`;
 
-    return client.moveToObject(xPathNavSelector, 80, 10)
+    return client.element(xPathNavSelector).scroll()
       .click(xPathSelector)
-      .moveToObject('#page-container', 0, 0);
+      .element('#page-container')
+      .scroll();
   };
 
 

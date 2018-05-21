@@ -20,7 +20,8 @@ module.exports = (client) => {
     .waitForPaginationComplete();
 
   me.clickAsmtResponsesButton = () => client
-    .moveToObject('#asmt_grid>tbody>tr>td>a')
+    .element('#asmt_grid>tbody>tr>td>a')
+    .scroll()
     .click('=responses')
     .waitForPaginationComplete();
 
@@ -43,7 +44,8 @@ module.exports = (client) => {
         'input[type=search]',
         `${details.ursi} ${details.assessmentDate} ${details.segmentInterval}`
       )
-      .scroll(selector, -350, 0)
+      .element(selector)
+      .scroll()
       .click(selector)
       .waitForPaginationComplete();
   };

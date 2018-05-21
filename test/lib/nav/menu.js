@@ -41,7 +41,8 @@ module.exports = (client, config, menuMap) => {
 
     // hover over top level menu item before clicking on child
     return client
-      .moveToObject(`=${parent.text}`, 10, 10)
+      .element(`=${parent.text}`)
+      .scroll()
       .click(`=${parent.text}`)
       .click(`=${text}`)
       .waitForPaginationComplete()

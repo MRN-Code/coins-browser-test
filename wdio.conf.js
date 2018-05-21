@@ -28,7 +28,7 @@ exports.config = {
     'test/instrument.js',          // broken
     'test/ocoins.js',              // broken
     'test/asmt-double-entry.js',   // broken
-    'test/query-builder.js',               // broken
+    'test/query-builder.js',       // broken
     //'test/shell-login.js',         // should run with mocha
   ],
   // Patterns to exclude.
@@ -76,9 +76,6 @@ exports.config = {
   // e.g. using promises you can set the sync option to false.
   sync: true,
   //
-  // move to moveToObject will be depricated.Should use pointers or scroll
-  // https://github.com/webdriverio/webdriverio/issues/1188
-  deprecationWarnings: false,
   //
   // Level of logging verbosity: silent | verbose | command | data | result | error
   logLevel: 'error',

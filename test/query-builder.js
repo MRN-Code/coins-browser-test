@@ -145,7 +145,8 @@ function addFieldsToQuery(options) {
  */
 function setupDemograpicData() {
   browser
-    .moveToObject('#optDemoDataOutput')
+    .element('#optDemoDataOutput')
+    .scroll()
     .click('#optDemoDataOutput')
     .waitForVis('#demoDataDiv');
   browser.selectByVisibleText('select[name="selDemoStudy"]', sampleStudyId);
@@ -160,7 +161,8 @@ function setupDemograpicData() {
 
 function setupAssessmentData() {
   browser
-    .moveToObject('#optAsmtDataOutput')
+    .element('#optAsmtDataOutput')
+    .scroll()
     .click('#optAsmtDataOutput')
     .waitForVis('#asmtDataDiv');
   browser
@@ -189,7 +191,8 @@ function setupAssessmentData() {
 
 function setupScanData() {
   browser
-    .moveToObject('#optScanDataOutput')
+    .element('#optScanDataOutput')
+    .scroll()
     .click('#optScanDataOutput')
     .waitForVis('#scanDataDiv');
   browser

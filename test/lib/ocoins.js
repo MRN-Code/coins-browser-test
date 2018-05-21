@@ -30,7 +30,8 @@ module.exports = (client) => {
   me.configure.clickCacheFirstRow = () => {
     const path = '//table[@id=\'ocoins_study_config_table\']/tbody/tr/td/button';
     client
-      .moveToObject(path)
+      .element(path)
+      .scroll()
       .click(path)
       .waitForExist('#study_cache_details_container', 10000);
   };
@@ -38,7 +39,8 @@ module.exports = (client) => {
   me.configure.deleteFirstRow = () => {
     const path = '//button[./*[contains(., \'Delete\')]]';
     client
-      .moveToObject(path)
+      .element(path)
+      .scroll()
       .click(path)
       .click('//div[contains(@class, \'ui-dialog\')]/button[contains(., \'Delete\')]')
       .pause(1100); // wait for fade to finish
@@ -57,7 +59,8 @@ module.exports = (client) => {
 
   me.configure.clickCacheModeButton = (path) => {
     client
-      .moveToObject(path)
+      .element(path)
+      .scroll()
       .waitForEnabled(path, 10000);
     client
       .click(path)
@@ -78,7 +81,8 @@ module.exports = (client) => {
     const path = '#ocoins_study_config_table_filter input[type=search]';
     client.waitForVis(path);
     return client
-      .moveToObject(path)
+      .element(path)
+      .scroll()
       .setValue(path, name);
   };
 

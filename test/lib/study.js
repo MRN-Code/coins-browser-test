@@ -23,7 +23,8 @@ module.exports = (client, config) => {
    */
   me.list.selectByName = (name) => {
     client
-      .moveToObject('#study_list_filter input[type=search]')
+      .element('#study_list_filter input[type=search]')
+      .scroll()
       .click('#study_list_filter input[type=search]')
       .setValue('#study_list_filter input[type=search]', name)
       .waitForText(`=${name}`);
@@ -82,7 +83,7 @@ module.exports = (client, config) => {
       const formId = (options.mode === 'update') ? '#frmUpdate' : '#frmAdd';
       const data = options.data;
 
-      client.moveToObject(formId);
+      client.element(formId).scroll();
       client.setValue('#addStudyVisitLabel', data.label);
       client.setValue(`${formId} input[name=time_from_baseline]`, data.timeFromBaseline);
       client.selectByVisibleText(`${formId} select[name=time_unit]`, data.timeUnit);
@@ -97,7 +98,8 @@ module.exports = (client, config) => {
     submitForm() {
       const buttonSelector = '#addStudyVisitSubmitBtn';
       return client
-        .moveToObject(buttonSelector)
+        .element(buttonSelector)
+        .scroll()
         .click(buttonSelector);
     },
 
@@ -106,7 +108,8 @@ module.exports = (client, config) => {
       selector += '"]/following-sibling::td/a';
 
       return client
-        .scroll(selector, 0, -60)
+        .element(selector)
+        .scroll()
         .click(selector);
     },
 

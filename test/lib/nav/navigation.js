@@ -20,9 +20,13 @@ module.exports = (client, config) => {
   me.micisMenu = micisMenu(client, config);
   me.asmtMenu = asmtMenu(client, config);
 
-  me.hoverHome = () => client
-    .moveToObject('a.primary-nav-menu-button')
+  me.hoverHome = () => {
+    client.waitForVisible('a.primary-nav-menu-button');
+    return client
+    .element('a.primary-nav-menu-button')
+    .scroll()
     .click('=Menu');
+  };
 
   me.gotoAsmt = () => {
     me
