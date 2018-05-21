@@ -9,10 +9,6 @@ exports.config = {
   // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
-  auth: [{
-    un: 'testusersm',
-    pw: 'Hiccup_91',
-  }],
   specs: [
     'test/study-subject-types.js',
     'test/study-add.js',
@@ -22,17 +18,18 @@ exports.config = {
     'test/study.js',               // broken
     'test/subject-tags.js',
     'test/subject-look-up.js',
-    'test/subject-enroll.js',      // should add fix for disenroll
+    'test/subject-enroll.js',      // should add fix for auto disenroll
     'test/subject-edit-type.js',
     'test/subject-add.js',
     'test/navigateToAsmt.js',
-    'test/fileImport.js',          // broken
-    'test/instrument.js',          // broken
     'test/dx-clone.js',
     'test/dx-new-request.js',
+    'test/fileImport.js',          // broken
+    'test/instrument.js',          // broken
     'test/ocoins.js',              // broken
     'test/asmt-double-entry.js',   // broken
-    // 'test/shell-login.js', // should run with mocha
+    'test/query-builder.js',               // broken
+    //'test/shell-login.js',         // should run with mocha
   ],
   // Patterns to exclude.
   exclude: [
@@ -78,6 +75,9 @@ exports.config = {
   // the wdio-sync package. If you still want to run your tests in an async way
   // e.g. using promises you can set the sync option to false.
   sync: true,
+  //
+  // move to moveToObject will be depricated.Should use pointers or scroll
+  // https://github.com/webdriverio/webdriverio/issues/1188
   deprecationWarnings: false,
   //
   // Level of logging verbosity: silent | verbose | command | data | result | error
@@ -162,10 +162,6 @@ exports.config = {
   // Gets executed before test execution begins. At this point you can access all global
   // variables, such as `browser`. It is the perfect place to define custom commands.
   before: function(capabilities, specs) {
-    // var chai = require('chai');
-    // var chaiWebdriver = require('chai-webdriverio').default;
-    // chai.use(chaiWebdriver(browser));
-    // global.expect = chai.expect;
     const should = require('should');
     require('./util/pagination.js')(browser);
   },
