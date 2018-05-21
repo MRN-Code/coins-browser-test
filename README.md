@@ -31,9 +31,9 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
 3. Copy `config/default.json.example` to `config/default.json`. Update all fields to match your configuration.
 
 # Usage: Running Tests
-1. Modify wdio.conf.js to include/exclude tests:
+1. Modify `wdio.conf.js` to include or exclude tests:
 
-2. Run your tests
+2. Run tests
   ```shell
   npm start
   ```
@@ -61,7 +61,7 @@ COINS is a single page app of sorts, and utilizes its own home-grown pagination 
 As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**.
 To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page.
 
-**waitForPaginationComplete** is available in all tests since the `pagination.js` module is configured to load before each test is `wdio.conf.js`, which will add the function to the webdriverio client.
+**waitForPaginationComplete** is available in all tests since the `pagination.js` module is configured to load before each test in `wdio.conf.js`, which adds the function to the webdriverio client.
 
 ## Going to ASMT:
 Either require `test/navigateToAsmt.js` in your mocha test, or use the `test/lib/nav/navigate.js` library:
