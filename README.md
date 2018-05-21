@@ -38,8 +38,10 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
   npm start
   ```
 # Usage: Writing tests
-`browser` is available as a global variable.
-Navigate to a route with browser.url('/path');
+`browser` is available as a global variable.<br>
+
+`auth/micis.js` module has functions related to authentication.
+An example test to login is shown below.
 ```js
 const config = require('config');
 // get browser actions: note that the client is passed as a param
@@ -49,12 +51,12 @@ const auth = require('./lib/auth/micis.js')(browser, config);
 describe('micis logon', function() {
     this.timeout(config.defaultTimeout);
     it('should logon', function() {
-        Auth.logon();
+        auth.logon();
     });
 });
 ```
 
-# Usage: Navigating within COINS
+## Usage: Navigating within COINS
 COINS is a single page app of sorts, and utilizes its own home-grown pagination system.
 As a result, selenium and webdriverio **do not have any idea when a new page is finished loading, and ready to ispect/interact with**.
 To work around this, we have added a helper function called **waitForPaginationComplete**, which will wait until COINS has loaded the next page.
