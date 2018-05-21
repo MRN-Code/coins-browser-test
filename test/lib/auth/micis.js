@@ -47,8 +47,7 @@ module.exports = (configuredClient) => {
         .setValue('.modal form input[name=username]', config.auth.un)
         .setValue('.modal form input[name=password]', config.auth.pw)
         .click('.modal form button[type=submit]')
-        .waitForVisible('input[name=password]', 5000, true); // wait untill redirect //Fix the pagination
-      configuredClient.waitForPaginationComplete();
+        .waitForPaginationComplete();
       const cookie = configuredClient.getCookie('MICIS');
       if (cookie) {
         me.loggedOn = cookie;
