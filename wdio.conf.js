@@ -10,6 +10,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
+    'test/shell-login.js',
     'test/study-subject-types.js',
     'test/study-add.js',
     'test/study-visit.js',
@@ -29,7 +30,6 @@ exports.config = {
     'test/ocoins.js',              // broken
     'test/asmt-double-entry.js',   // broken
     'test/query-builder.js',       // broken
-    //'test/shell-login.js',         // should run with mocha
   ],
   // Patterns to exclude.
   exclude: [
