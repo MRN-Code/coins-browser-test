@@ -48,8 +48,7 @@ module.exports = (client, config) => {
   };
 
   me.selectAsmtStudy = (studyId) => {
-    client
-      .waitForPaginationComplete();
+    client.waitForExist(`select[name=asmt_study_id] option[value="${studyId}"]`);
     client
       .selectByValue('#asmt_study_id', studyId)
       .waitForPaginationComplete();

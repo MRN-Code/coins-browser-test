@@ -136,7 +136,7 @@ describe('Add subject tags', function subjectTags() {
       /**
        * Confirm tag's value is no longer in the subject's tags table.
        */
-      const res = browser.getText('#subject_tags_table tbody');
+      const res = browser.customGetText('#subject_tags_table tbody');
       /* eslint-enable no-unused-expressions */
       /**
        * When a subject only has one tag the `#subject_tags_table`
