@@ -53,6 +53,8 @@ function setupQuery(options) {
 
     browser
       .scroll(0, 0)
+      .waitForExist('#optListOfSubjects');
+    browser
       .click('#optListOfSubjects')
       .waitForVis('#ursiListDiv');
 
