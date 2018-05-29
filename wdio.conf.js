@@ -15,17 +15,15 @@ exports.config = {
     'test/study-add.js',
     'test/study-visit.js',
     'test/study-details.js',
-    'test/logon.js',
     'test/study.js',               // broken
     'test/subject-tags.js',
     'test/subject-look-up.js',
     'test/subject-enroll.js',      // should add fix for auto disenroll
     'test/subject-edit-type.js',
     'test/subject-add.js',
-    'test/navigateToAsmt.js',
     'test/dx-clone.js',
     'test/dx-new-request.js',
-    'test/fileImport.js',          // broken
+    'test/fileImport.js',
     'test/instrument.js',          // broken
     'test/ocoins.js',              // broken
     'test/asmt-double-entry.js',   // broken
