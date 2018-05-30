@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals browser */
+
 /**
  * Test creating a new study.
  *
@@ -14,10 +16,9 @@
 const _ = require('lodash');
 const moment = require('moment');
 const config = require('config');
-const client = require('./lib/client').client;
-const nav = require('./lib/nav/navigation')(client, config);
-const micis = require('./lib/auth/micis')(client);
-const should = require('should');
+const nav = require('./lib/nav/navigation')(browser, config);
+const micis = require('./lib/auth/micis')(browser);
+
 
 /**
  * Set up sample data. This should be unique every time the test is run through
@@ -53,103 +54,86 @@ const sampleData = {
 describe('Add a new study', function studyAdd() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) {
-        micis.logon();
-      }
-
-      nav.micisMenu
-                .clickNested('Add New Study')
-                .call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) {
+      micis.logon();
+    }
+    nav.micisMenu.clickNested('Add New Study');
+  });
+  /**
+   * Confirm the form exists (step #1).
+   */
+  it('should show a new study form', () => {
+    browser.element('form#frmAdd').should.be.ok;// eslint-disable-line no-unused-expressions
+  });
+  /**
+   * Fill out the form using `sampleData` (step #2).
+   */
+  it('should accept new study values', () => {
+    browser
+      .setValue('input[name=label]', sampleData.label)
+      .setValue('input[name=hrrc_title]', sampleData.title)
+      .setValue('input[name=study_dir_name]', sampleData.archiveDirectory)
+      .click('//*[@id="frmAdd"]/table[1]/tbody/tr[6]/td[2]/input')
+      .click('//*[@id="frmAdd"]/table[1]/tbody/tr[7]/td[2]/input')
+      .selectByVisibleText('select[name=pi_id]', sampleData.pi)
+      .selectByVisibleText('select[name=co_pi_id]', sampleData.coInvestigator)
+      .selectByVisibleText('select[name=site_id]', sampleData.sideId)
+      .setValue('input[name=rad_review_emails]', sampleData.email)
+      .setValue('input[name=irb_number]', sampleData.irbNumber)
+      .setValue('input[name=hrrc_num]', sampleData.internalStudyNumber)
+      .setValue('input[name=hrrc_consent_date]', sampleData.approvalDate)
+      .setValue('input[name=expiration_date]', sampleData.expirationDate)
+      .setValue('input[name=max_enrollment]', sampleData.maxEnrollment)
+      .selectByVisibleText('select[name=reuse_ursi]', sampleData.studySharing)
+      .setValue('input[name=exp_warn_emails]', sampleData.email)
+      .setValue('input[name=share_inst_emails]', sampleData.email)
+      .setValue('input[name=sponsor]', sampleData.sponsor)
+      .setValue('input[name=grant_number]', sampleData.grantNumber)
+      .setValue('input[name=url_reference]', sampleData.urlReference)
+      .setValue('input[name=url_description]', sampleData.urlDescription)
+      .selectByVisibleText('select[name=status_id]', sampleData.status)
+      .selectByVisibleText('select[name=default_radiologist]', sampleData.defaultRadiologist)
+      .selectByVisibleText('select[name=PrimaryResearchStudyArea_id]', sampleData.primaryResearchArea)
+      .selectByVisibleText('select[name=SecondaryResearchStudyArea_id]', sampleData.secondaryResearchArea)
+      .setValue('textarea[name=description]', sampleData.description)
+      .setValue('input[name=study_css_url]', sampleData.cssUrl);
   });
 
+  /**
+   * Click through to save the new study (step #3).
+   */
+  it('should save new study', () => {
+    browser
+      .element('input[name=DoAdd]')
+      .scroll()
+      .click('input[name=DoAdd]')
+      .waitForPaginationComplete()
+      .waitForExist('.confirmMsg', 1500);
+    const res = browser.getText('.confirmMsg');
     /**
-     * Confirm the form exists (step #1).
+     * A 'study saved' view is served with a confirmation message.
+     * Check the message's text to make sure it contains the
+     * sample data's label value.
      */
-  it('should show a new study form', (done) => {
-    client
-            .element('form#frmAdd', (err) => {
-              if (err) {
-                throw err;
-              }
-            })
-            .call(done);
-  });
-    /**
-     * Fill out the form using `sampleData` (step #2).
-     */
-  it('should accept new study values', (done) => {
-    client
-            .setValue('input[name=label]', sampleData.label)
-            .setValue('input[name=hrrc_title]', sampleData.title)
-            .setValue('input[name=study_dir_name]', sampleData.archiveDirectory)
-            .click('//*[@id="frmAdd"]/table[1]/tbody/tr[6]/td[2]/input')
-            .click('//*[@id="frmAdd"]/table[1]/tbody/tr[7]/td[2]/input')
-            .selectByVisibleText('select[name=pi_id]', sampleData.pi)
-            .selectByVisibleText('select[name=co_pi_id]', sampleData.coInvestigator)
-            .selectByVisibleText('select[name=site_id]', sampleData.sideId)
-            .setValue('input[name=rad_review_emails]', sampleData.email)
-            .setValue('input[name=irb_number]', sampleData.irbNumber)
-            .setValue('input[name=hrrc_num]', sampleData.internalStudyNumber)
-            .setValue('input[name=hrrc_consent_date]', sampleData.approvalDate)
-            .setValue('input[name=expiration_date]', sampleData.expirationDate)
-            .setValue('input[name=max_enrollment]', sampleData.maxEnrollment)
-            .selectByVisibleText('select[name=reuse_ursi]', sampleData.studySharing)
-            .setValue('input[name=exp_warn_emails]', sampleData.email)
-            .setValue('input[name=share_inst_emails]', sampleData.email)
-            .setValue('input[name=sponsor]', sampleData.sponsor)
-            .setValue('input[name=grant_number]', sampleData.grantNumber)
-            .setValue('input[name=url_reference]', sampleData.urlReference)
-            .setValue('input[name=url_description]', sampleData.urlDescription)
-            .selectByVisibleText('select[name=status_id]', sampleData.status)
-            .selectByVisibleText('select[name=default_radiologist]', sampleData.defaultRadiologist)
-            .selectByVisibleText('select[name=PrimaryResearchStudyArea_id]', sampleData.primaryResearchArea)
-            .selectByVisibleText('select[name=SecondaryResearchStudyArea_id]', sampleData.secondaryResearchArea)
-            .setValue('textarea[name=description]', sampleData.description)
-            .setValue('input[name=study_css_url]', sampleData.cssUrl)
-            .call(done);
+    const pattern = new RegExp(`${sampleData.label} successfully added`, 'i');
+    res.should.match(pattern);
+
+    browser.click('=View Study Details')
+      .waitForPaginationComplete();
   });
 
+  /**
+   * Verify the new study's values were saved (step #4).
+   */
+  it('should display correct study values', () => {
     /**
-     * Click through to save the new study (step #3).
+     * Associate the form's labels to the data they should match.
+     *
+     * The view study page contains a very large table with all the study's
+     * saved data. This data structure matches the table's labels (`label`)
+     * to the text values they should match (`match`).
      */
-  it('should save new study', (done) => {
-    client
-            .moveToObject('input[name=DoAdd]')
-            .click('input[name=DoAdd]')
-            .waitForPaginationComplete()
-            .waitForExist('.confirmMsg', 1500)
-            .getText('.confirmMsg', (err, res) => {
-              if (err) {
-                throw err;
-              }
-
-                /**
-                 * A 'study saved' view is served with a confirmation message.
-                 * Check the message's text to make sure it contains the
-                 * sample data's label value.
-                 */
-              const pattern = new RegExp(`${sampleData.label} successfully added`, 'i');
-              res.should.match(pattern);
-            })
-            .click('=View Study Details')
-            .waitForPaginationComplete()
-            .call(done);
-  });
-
-    /**
-     * Verify the new study's values were saved (step #4).
-     */
-  it('should display correct study values', (done) => {
-        /**
-         * Associate the form's labels to the data they should match.
-         *
-         * The view study page contains a very large table with all the study's
-         * saved data. This data structure matches the table's labels (`label`)
-         * to the text values they should match (`match`).
-         */
     const labelMatches = [{
       label: 'Study Name:',
       match: sampleData.label,
@@ -223,27 +207,14 @@ describe('Add a new study', function studyAdd() {
      *
      * @{@link  http://webdriver.io/api/utility/waitForExist.html}
      */
-    client.waitForExist('.box-container > table:nth-of-type(2)', 1500, false, (err) => {
-      if (err) {
-        throw err;
-      }
-
-      /**
-       * Iterate over the table's labels and ensure their values are
-       * correct.
-       */
-      labelMatches.forEach((item) => {
-        client.getText(
-          `//tr/td[text()="${item.label}"]/following-sibling::td[1]`,
-          (error, res) => {
-            if (error) {
-              throw error;
-            }
-
-            res.should.match(new RegExp(item.match, 'i'));
-          }
-        );
-      });
-    }).call(done);
+    browser.waitForExist('.box-container > table:nth-of-type(2)', 1500, false);
+    /**
+     * Iterate over the table's labels and ensure their values are
+     * correct.
+     */
+    labelMatches.forEach((item) => {
+      const res = browser.getText(`//tr/td[text()="${item.label}"]/following-sibling::td[1]`);
+      res.should.match(new RegExp(item.match, 'i'));
+    });
   });
 });

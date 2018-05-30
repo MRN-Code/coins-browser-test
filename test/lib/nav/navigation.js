@@ -20,29 +20,39 @@ module.exports = (client, config) => {
   me.micisMenu = micisMenu(client, config);
   me.asmtMenu = asmtMenu(client, config);
 
-  me.hoverHome = done => client
-    .moveToObject('a.primary-nav-menu-button')
-    .click('=Menu', done);
+  me.hoverHome = () => {
+    client.waitForVisible('a.primary-nav-menu-button');
+    return client
+    .element('a.primary-nav-menu-button')
+    .scroll()
+    .click('=Menu');
+  };
 
-  me.gotoAsmt = done => client
-    .call(me.hoverHome)
-    .click('=ASMT')
-    .waitForPaginationComplete(done);
+  me.gotoAsmt = () => {
+    me
+      .hoverHome()
+      .click('=ASMT')
+      .waitForPaginationComplete()
+      .pause(3000);
+  };
 
-  me.gotoOcoins = done => client
+  me.gotoOcoins = () => client
     .url(`https://${config.origin}/micis/index.php?subsite=ocoins_beta`)
-    .waitForPaginationComplete(done);
+    .waitForPaginationComplete();
 
-  me.goToQueryBuilder = done => client
-    .scroll(0, 0)
-    .call(me.hoverHome)
-    .click('=Query Builder')
-    .waitForPaginationComplete(done);
+  me.goToQueryBuilder = () => {
+    client
+      .scroll(0, 0);
+    me.hoverHome()
+      .click('=Query Builder')
+      .waitForPaginationComplete();
+  };
 
-  me.selectAsmtStudy = (studyId, done) => client
-    .waitForPaginationComplete()
-    .selectByValue('#asmt_study_id', studyId)
-    .waitForPaginationComplete(done);
-
+  me.selectAsmtStudy = (studyId) => {
+    client.waitForExist(`select[name=asmt_study_id] option[value="${studyId}"]`);
+    client
+      .selectByValue('#asmt_study_id', studyId)
+      .waitForPaginationComplete();
+  };
   return me;
 };

@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals browser */
+
 /**
  * Test shell login and its cookie-passing.
  *
@@ -23,56 +25,46 @@
 
 const config = require('config');
 const request = require('request');
-const should = require('should');
 
 const scriptURL = `https://${config.origin}/cas/shlogin.php`;
+let resp = null;
+let respBody = null;
+
+function postData(credentials) {
+  return new Promise((resolve, reject) => {
+    request.post({
+      form: {
+        uk: credentials,
+      },
+      url: scriptURL,
+    },
+      (error, httpResponse, body) => {
+        if (error) {
+          reject();
+        }
+        resp = httpResponse;
+        respBody = body;
+        resolve();
+      });
+  });
+}
 
 describe('shell login', function shellLoginTest() {
   this.timeout(config.defaultTimeout);
-
-  it('rejects bad requests', (done) => {
-    request.post(
-      {
-        form: {
-          // Bogus credentials:
-          uk: 'FluiZZM5pXi+XCmJ8TmBGA== RYF9DQGlwAw1txSotM4AVA==',
-        },
-        url: scriptURL,
-      },
-      (error, httpResponse) => {
-        if (error) {
-          throw error;
-        }
-
-        httpResponse.statusCode.should.be.aboveOrEqual(400);
-        httpResponse.headers.should.not.have.property('set-cookie');
-
-        done();
-      }
-    );
+  it('rejects bad requests', () => {
+    // Bogus credentials:
+    const uk = 'FluiZZM5pXi+XCmJ8TmBGA== RYF9DQGlwAw1txSotM4AVA==';
+    browser.call(() => postData(uk));
+    resp.statusCode.should.be.aboveOrEqual(400);
+    resp.headers.should.not.have.property('set-cookie');
   });
 
-  it('passes cookie with successful request', (done) => {
-    request.post(
-      {
-        form: {
-          uk: config.shlogin,
-        },
-        url: scriptURL,
-      },
-      (error, httpResponse, body) => {
-        if (error) {
-          throw error;
-        }
-
-        httpResponse.headers.should.have.property('set-cookie');
-        httpResponse.headers['set-cookie']
-          .some(c => c.includes('CAS_Auth_User'))
-          .should.be.true();
-        body.should.equal('LOGGED_IN');
-
-        done();
-      }
-    );
+  it('passes cookie with successful request', () => {
+    browser.call(() => postData(config.shlogin));
+    resp.headers.should.have.property('set-cookie');
+    resp.headers['set-cookie']
+      .some(c => c.includes('CAS_Auth_User'))
+      .should.be.true();
+    respBody.should.equal('LOGGED_IN');
   });
 });

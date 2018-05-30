@@ -1,12 +1,10 @@
 'use strict';
 
-const should = require('should');
-
 // exports
 module.exports = (client) => {
   const me = {};
 
-  me.fillAsmtSearchCriteria = (details, done) => client
+  me.fillAsmtSearchCriteria = details => client
     .setValue('input[name=ursi]', details.ursi)
     .setValue('input[name=assessment_date]', details.assessmentDate)
 
@@ -19,25 +17,24 @@ module.exports = (client) => {
     .selectByValue('[name="entry_code"]', 'C')
     .selectByValue('[name="dataentry_type_id"]', details.dataEntryTypeId)
     .click('input[name=DoSearch]')
-    .waitForPaginationComplete(done);
+    .waitForPaginationComplete();
 
-  me.clickAsmtResponsesButton = done => client
-    .moveToObject('#asmt_grid>tbody>tr>td>a')
+  me.clickAsmtResponsesButton = () => client
+    .element('#asmt_grid>tbody>tr>td>a')
+    .scroll()
     .click('=responses')
-    .waitForPaginationComplete(done);
+    .waitForPaginationComplete();
 
-  me.verifyAutoCalcResponseExists = done => client
-    .getHTML('div#page', (err, html) => {
-      // 1) grab html from the page
-      // 2) search for 10.760204081633
-      const n = html.search('10.760204081633');
+  me.verifyAutoCalcResponseExists = () => {
+    // 1) grab html from the page
+    // 2) search for 10.760204081633
+    const html = client.getHTML('div#page');
+    const n = html.search('10.760204081633');
+    // 3) assert that the text we are searching for actually exists
+    n.should.not.equal(-1);
+  };
 
-      // 3) assert that the text we are searching for actually exists
-      n.should.not.equal(-1);
-    })
-    .call(done);
-
-  me.findAsmtConflict = (details, done) => {
+  me.findAsmtConflict = (details) => {
     // TODO: this could be made more robust. As of now, it
     // just selects the first ("View") button, which is pretty brittle
     const selector = '#conflicts_table>tbody>tr>td>button';
@@ -47,23 +44,23 @@ module.exports = (client) => {
         'input[type=search]',
         `${details.ursi} ${details.assessmentDate} ${details.segmentInterval}`
       )
-      .scroll(selector, -350, 0)
+      .element(selector)
+      .scroll()
       .click(selector)
-      .waitForPaginationComplete(done);
+      .waitForPaginationComplete();
   };
 
-  me.fixAndResolveConflict = done => client
+  me.fixAndResolveConflict = () => client
     .click('input[value=">>>"]')
     .click('input[value="Resolve"]')
-    .waitForPaginationComplete(done);
+    .waitForPaginationComplete();
 
-  me.downloadAsmt = done => client
+  me.downloadAsmt = () => client
     .click('input.select-all')
     .click('div#assessment-options')
     .click('input[id=dl_asmts]')
     // pause 7s to wait for download finish
-    .pause(7000)
-    .call(done);
+    .pause(7000);
 
   return me;
 };

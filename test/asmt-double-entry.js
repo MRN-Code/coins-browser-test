@@ -1,17 +1,17 @@
 'use strict';
 
+/* globals browser */
+
 const config = require('config');
-const should = require('should');
 const glob = require('glob');
 const homedir = require('homedir');
 const fs = require('fs');
 
-const client = require('./lib/client.js').client;
-const nav = require('./lib/nav/navigation.js')(client, config);
-const dataEntry = require('./lib/dataEntry.js')(client, config);
-const manage = require('./lib/manage.js')(client, config);
+const nav = require('./lib/nav/navigation.js')(browser, config);
+const dataEntry = require('./lib/dataEntry.js')(browser, config);
+const manage = require('./lib/manage.js')(browser, config);
 
-const micis = require('./lib/auth/micis.js')(client);
+const micis = require('./lib/auth/micis.js')(browser);
 
 /**
  * Random Time Generator
@@ -56,23 +56,20 @@ const getRandomDate = () => {
 describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) {
-        micis.logon();
-      }
-      client.call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) {
+      micis.logon();
+    }
   });
 
   describe('asmt double entry without error', () => {
-        // define inputs
+    // define inputs
     const asmtDetails = {
       ursi: 'M06100119',
       studyId: 2319, // NI TEST
       instrumentId: 26363, // Calculation Test
       segmentInterval: 'v3', // can vary this: visit1, v1, v2, v3, v4
-      sourceType: '5',  // can vary this: 3, 4, 5, 6, 7, 8, 9
+      sourceType: '5', // can vary this: 3, 4, 5, 6, 7, 8, 9
       assessmentDate: getRandomDate(),
       assessmentStartTime: getRandomTime(),
       rater1: 1341, // Abeer Ayaz
@@ -92,121 +89,117 @@ describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
 
     const asmtSecondEntry = asmtFirstEntry;
 
-    it('should go to asmt and select NITEST (study_id 2319)', (done) => {
+    it('should go to asmt and select NITEST (study_id 2319)', () => {
       nav.gotoAsmt();
-      nav.selectAsmtStudy(asmtDetails.studyId, done);
+      nav.selectAsmtStudy(asmtDetails.studyId);
     });
 
-    it('should navigate to DATA ENTRY > New Assessment', (done) => {
+    it('should navigate to DATA ENTRY > New Assessment', () => {
+      nav.asmtMenu.clickNested('New Assessment');
+    });
+
+    it('should verify that the AASE instrument is hidden from Data Entry (because it is a hidden instrument)', () => {
+      // 1995 is instrument id for AASE instruments
+      browser.isExisting('select#instrument_id option[value="1995"]').should.not.be.ok;// eslint-disable-line no-unused-expressions
+    });
+
+    it('should select Calculation Test (instrument_id 26363)', () => {
+      // select calculation test
+      dataEntry.selectInstrument(asmtDetails.instrumentId);
+    });
+
+    it('should verify that the specialvisit segment_interval is hidden from Data Entry (because it is a hidden visit)', () => {
+      browser.isExisting('select#segment_interval option[value="specialvisit"]').should.not.be.ok;// eslint-disable-line no-unused-expressions
+    });
+
+    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 1
+      dataEntry.fillCoverSheetPart1(asmtDetails);
+    });
+
+    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 2
+      dataEntry.fillCoverSheetPart2(asmtDetails);
+    });
+
+    it('should partially fill in assessment, then save and escape', () => {
+      // partially fill in asmt, save, escape
+      dataEntry.partiallyFillCalTestAsmt(asmtFirstEntry);
+    });
+
+    it('should navigate to DATA ENTRY > Resume Entry', () => {
       nav.asmtMenu
-                .clickNested('New Assessment', done);
+        .clickNested('Resume Entry');
     });
 
-    it('should verify that the AASE instrument is hidden from Data Entry (because it is a hidden instrument)', (done) => {
-            // 1995 is instrument id for AASE instruments
-      client.isExisting('select#instrument_id option[value="1995"]').should.be.fulfilledWith(false);
-      client.call(done);
-    });
-
-    it('should select Calculation Test (instrument_id 26363)', (done) => {
-            // select calculation test
-      dataEntry.selectInstrument(asmtDetails.instrumentId, done);
-    });
-
-    it('should verify that the specialvisit segment_interval is hidden from Data Entry (because it is a hidden visit)', (done) => {
-      client.isExisting('select#segment_interval option[value="specialvisit"]').should.be.fulfilledWith(false);
-      client.call(done);
-    });
-
-    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 1
-      dataEntry.fillCoverSheetPart1(asmtDetails, done);
-    });
-
-    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 2
-      dataEntry.fillCoverSheetPart2(asmtDetails, done);
-    });
-
-    it('should partially fill in assessment, then save and escape', (done) => {
-            // partially fill in asmt, save, escape
-      dataEntry.partiallyFillCalTestAsmt(asmtFirstEntry, done);
-    });
-
-    it('should navigate to DATA ENTRY > Resume Entry', (done) => {
-      nav.asmtMenu
-                .clickNested('Resume Entry', done);
-    });
-
-    it('should resume the assessment which was just escaped', (done) => {
-            // go to resume queue, click the escaped asmt
+    it('should resume the assessment which was just escaped', () => {
+      // go to resume queue, click the escaped asmt
       const asmtDate = asmtDetails.assessmentDate.replace(/\//g, '-');
-      dataEntry.resumeEntry(asmtDate, done);
+      dataEntry.resumeEntry(asmtDate);
     });
 
-    it('should enter the resumed assessment', (done) => {
-            // click the button to enter resumed assessment
-      dataEntry.enterResumedEntry(done);
+    it('should enter the resumed assessment', () => {
+      // click the button to enter resumed assessment
+      dataEntry.enterResumedEntry();
     });
 
-    it('should fill in assessment first entry', (done) => {
-            // fill assessment 1 First Entry
-      dataEntry.completePartialCalTestAsmt(asmtFirstEntry, done);
+    it('should fill in assessment first entry', () => {
+      // fill assessment 1 First Entry
+      dataEntry.completePartialCalTestAsmt(asmtFirstEntry);
     });
 
-    it('should begin a new assessment', (done) => {
+    it('should begin a new assessment', () => {
       dataEntry.beginNewAssessment();
-      client.call(done);
     });
 
-    it('should select Calculation Test (instrument_id 26363) for the second time', (done) => {
-            // select calculation test
-      dataEntry.selectInstrument(asmtDetails.instrumentId, done);
+    it('should select Calculation Test (instrument_id 26363) for the second time', () => {
+      // select calculation test
+      dataEntry.selectInstrument(asmtDetails.instrumentId);
     });
 
-        // After escape-resume, the coversheet info lost. Need to re-fill in.
-    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 1
-      dataEntry.fillCoverSheetPart1(asmtDetails, done);
+    // After escape-resume, the coversheet info lost. Need to re-fill in.
+    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 1
+      dataEntry.fillCoverSheetPart1(asmtDetails);
     });
 
-    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 2
-      dataEntry.fillCoverSheetPart2(asmtDetails, done);
+    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 2
+      dataEntry.fillCoverSheetPart2(asmtDetails);
     });
 
-    it('should fill in assessment second entry', (done) => {
-            // fill assessment 1 Seond Entry
-      dataEntry.fillCalculationTestAsmt(asmtSecondEntry, done);
+    it('should fill in assessment second entry', () => {
+      // fill assessment 1 Seond Entry
+      dataEntry.fillCalculationTestAsmt(asmtSecondEntry);
     });
 
-    it('should navigate to MANAGE > Search Assessments', (done) => {
+    it('should navigate to MANAGE > Search Assessments', () => {
       nav.asmtMenu
-                .clickNested('Search Assessments', done);
+        .clickNested('Search Assessments');
     });
 
-    it('should fill assessment search criteria and click search button', (done) => {
-      manage.fillAsmtSearchCriteria(asmtDetails, done);
+    it('should fill assessment search criteria and click search button', () => {
+      manage.fillAsmtSearchCriteria(asmtDetails);
     });
 
-        /**
-         * We did not create a profile for the browser to NOT ASK BEFORE DOWNLOADING.
-         * So, in order for this test to be successful, you need to make sure the popup window
-         * does not show up. To do this, try manually downloading the file in the testing browser,
-         * when the window pops up for you to confirm the download, check the checkbox saying
-         * "Do this automatically for files like this from now on" and click "OK" to download
-         * the data. Once this is done, this test should be able to pass. This only needs to
-         * be done once in the testing browser.
-         */
-    it('should select all assessments and download them', (done) => {
-      manage.downloadAsmt(done);
+    /**
+     * We did not create a profile for the browser to NOT ASK BEFORE DOWNLOADING.
+     * So, in order for this test to be successful, you need to make sure the popup window
+     * does not show up. To do this, try manually downloading the file in the testing browser,
+     * when the window pops up for you to confirm the download, check the checkbox saying
+     * "Do this automatically for files like this from now on" and click "OK" to download
+     * the data. Once this is done, this test should be able to pass. This only needs to
+     * be done once in the testing browser.
+     */
+    it('should select all assessments and download them', () => {
+      manage.downloadAsmt();
     });
 
-    it('should check if the downloaded file exists', (done) => {
-            // check download folder to see if the file exists
+    it('should check if the downloaded file exists', () => {
+      // check download folder to see if the file exists
       let exists = false;
       glob.sync(`${homedir()}/Downloads/assessmentsResults*.csv`).forEach((file) => {
-                // check if any file download within 30 seconds
+        // check if any file download within 30 seconds
         if ((new Date()).getTime() - fs.statSync(file).ctime.getTime() < 30 * 1000) {
           exists = true;
         }
@@ -214,27 +207,26 @@ describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
       if (!exists) {
         throw new Error('Assessment download failed.');
       }
-      client.call(done);
     });
 
-    it('should select "responses" button in order to view assessment responses', (done) => {
-      manage.clickAsmtResponsesButton(done);
+    it('should select "responses" button in order to view assessment responses', () => {
+      manage.clickAsmtResponsesButton();
     });
 
-    it('should find auto calc that matches: 10.760204081633', (done) => {
-      manage.verifyAutoCalcResponseExists(done);
+    it('should find auto calc that matches: 10.760204081633', () => {
+      manage.verifyAutoCalcResponseExists();
     });
   });
 
-    // This is very very similar to the above test with only a few slight changes
+  // This is very very similar to the above test with only a few slight changes
   describe('asmt double entry with entry error and entry error correction', () => {
-        // define inputs
+    // define inputs
     const asmtDetails = {
       ursi: 'M06100119',
       studyId: 2319, // NI TEST
       instrumentId: 26363, // Calculation Test
       segmentInterval: 'v2', // can vary this: visit1, v1, v2, v3, v4
-      sourceType: '8',  // can vary this: 3, 4, 5, 6, 7, 8, 9
+      sourceType: '8', // can vary this: 3, 4, 5, 6, 7, 8, 9
       assessmentDate: getRandomDate(),
       assessmentStartTime: getRandomTime(),
       rater1: 1341, // Abeer Ayaz
@@ -259,84 +251,83 @@ describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
       asmtTestcal51: 0,
     };
 
-    it('should navigate to DATA ENTRY > New Assessment', (done) => {
+    it('should navigate to DATA ENTRY > New Assessment', () => {
       nav.asmtMenu
-                .clickNested('New Assessment', done);
+        .clickNested('New Assessment');
     });
 
-    it('should select Calculation Test (instrument_id 26363)', (done) => {
-            // select calculation test
-      dataEntry.selectInstrument(asmtDetails.instrumentId, done);
+    it('should select Calculation Test (instrument_id 26363)', () => {
+      // select calculation test
+      dataEntry.selectInstrument(asmtDetails.instrumentId);
     });
 
-    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 1
-      dataEntry.fillCoverSheetPart1(asmtDetails, done);
+    it('should fill out the first 4 values of the Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 1
+      dataEntry.fillCoverSheetPart1(asmtDetails);
     });
 
-    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', (done) => {
-            // fill cover sheet part 2
-      dataEntry.fillCoverSheetPart2(asmtDetails, done);
+    it('should fill out the remaining required inputs for Data Entry: Cover Sheet form', () => {
+      // fill cover sheet part 2
+      dataEntry.fillCoverSheetPart2(asmtDetails);
     });
 
-    it('should fill in assessment first entry', (done) => {
-            // fill assessment 1 First Entry
-      dataEntry.fillCalculationTestAsmt(asmtFirstEntry, done);
+    it('should fill in assessment first entry', () => {
+      // fill assessment 1 First Entry
+      dataEntry.fillCalculationTestAsmt(asmtFirstEntry);
     });
 
-    it('should begin a new assessment', (done) => {
+    it('should begin a new assessment', () => {
       dataEntry.beginNewAssessment();
-      client.call(done);
     });
 
-    it('should select Calculation Test (instrument_id 26363) for the second time', (done) => {
-            // select calculation test
-      dataEntry.selectInstrument(asmtDetails.instrumentId, done);
+    it('should select Calculation Test (instrument_id 26363) for the second time', () => {
+      // select calculation test
+      dataEntry.selectInstrument(asmtDetails.instrumentId);
     });
 
-    it('should click the next button for the first section of the Data Entry: Cover Sheet form', (done) => {
-            // click the next button and wait for pagination to complete
-      dataEntry.clickCoverSheetNextButton(done);
+    it('should click the next button for the first section of the Data Entry: Cover Sheet form', () => {
+      // click the next button and wait for pagination to complete
+      dataEntry.clickCoverSheetNextButton();
     });
 
-    it('should click the next button for the second section of the Data Entry: Cover Sheet form', (done) => {
-            // click the next button a second time and wait for pagination to complete
-      dataEntry.clickCoverSheetNextButton(done);
+    it('should click the next button for the second section of the Data Entry: Cover Sheet form', () => {
+      // click the next button a second time and wait for pagination to complete
+      dataEntry.clickCoverSheetNextButton();
     });
 
-    it('should fill in assessment second entry', (done) => {
-            // fill assessment 1 Seond Entry
-      dataEntry.fillCalculationTestAsmt(asmtSecondEntry, done);
+    it('should fill in assessment second entry', () => {
+      // fill assessment 1 Seond Entry
+      dataEntry.fillCalculationTestAsmt(asmtSecondEntry);
     });
 
-    it('should navigate to MANAGE > View Conflicts', (done) => {
+    it('should navigate to MANAGE > View Conflicts', () => {
       nav.asmtMenu
-                .clickNested('View Conflicts', done);
+        .clickNested('View Conflicts');
     });
 
-    it('should search for and find the asmt conflict', (done) => {
-      manage.findAsmtConflict(asmtDetails, done);
+    it('should search for and find the asmt conflict', () => {
+      manage.findAsmtConflict(asmtDetails);
     });
 
-    it('should fix the error, then resolve the conflict', (done) => {
-      manage.fixAndResolveConflict(done);
+    it('should fix the error, then resolve the conflict', () => {
+      manage.fixAndResolveConflict();
     });
 
-    it('should navigate to MANAGE > Search Assessments', (done) => {
+    it('should navigate to MANAGE > Search Assessments', () => {
       nav.asmtMenu
-                .clickNested('Search Assessments', done);
+        .clickNested('Search Assessments');
     });
 
-    it('should fill assessment search criteria and click search button', (done) => {
-      manage.fillAsmtSearchCriteria(asmtDetails, done);
+    it('should fill assessment search criteria and click search button', () => {
+      manage.fillAsmtSearchCriteria(asmtDetails);
     });
 
-    it('should select "responses" button in order to view assessment responses', (done) => {
-      manage.clickAsmtResponsesButton(done);
+    it('should select "responses" button in order to view assessment responses', () => {
+      manage.clickAsmtResponsesButton();
     });
 
-    it('should find auto calc that matches: 10.760204081633', (done) => {
-      manage.verifyAutoCalcResponseExists(done);
+    it('should find auto calc that matches: 10.760204081633', () => {
+      manage.verifyAutoCalcResponseExists();
     });
   });
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-/* global coinsUtils */
+/* global coinsUtils browser*/
 
 /**
  * Study subject types.
@@ -21,10 +21,8 @@
  */
 
 const config = require('config');
-const client = require('./lib/client.js').client;
-const micis = require('./lib/auth/micis.js')(client);
-const should = require('should'); // jshint ignore:line
-const study = require('./lib/study.js')(client, config);
+const micis = require('./lib/auth/micis.js')(browser);
+const study = require('./lib/study.js')(browser, config);
 
 /**
  * Target subject type label.
@@ -95,117 +93,65 @@ describe('Edit study subject type', function studySubjectTypes() {
 
   this.timeout(config.defaultTimeout);
 
-  before('initialize', (done) => {
-    client.clientReady.then(() => {
-      if (!micis.loggedOn) {
-        micis.logon();
-      }
-
-      study
-        .goToView('NITEST')
-        .waitForPaginationComplete()
-        .call(done);
-    });
+  before('initialize', () => {
+    if (!micis.loggedOn) {
+      micis.logon();
+    }
+    study
+      .goToView('NITEST')
+      .waitForPaginationComplete();
   });
 
-  it('should navigate to types list', (done) => {
-    client
-            .click('input[value="Edit Subject Types"]')
-            .waitForPaginationComplete()
-            .call(done);
+  it('should navigate to types list', () => {
+    browser
+      .click('input[value="Edit Subject Types"]')
+      .waitForPaginationComplete();
   });
 
-  it('should edit a subject type', (done) => {
+  it('should edit a subject type', () => {
     const linkSelector = getEditLinkSelector(targetSubjectTypeLabel);
 
-    client
+    const res = browser
       .click(linkSelector)
       .waitForPaginationComplete()
       .setValue(labelSelector, testSubjectType.label)
       .setValue(descriptionSelector, testSubjectType.description)
       .click('input[type=button][name=DoUpdate]')
       .waitForPaginationComplete()
-      .execute(
-          findNotifyItem,
-          testSubjectType.label,
-          (err, res) => {
-            const text = res.value;
-
-            if (err) {
-              throw err;
-            }
-
-            text.should.match(new RegExp(testSubjectType.label));
-          }
-      )
-      .call(done);
+      .execute(findNotifyItem, testSubjectType.label);
+    const text = res.value;
+    text.should.match(new RegExp(testSubjectType.label));
   });
 
   it(
-    'should reflect changes in list and form',
-    (done) => {
+    'should reflect changes in list and form', () => {
       const linkSelector = getEditLinkSelector(testSubjectType.label);
 
-      study
+      const text = study
         .goToView('NITEST')
         .waitForPaginationComplete()
         .click('input[value="Edit Subject Types"]')
         .waitForPaginationComplete()
-        .getText(
-          '.box-container .coins-datatable',
-          (err, text) => {
-            if (err) {
-              throw err;
-            }
-
-            text.should.match(new RegExp(testSubjectType.label));
-          }
-        )
+        .getText('.box-container .coins-datatable');
+      text.should.match(new RegExp(testSubjectType.label));
+      const value = browser
         .click(linkSelector)
         .waitForPaginationComplete()
-        .getValue(
-          labelSelector,
-          (err, value) => {
-            if (err) {
-              throw err;
-            }
-
-            value.should.be.equal(testSubjectType.label);
-          }
-        )
-        .getValue(
-          descriptionSelector,
-          (err, value) => {
-            if (err) {
-              throw err;
-            }
-
-            value.should.be.equal(testSubjectType.description);
-          }
-        )
-        .call(done);
+        .getValue(labelSelector);
+      value.should.be.equal(testSubjectType.label);
+      const description = browser.getValue(descriptionSelector);
+      description.should.be.equal(testSubjectType.description);
     }
   );
 
-  it('should reset subject type', (done) => {
-    client
+  it('should reset subject type', () => {
+    const res = browser
       .setValue(labelSelector, targetSubjectTypeLabel)
       .setValue(descriptionSelector, targetSubjectTypeLabel)
       .click('input[type=button][name=DoUpdate]')
       .waitForPaginationComplete()
-      .execute(
-        findNotifyItem,
-        targetSubjectTypeLabel,
-        (err, res) => {
-          const text = res.value;
-
-          if (err) {
-            throw err;
-          }
-
-          text.should.match(new RegExp(targetSubjectTypeLabel));
-        }
-      )
-      .call(done);
+      .execute(findNotifyItem, targetSubjectTypeLabel);
+    const text = res.value;
+    text.should.match(new RegExp(targetSubjectTypeLabel));
   });
 });

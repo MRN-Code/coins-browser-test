@@ -20,49 +20,22 @@ const _ = require('lodash');
  * @param options {object} an (optional) object containing properties for timeout and interval:
  *   options.interval = the amount of time to wait between polling (default 500ms)
  *   options.timeout = the maximum amount of time to wait
- * @param cb {function} A callback function supplied by mocha (aka `done`) or by webdriverio
- * Note: this function will be wrapped by webdriverio, and will always be passed a callback
- *   as the last parameter. Since we have optional parameters, we will use the vargs-callback
- *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
-function waitForCondition(condition, conditionArgs, options, cb) {
+function waitForCondition(condition, conditionArgs, options) {
   options = options || {}; // eslint-disable-line no-param-reassign
   if (!_.isArray(conditionArgs)) {
     conditionArgs = [conditionArgs]; // eslint-disable-line no-param-reassign
   }
-  const timeout = options.timeout || config.defaultTimeout;
-  const interval = options.interval || 500;
-
-  const startTime = new Date();
   const self = this;
-  function exec() {
-    function pollF(err, ret) {
-      const duration = +new Date() - startTime;
-      if (err) {
-        cb(err);
-      }
-      if (ret.value) {
-        cb();
-      } else {
-        if (duration > timeout) {
-          /* eslint-disable no-console */
-          console.log(timeout);
-          console.log(duration);
-          /* eslint-enable no-console */
-
-          /* eslint-disable no-param-reassign */
-          err = new Error(`waitForCondition timeout of ${timeout} exceeded`);
-          cb(err);
-          /* eslint-enable no-param-reassign */
-        }
-        exec();
-      }
-    }
-    const executeArgs = _.flatten([condition, conditionArgs, pollF]);
-    return self.pause(interval).execute.apply(self, executeArgs);
-  }
+  const timeout = options.timeout || 3000; // config.defaultTimeout;
+  const interval = options.interval || 500;
+  const executeArgs = _.flatten([condition, conditionArgs]);
   // call exec to set off the recursive waiting
-  return exec();
+  self.waitUntil(() => {
+    const res = self.execute.apply(self, executeArgs); // eslint-disable-line prefer-spread
+    return res.value === true;
+  }, timeout, 'Error waiting for condition', interval);
+  return self;
 }
 
 
@@ -71,12 +44,8 @@ function waitForCondition(condition, conditionArgs, options, cb) {
  * performs a busy-wait, while polling for the MICIS pagination system to be ready for interaction.
  * This means that all AJAX requests have completed, and that the page-container has been rendered.
  * @param timeout {number} an (optional) the maximum amount of time to wait (default = 9 seconds)
- * @param cb {function} A callback function supplied by mocha (aka `done`) or by webdriverio
- * Note: this function will be wrapped by webdriverio, and will always be passed a callback
- *   as the last parameter. Since we have optional parameters, we will use the vargs-callback
- *   module to __pad__ the arguments passed to this function (replace missing args with unknowns)
  */
-function waitForPaginationComplete(timeout, cb) {
+function waitForPaginationComplete(timeout) {
   timeout = timeout || config.defaultTimeout; // eslint-disable-line no-param-reassign
   // function to be executed in browser
   function checkBrowserPaginationComplete() {
@@ -87,7 +56,9 @@ function waitForPaginationComplete(timeout, cb) {
     }
     return false; // not ready yet
   }
-  return this.waitForCondition(checkBrowserPaginationComplete, null, { timeout }, cb);
+  return this.waitForCondition(checkBrowserPaginationComplete, null, {
+    timeout,
+  });
 }
 
 
@@ -105,14 +76,33 @@ function waitForVis(sell, timeout, cb) {
     const el = window.document.querySelector(selector);
     return (el ? el.offsetParent !== null : false);
   }
-  return this.waitForCondition(testForVis, sell, { timeout }, cb);
+  this.waitForCondition(testForVis, sell, {
+    timeout,
+  }, cb);
 }
-
+/** Selenium issue:getText fails because of many parallel connections.
+ * https://github.com/webdriverio/webdriverio/issues/2406
+ * should use this func where getText() fails with server excepetion
+ * @param {string} selector  css selectors
+ * @return {string}  text
+ */
+function customGetText(selector) {
+  const {
+    value: elements,
+  } = this.elements(selector);
+  if (elements.length === 1) return (this.elementIdText(elements[0].ELEMENT)).value;
+  const text = [];
+  _.forEach(elements, (elem) => {
+    text.push((this.elementIdText(elem.ELEMENT)).value);
+  });
+  return text;
+}
 
 // exports;
 module.exports = function pagination(client) {
   client.addCommand('waitForCondition', vargscb(waitForCondition));
   client.addCommand('waitForPaginationComplete', vargscb(waitForPaginationComplete));
   client.addCommand('waitForVis', vargscb(waitForVis));
+  client.addCommand('customGetText', vargscb(customGetText));
   return client;
 };
