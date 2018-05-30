@@ -33,7 +33,7 @@ module.exports = (client, config) => {
       .hoverHome()
       .click('=ASMT')
       .waitForPaginationComplete()
-      .pause(1500);
+      .pause(3000);
   };
 
   me.gotoOcoins = () => client
