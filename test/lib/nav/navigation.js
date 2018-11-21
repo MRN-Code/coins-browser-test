@@ -37,7 +37,7 @@ module.exports = (client, config) => {
   };
 
   me.gotoOcoins = () => client
-    .url(`https://${config.origin}/micis/index.php?subsite=ocoins_beta`)
+    .url(`${client.options.baseUrl}/micis/index.php?subsite=ocoins_beta`)
     .waitForPaginationComplete();
 
   me.goToQueryBuilder = () => {

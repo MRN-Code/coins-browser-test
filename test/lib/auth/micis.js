@@ -39,7 +39,12 @@ module.exports = (configuredClient) => {
    * @param {Function} [done] Function to execute once logon is complete
    */
   me.logon = () => {
-    configuredClient.url('/');
+    if (client.options.baseUrl.includes('coinstraining')) {
+      configuredClient.url('/');
+    } else {
+      const route = encodeURIComponent(`${client.options.baseUrl}/micis/index.php`);
+      configuredClient.url(`/login/?rp=${route}`);
+    }
 
     if (!me.loggedOn) {
       configuredClient.element('input[name=password]').waitForExist();
@@ -55,7 +60,6 @@ module.exports = (configuredClient) => {
         throw new Error('micis cookie not found');
       }
     }
-
     return nav
       .disableNavigationAlert();
   };
