@@ -79,6 +79,7 @@ describe('Add subject tags', function subjectTags() {
         )
         .click('#addextFrm input[type=button]')
         .waitForPaginationComplete();
+      browser.pause(1000);
     });
   });
 
@@ -86,8 +87,8 @@ describe('Add subject tags', function subjectTags() {
    * Confirm the freshly created tags exist in subject's tag table.
    */
   it('should save new tags', () => {
-    browser.pause(500);
-    const res = browser.getText('#subject_tags_table tbody');
+    browser.pause(5000);
+    const res = browser.customGetText('#subject_tags_table tbody');
 
     /**
      * Iterate over the table's rows and find those containing
@@ -102,20 +103,26 @@ describe('Add subject tags', function subjectTags() {
 
   it('should save tag edits', () => {
     const tag = sampleTags[0];
+    // search for tag in the data table to make it visible.
+    browser.setValue('#subject_tags_table_filter > label > input[type="search"]', tag.value);
+    browser.pause(1000);
 
     browser
-      .click(`//td[text()="${tag.value}"]/..//input[@type="button"]`)
-      .waitForPaginationComplete()
+      .click(`input[value=${tag.value}] ~ input[name=doEdit]`)
+      .waitForPaginationComplete();
       /**
        * Warning! The sample tag is mutated. This is helpful for tracking
        * the new value for the remainder of the test.
        */
-      .setValue('#editExtIdFrm input[name=value]', tag.value += '_edit')
-      .click('#editExtIdFrm input[name=doChange]')
-      .waitForPaginationComplete()
-      .waitForText('#subject_tags_table tbody', 1000);
 
-    const res = browser.getText('#subject_tags_table tbody');
+    browser.setValue('#editExtIdFrm input[name=value]', tag.value += '_edit');
+    browser.pause(1000);
+    browser.click('#editExtIdFrm input[name=doChange]').waitForPaginationComplete();
+    browser.pause(1000);
+    browser.waitForText('#subject_tags_table tbody', 1000); // *[@id="subject_tags_table_filter"]/label/input
+    browser.pause(1000);
+
+    const res = browser.customGetText('#subject_tags_table tbody');
     const hasMatch = res.split(/\n/).some(row => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1);
     /* eslint-disable no-unused-expressions */
     should(hasMatch).be.ok;
@@ -124,15 +131,20 @@ describe('Add subject tags', function subjectTags() {
 
   it('should remove deleted tags', () => {
     sampleTags.forEach((tag) => {
+      // search for tag in the data table to make it visible.
+      browser.setValue('#subject_tags_table_filter > label > input[type="search"]', tag.value);
       browser
         /**
          * @todo Refactor this click-through to tag edit page into a
          *       helper.
          */
-        .click(`//td[text()="${tag.value}"]/..//input[@type="button"]`)
-        .waitForPaginationComplete()
-        .click('#editExtIdFrm input[name=doRemove]')
+        .click('input[name=doEdit]')
         .waitForPaginationComplete();
+      browser.pause(1000);
+      browser.click('#editExtIdFrm input[name=doRemove]')
+        .waitForPaginationComplete();
+      browser.pause(1000);
+
       /**
        * Confirm tag's value is no longer in the subject's tags table.
        */
