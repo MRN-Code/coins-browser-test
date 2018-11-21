@@ -37,16 +37,17 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should drag an MR filter into the request workspace', () => {
     // TODO: the first drag and drop needs improvement, as sometimes the MR filter
     // gets dragged to the wrong location
-    const label = 'ul.attributeList > li:nth-child(3)';
-    const select = `${label} > div.attributeOptionContainer > select`;
+    const label = '#attributeTypeSelector';
+    const select = '#attributeValueSelector';
     const applyButton = 'input#applyButton';
-
+    browser.pause(2000);
     browser
-      .dragAndDrop('div.draggable.filter.MRFilter.ui-draggable > label', 'div.group.andGroup.ui-droppable > a.closeButton')
-      .waitForExist(label);
+      .dragAndDrop('div.draggable.filter.MRFilter.ui-draggable > label', 'div.group.andGroup.ui-droppable > a.closeButton').pause(5000);
+    browser.waitForExist(label);
     browser
-      .click(label)
+      .selectByVisibleText(label, 'Label')
       .waitForExist(select);
+    browser.pause(2000);
     browser
       .selectByValue(select, 'ANAT')
       .waitForExist(applyButton);
@@ -73,19 +74,16 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   });
 
   it('should drag a Study filter into the request workspace', () => {
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const studyName = `${activeFilterForm} > ul.attributeList > li.attributeItem`;
-    const select = `${studyName} > div > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
+    const applyButton = 'body > div:last-child > div >form> div> input#applyButton';
 
     browser
       .dragAndDrop('div.draggable.filter.StudiesFilter.ui-draggable > label', 'div#request > div > div.filter.MRFilter')
-      .waitForExist(studyName);
+      .pause(2000);
     browser
-      .click(studyName)
-      .waitForExist(select);
+      .selectByValue('body > div:last-child > div > #attributeFilterForm > #attributeTypeDiv> #attributeTypeSelector', '22')
+      .pause(2000);
     browser
-      .selectByVisibleText(select, 'ABIDE (1)')
+      .selectByVisibleText('body > div:last-child > div > #attributeFilterForm > #attributeValueDiv > #attributeValueSelector', 'ABIDE (1)')
       .waitForExist(applyButton);
     browser
       .click(applyButton)
@@ -96,31 +94,27 @@ describe('Test data exchange functionality for a new request', function dxNewReq
   it('should change the request workspace group to an [OR] group', () => {
     const switchButton = 'div#request > div > label.groupSwitch';
     browser.waitForExist(switchButton);
-    browser.click(switchButton).pause(2000);
+    browser.click(switchButton).pause(4000);
     browser.customGetText(statistics).should.be.eql(['2637', '1112', '2', '1315']);
   });
 
   it('should add another filter and a group', () => {
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const subjectType = `${activeFilterForm} > ul.attributeList > li:nth-child(1)`;
-    const select = `${subjectType} > div > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
-
+    const applyButton = 'body > div:last-child > div >form> div> input#applyButton';
     browser
       .dragAndDrop('div#groupContainer > div.draggable.group.andGroup.ui-draggable > div.groupLabelContainer', 'div#request > div > div.filter.MRFilter')
       .pause(1000);
     browser
       .dragAndDrop('div.draggable.filter.SubjectsFilter.ui-draggable > label', 'div#request > div > div.group.andGroup.ui-droppable')
-      .waitForExist(subjectType);
+      .pause(1000);
     browser
-      .click(subjectType)
-      .waitForExist(select);
+      .selectByVisibleText('body > div:last-child > div > #attributeFilterForm > #attributeTypeDiv> #attributeTypeSelector', 'Subject Type')
+      .pause(2000);
     browser
-      .selectByVisibleText(select, '20-29 (72)')
+      .selectByVisibleText('body > div:last-child > div > #attributeFilterForm > #attributeValueDiv> #attributeValueSelector', '20-29 (72)')
       .waitForExist(applyButton);
     browser
       .click(applyButton)
-      .pause(2000);
+      .pause(4000);
     browser.customGetText(statistics).should.be.eql(['3748', '1556', '3', '1385']);
   });
 
@@ -146,16 +140,17 @@ describe('Test data exchange functionality for a new request', function dxNewReq
 
   it('should edit the MR filter', () => {
     const editButton = 'div.filter.MRFilter > a.editButton';
-    const activeFilterForm = 'div.ui-dialog:not([style*="display: none"]) > div.filterForm';
-    const label = `${activeFilterForm} > ul.attributeList > li:nth-child(4)`;
-    const select = `${label} > div.attributeOptionContainer > select`;
-    const applyButton = `${activeFilterForm} > input#applyButton`;
+    const activeFilterForm = 'body > div:last-child > div > #attributeFilterForm';
+    const label = `${activeFilterForm} > #attributeTypeDiv> #attributeTypeSelector`;
+    const select = `${activeFilterForm} > #attributeValueDiv> #attributeValueSelector`;
+    const applyButton = `${activeFilterForm} >div> input#applyButton`;
 
     browser.waitForExist(editButton);
     browser
       .click(editButton)
       .waitForExist(label);
-    browser.click(label)
+    browser.pause(3000);
+    browser.selectByValue(label, '2')
       .waitForExist(select);
     browser
       .selectByValue(select, 'PITT Scanner')
