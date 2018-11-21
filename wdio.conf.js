@@ -1,7 +1,7 @@
 exports.config = {
   // Configurations for coins
   // shell login
-  shlogin: 'Db/I9LcmH/nPS/nZT532Gw== y5IphO8jOScfbIAWbzUwhA==',
+  shlogin: '<encrypted username> <encrypted password>',
   // credentials for coins login
   auth: {
     un: 'yourUsername',
