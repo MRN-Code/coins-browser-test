@@ -52,14 +52,17 @@ describe('study visit', function studyVisit() {
           }
           return value;
         });
+      browser.pause(3000);
 
       study.view.visits.submitForm().waitForPaginationComplete();
+
       study.view.visits                           // eslint-disable-line no-unused-expressions
         .visitTableContainsRow(row).should.be.ok; // eslint-disable-line no-unused-expressions
     });
   });
   describe('edit study visit', () => {
     it('should have an edit visit form', () => {
+      browser.pause(3000);
       const segmentInt = sampleVisitData.segmentInterval;
       study.view.visits
         .navigateToEditPage(segmentInt)
