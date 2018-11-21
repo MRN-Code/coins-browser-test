@@ -2,13 +2,11 @@
 
 /* globals browser */
 
-const config = require('config');
-const nav = require('./lib/nav/navigation')(browser, config);
+const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
 const should = require('should');
 
-describe('Test data exchange functionality for a new request', function dxNewRequest() {
-  this.timeout(config.defaultTimeout);
+describe('Test data exchange functionality for a new request', () => {
   const statistics = 'div#filterContainer > div.statisticsLabel > div.statisticsValue';
 
   before('initialize', () => {

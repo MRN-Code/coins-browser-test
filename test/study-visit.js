@@ -4,8 +4,7 @@
 
 // Tests adding and editing a study visit
 
-const config = require('config');
-const study = require('./lib/study.js')(browser, config);
+const study = require('./lib/study.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
 const sampleVisitData = {
@@ -20,9 +19,7 @@ const editVisitData = {
   timeUnit: 'Month',
 };
 
-describe('study visit', function studyVisit() {
-  this.timeout(config.defaultTimeout);
-
+describe('study visit', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

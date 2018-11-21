@@ -18,9 +18,8 @@
  */
 
 const randomNumber = require('lodash/random');
-const config = require('config');
 const micis = require('./lib/auth/micis.js')(browser);
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 
 const sampleUrsi = 'M87161657';
 const sampleTags = [{
@@ -31,12 +30,11 @@ const sampleTags = [{
   value: randomNumber(1e8, 1e9 - 1), // Random 9-digit number
 }];
 
-describe('Add subject tags', function subjectTags() {
+describe('Add subject tags', () => {
   /**
    * This set of assertions require several page reloads. You may need to
    * adjust the timeout to ~45s.
    */
-  this.timeout(config.defaultTimeout);
 
   before('initialize', () => {
     if (!micis.loggedOn) {

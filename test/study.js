@@ -2,15 +2,12 @@
 
 /* globals browser */
 
-const config = require('config');
-const study = require('./lib/study.js')(browser, config);
+const study = require('./lib/study.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
 const tempTagId = `testTag_${Date.now()}`;
 
-describe('study', function studyTest() {
-  this.timeout(config.defaultTimeout);
-
+describe('study', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

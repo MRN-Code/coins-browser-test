@@ -6,13 +6,13 @@
  *
  * e.g.
  * ```js
- * module.exports = function(client, config) {
- *     return require('./menu.js')(client, config, menuMap);
+ * module.exports = function(client) {
+ *     return require('./menu.js')(client, menuMap);
  * };
  */
 
 
-module.exports = (client, config, menuMap) => {
+module.exports = (client, menuMap) => {
   const me = {};
 
   // put menuMap in public scope

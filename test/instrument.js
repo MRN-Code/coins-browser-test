@@ -3,13 +3,12 @@
 /* globals browser */
 
 // test deps
-const config = require('config');
 const randomstring = require('randomstring');
 
-const nav = require('./lib/nav/navigation.js')(browser, config);
-const instrument = require('./lib/instrument.js')(browser, config);
-const section = require('./lib/section.js')(browser, config);
-const question = require('./lib/question.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
+const instrument = require('./lib/instrument.js')(browser);
+const section = require('./lib/section.js')(browser);
+const question = require('./lib/question.js')(browser);
 
 
 const instOptions = {

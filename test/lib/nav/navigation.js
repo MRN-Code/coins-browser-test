@@ -3,7 +3,7 @@
 const asmtMenu = require('./asmtMenu.js');
 const micisMenu = require('./micisMenu.js');
 
-module.exports = (client, config) => {
+module.exports = (client) => {
   const me = {};
 
   // disable COINS navigation alerts when changing pages
@@ -17,8 +17,8 @@ module.exports = (client, config) => {
     window.preventExitPopup = true;
   });
 
-  me.micisMenu = micisMenu(client, config);
-  me.asmtMenu = asmtMenu(client, config);
+  me.micisMenu = micisMenu(client);
+  me.asmtMenu = asmtMenu(client);
 
   me.hoverHome = () => {
     client.waitForVisible('a.primary-nav-menu-button');

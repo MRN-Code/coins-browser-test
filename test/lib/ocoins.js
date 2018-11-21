@@ -1,11 +1,10 @@
 'use strict';
 
 const navigation = require('./nav/navigation.js');
-const config = require('config');
 const url = require('url');
 
 module.exports = (client) => {
-  const nav = navigation(client, config);
+  const nav = navigation(client);
 
   const me = {
     configure: {},
@@ -90,7 +89,7 @@ module.exports = (client) => {
     nav.disableNavigationAlert();
     client.url(url.format({
       protocol: 'https',
-      host: config.origin,
+      host: client.options.baseUrl,
       pathname: 'oCoins/app',
     }));
     return me.app.waitForBootstrapped();

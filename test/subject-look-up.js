@@ -6,13 +6,10 @@
  * Test the 'Look Up a Subject' feature.
  */
 
-const config = require('config');
 const micis = require('./lib/auth/micis.js')(browser);
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 
-describe('subject look up', function subjectLookUp() {
-  this.timeout(config.defaultTimeout);
-
+describe('subject look up', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

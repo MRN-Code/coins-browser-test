@@ -1,9 +1,7 @@
 'use strict';
 
 // test deps
-const config = require('config');
-const client = require('../client.js').client;
-const nav = require('../nav/navigation.js')(client, config);
+const nav = require('../nav/navigation.js');
 
 /**
  * Browser actions for authenticating with MICIS
@@ -39,18 +37,18 @@ module.exports = (configuredClient) => {
    * @param {Function} [done] Function to execute once logon is complete
    */
   me.logon = () => {
-    if (client.options.baseUrl.includes('coinstraining')) {
+    if (configuredClient.options.baseUrl.includes('coinstraining')) {
       configuredClient.url('/');
     } else {
-      const route = encodeURIComponent(`${client.options.baseUrl}/micis/index.php`);
+      const route = encodeURIComponent(`${configuredClient.options.baseUrl}/micis/index.php`);
       configuredClient.url(`/login/?rp=${route}`);
     }
 
     if (!me.loggedOn) {
       configuredClient.element('input[name=password]').waitForExist();
       configuredClient
-        .setValue('.modal form input[name=username]', config.auth.un)
-        .setValue('.modal form input[name=password]', config.auth.pw)
+        .setValue('.modal form input[name=username]', configuredClient.options.auth.un)
+        .setValue('.modal form input[name=password]', configuredClient.options.auth.pw)
         .click('.modal form button[type=submit]')
         .waitForPaginationComplete();
       const cookie = configuredClient.getCookie('MICIS');
@@ -60,7 +58,7 @@ module.exports = (configuredClient) => {
         throw new Error('micis cookie not found');
       }
     }
-    return nav
+    return nav(configuredClient)
       .disableNavigationAlert();
   };
 

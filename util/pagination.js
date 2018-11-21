@@ -1,9 +1,9 @@
 'use strict';
 
-/* eslint-env browser */
+/* eslint-env */
+/* global browser window */
 
 const vargscb = require('vargs-callback');
-const config = require('config');
 const _ = require('lodash');
 
 /**
@@ -27,7 +27,7 @@ function waitForCondition(condition, conditionArgs, options) {
     conditionArgs = [conditionArgs]; // eslint-disable-line no-param-reassign
   }
   const self = this;
-  const timeout = options.timeout || 3000; // config.defaultTimeout;
+  const timeout = options.timeout || browser.options.waitforTimeout;
   const interval = options.interval || 500;
   const executeArgs = _.flatten([condition, conditionArgs]);
   // call exec to set off the recursive waiting
@@ -46,7 +46,7 @@ function waitForCondition(condition, conditionArgs, options) {
  * @param timeout {number} an (optional) the maximum amount of time to wait (default = 9 seconds)
  */
 function waitForPaginationComplete(timeout) {
-  timeout = timeout || config.defaultTimeout; // eslint-disable-line no-param-reassign
+  timeout = timeout || browser.options.waitforTimeout; // eslint-disable-line no-param-reassign
   // function to be executed in browser
   function checkBrowserPaginationComplete() {
     if (window.coinsUtils && window.coinsUtils.seleniumUtils) {
@@ -70,7 +70,7 @@ function waitForPaginationComplete(timeout) {
  * @return {WebDriverIO}
  */
 function waitForVis(sell, timeout, cb) {
-  timeout = timeout || config.defaultTimeout; // eslint-disable-line no-param-reassign
+  timeout = timeout || browser.options.waitforTimeout; // eslint-disable-line no-param-reassign
   // function to be executed in browser
   function testForVis(selector) {
     const el = window.document.querySelector(selector);

@@ -4,8 +4,7 @@
 /**
  * Confirm study details pages load and display appropriate content.
  */
-const config = require('config');
-const study = require('./lib/study')(browser, config);
+const study = require('./lib/study')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
 /**
@@ -21,8 +20,7 @@ function navigateToSingleStudy() {
   study.goToView('NITEST');
 }
 
-describe('Study details', function studyDetails() {
-  this.timeout(config.defaultTimeout);
+describe('Study details', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

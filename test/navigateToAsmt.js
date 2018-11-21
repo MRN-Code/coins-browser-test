@@ -3,8 +3,7 @@
 /* globals browser */
 
 // test deps
-const config = require('config');
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 
 const timeoutDur = 25000;
 const defaultStudyId = 2319; // NITEST

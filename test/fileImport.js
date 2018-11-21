@@ -2,15 +2,12 @@
 
 /* globals browser */
 
-const config = require('config');
 const path = require('path');
 
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
-describe('Perform various imports and verify that they function correctly', function fileImport() {
-  this.timeout(config.defaultTimeout);
-
+describe('Perform various imports and verify that they function correctly', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();
