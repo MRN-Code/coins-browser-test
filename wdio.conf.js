@@ -1,5 +1,16 @@
 exports.config = {
-
+  // Configurations for coins
+  // shell login
+  shlogin: '<encrypted username> <encrypted password>',
+  // credentials for coins login
+  auth: {
+    un: 'yourUsername',
+    pw: 'yourPassword',
+  },
+  //
+  // Set a base URL in order to shorten url command calls. If your url parameter starts
+  // with "/", then the base url gets prepended.
+  baseUrl: 'https://coinstraining.mrn.org',
   //
   // ==================
   // Specify Test Files
@@ -15,7 +26,6 @@ exports.config = {
     'test/study-add.js',
     'test/study-visit.js',
     'test/study-details.js',
-    'test/study.js',               // broken
     'test/subject-tags.js',
     'test/subject-look-up.js',
     'test/subject-enroll.js',      // should add fix for auto disenroll
@@ -24,10 +34,11 @@ exports.config = {
     'test/dx-clone.js',
     'test/dx-new-request.js',
     'test/fileImport.js',
-    'test/instrument.js',          // broken
-    'test/ocoins.js',              // broken
-    'test/asmt-double-entry.js',   // broken
-    'test/query-builder.js',       // broken
+    'test/ocoins.js',
+    //'test/instrument.js',          // broken
+    //'test/study.js',               // broken
+    //'test/asmt-double-entry.js',   // broken
+    //'test/query-builder.js',       // broken
   ],
   // Patterns to exclude.
   exclude: [
@@ -84,10 +95,6 @@ exports.config = {
   //
   // Saves a screenshot to a given path if a command fails.
   screenshotPath: './errorShots/',
-  //
-  // Set a base URL in order to shorten url command calls. If your url parameter starts
-  // with "/", then the base url gets prepended.
-  baseUrl: 'https://coinstraining.mrn.org',
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,

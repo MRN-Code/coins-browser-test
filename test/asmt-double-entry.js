@@ -2,14 +2,13 @@
 
 /* globals browser */
 
-const config = require('config');
 const glob = require('glob');
 const homedir = require('homedir');
 const fs = require('fs');
 
-const nav = require('./lib/nav/navigation.js')(browser, config);
-const dataEntry = require('./lib/dataEntry.js')(browser, config);
-const manage = require('./lib/manage.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
+const dataEntry = require('./lib/dataEntry.js')(browser);
+const manage = require('./lib/manage.js')(browser);
 
 const micis = require('./lib/auth/micis.js')(browser);
 
@@ -53,9 +52,7 @@ const getRandomDate = () => {
   return `${month}/${day}/19${year}`;
 };
 
-describe('navigate to asmt and fill out asmts', function asmtDoubleEntry() {
-  this.timeout(config.defaultTimeout);
-
+describe('navigate to asmt and fill out asmts', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

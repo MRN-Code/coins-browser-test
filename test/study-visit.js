@@ -4,8 +4,7 @@
 
 // Tests adding and editing a study visit
 
-const config = require('config');
-const study = require('./lib/study.js')(browser, config);
+const study = require('./lib/study.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
 const sampleVisitData = {
@@ -20,9 +19,7 @@ const editVisitData = {
   timeUnit: 'Month',
 };
 
-describe('study visit', function studyVisit() {
-  this.timeout(config.defaultTimeout);
-
+describe('study visit', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();
@@ -52,14 +49,17 @@ describe('study visit', function studyVisit() {
           }
           return value;
         });
+      browser.pause(3000);
 
       study.view.visits.submitForm().waitForPaginationComplete();
+
       study.view.visits                           // eslint-disable-line no-unused-expressions
         .visitTableContainsRow(row).should.be.ok; // eslint-disable-line no-unused-expressions
     });
   });
   describe('edit study visit', () => {
     it('should have an edit visit form', () => {
+      browser.pause(3000);
       const segmentInt = sampleVisitData.segmentInterval;
       study.view.visits
         .navigateToEditPage(segmentInt)

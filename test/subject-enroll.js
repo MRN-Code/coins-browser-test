@@ -2,14 +2,11 @@
 
 /* globals browser */
 
-const config = require('config');
-const nav = require('./lib/nav/navigation.js')(browser, config);
-const subject = require('./lib/subject.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
+const subject = require('./lib/subject.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
-describe('subject enroll', function subjectEnroll() {
-  this.timeout(config.defaultTimeout);
-
+describe('subject enroll', () => {
   before('initialize', () => {
     if (!micis.loggedOn) { micis.logon(); }
   });

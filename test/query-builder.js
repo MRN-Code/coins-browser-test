@@ -7,9 +7,8 @@
 'use strict';
 
 const _ = require('lodash');
-const config = require('config');
 const hideZendeskWidget = require('./lib/hide-zendesk-widget.js');
-const nav = require('./lib/nav/navigation')(browser, config);
+const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
 const sampleStudyId = '(MRN) VCALHOUN: [99-998] NITEST';
@@ -344,9 +343,7 @@ function goBack() {
   browser.execute(hideZendeskWidget);
 }
 
-describe('Query Builder', function queryBuilder() {
-  this.timeout(config.defaultTimeout);
-
+describe('Query Builder', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

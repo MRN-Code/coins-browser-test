@@ -2,15 +2,12 @@
 
 /* globals browser */
 
-const config = require('config');
 const path = require('path');
 
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
-describe('Perform various imports and verify that they function correctly', function fileImport() {
-  this.timeout(config.defaultTimeout);
-
+describe('Perform various imports and verify that they function correctly', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();
@@ -76,14 +73,11 @@ describe('Perform various imports and verify that they function correctly', func
     });
 
     it('Should upload assessments', () => {
-      browser.selectByValue('select#instrument_id', 24063)
-        .click('#single_visit_radio')
-        // interval value could be updated for multiple tests during dev.
-        .selectByValue('select#visit_interval', 'v2')
-        // This click action is a hack to activate the 'input[name=userfile]' element
-        // Otherwise the selenium will not be able to see the element
-        .click('input#upload')
-        .chooseFile('input[name=userfile]', path.join(
+      browser.click('input[name=defaultCoverSheetData][value=no]')
+        .click('input[name=bgImport][value=no]')
+        .click('input[name=uploadType][value=completed]')
+        .click('#importLabel')
+        .chooseFile('#import', path.join(
           __dirname,
           'upload_test_files/NITEST_STOP-BANG_template.csv'
         ))
@@ -92,8 +86,9 @@ describe('Perform various imports and verify that they function correctly', func
 
     it('Should see the upload is successful', () => {
       browser.waitForPaginationComplete(10000);
-      browser.isExisting('table#new_asmts').should.be.ok;// eslint-disable-line no-unused-expressions
-      browser.getText('div#new_asmts_info').should.containEql('Showing 1 to 2 of 2 entries');
+      browser.isExisting('#import_response > div > p').should.be.ok;// eslint-disable-line no-unused-expressions
+      browser.pause(5000);
+      browser.getText('#import_response > div > div > textarea').split(',').should.have.size(2);
     });
   });
 });

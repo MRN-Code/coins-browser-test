@@ -20,9 +20,8 @@
  * 11. Undo edit???
  */
 
-const config = require('config');
 const micis = require('./lib/auth/micis.js')(browser);
-const study = require('./lib/study.js')(browser, config);
+const study = require('./lib/study.js')(browser);
 
 /**
  * Target subject type label.
@@ -76,7 +75,7 @@ function findNotifyItem(label) { // eslint-disable-line consistent-return
   }
 }
 
-describe('Edit study subject type', function studySubjectTypes() {
+describe('Edit study subject type', () => {
   /**
    * Description control selector for the 'edit subject type' form.
    *
@@ -90,8 +89,6 @@ describe('Edit study subject type', function studySubjectTypes() {
    * @const {string}
    */
   const labelSelector = 'input[name=label]';
-
-  this.timeout(config.defaultTimeout);
 
   before('initialize', () => {
     if (!micis.loggedOn) {

@@ -2,8 +2,7 @@
 
 /* globals browser */
 
-const config = require('config');
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 const ocoins = require('./lib/ocoins.js')(browser);
 

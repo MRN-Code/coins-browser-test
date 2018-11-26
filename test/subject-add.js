@@ -3,15 +3,12 @@
 /* globals browser */
 
 const _ = require('lodash');
-const config = require('config');
-const nav = require('./lib/nav/navigation.js')(browser, config);
-const subject = require('./lib/subject.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
+const subject = require('./lib/subject.js')(browser);
 
 const micis = require('./lib/auth/micis.js')(browser);
 
-describe('subject', function subjectAdd() {
-  this.timeout(config.defaultTimeout);
-
+describe('subject', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();
@@ -57,9 +54,7 @@ describe('subject', function subjectAdd() {
     });
   });
 
-  describe('subject lookup', function subjectAddLookup() {
-    this.timeout(config.defaultTimeout);
-
+  describe('subject lookup', () => {
     before('initialize', () => {
       if (!micis.loggedOn) {
         micis.logon();

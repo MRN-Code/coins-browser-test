@@ -8,7 +8,7 @@
  * Shell login happens via a `wget`-centered bash script on the command line.
  * Therefore, this test uses request instead of a browser.
  *
- * This requires a `shlogin` property in _config/local.json_ to test. Generate
+ * This requires a `shlogin` property in wdio.conf.js_ to test. Generate
  * it by logging in to COINS' UI and visiting MICIS → Menu → Get
  * Shell-Access-Key, entering your password in the form, and copying the
  * contents of the resulting .key file into configuration:
@@ -23,10 +23,9 @@
  * {@link https://docs.google.com/document/d/1D7106Ax4yeW1kGAfYsWqxXlz9mRz8qMkx96HWACFqR8/edit#}
  */
 
-const config = require('config');
 const request = require('request');
 
-const scriptURL = `https://${config.origin}/cas/shlogin.php`;
+const scriptURL = `${browser.options.baseUrl}/cas/shlogin.php`;
 let resp = null;
 let respBody = null;
 
@@ -49,8 +48,7 @@ function postData(credentials) {
   });
 }
 
-describe('shell login', function shellLoginTest() {
-  this.timeout(config.defaultTimeout);
+describe('shell login', () => {
   it('rejects bad requests', () => {
     // Bogus credentials:
     const uk = 'FluiZZM5pXi+XCmJ8TmBGA== RYF9DQGlwAw1txSotM4AVA==';
@@ -60,7 +58,7 @@ describe('shell login', function shellLoginTest() {
   });
 
   it('passes cookie with successful request', () => {
-    browser.call(() => postData(config.shlogin));
+    browser.call(() => postData(browser.options.shlogin));
     resp.headers.should.have.property('set-cookie');
     resp.headers['set-cookie']
       .some(c => c.includes('CAS_Auth_User'))

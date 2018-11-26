@@ -2,8 +2,8 @@
 
 const navigation = require('./nav/navigation.js');
 
-module.exports = (client, config) => {
-  const nav = navigation(client, config);
+module.exports = (client) => {
+  const nav = navigation(client);
 
   const me = {
     list: {},

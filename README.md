@@ -28,7 +28,7 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
 
   This automatically installs the dependencies including [Selenium](http://www.seleniumhq.org/download/) standalone server as a service.
 
-3. Copy `config/default.json.example` to `config/default.json`. Update all fields to match your configuration.
+3. Edit `wdio.conf.js`. Update baseUrl, coins credentials and shlogin fields to match your configuration.
 
 # Usage: Running Tests
 1. Modify `wdio.conf.js` to include or exclude tests:
@@ -43,13 +43,11 @@ You need [Node.js](https://nodejs.org/en/) (version 6+ required) and npm (comes 
 `auth/micis.js` module has functions related to authentication.
 An example test to login is shown below.
 ```js
-const config = require('config');
 // get browser actions: note that the client is passed as a param
-const auth = require('./lib/auth/micis.js')(browser, config);
+const auth = require('./lib/auth/micis.js')(browser);
 
 // create test case
 describe('micis logon', function() {
-    this.timeout(config.defaultTimeout);
     it('should logon', function() {
         auth.logon();
     });
@@ -89,11 +87,10 @@ Use either micisMenu.js or asmtMenu.js in `test/lib/nav/`. The `menuMap` in each
     1. Browser actions:
         1. Write your browser functionality in js files within `test/lib/[category]`.
         1. Each file should export a function with the following signature:
-        ` module.exports = function(client, config) { `
+        ` module.exports = function(client) { `
         1. That function should return an object whose properties are functions to perform granular actions.
     1. Tests:
         1. Write your tests in js files within `test/`
-        1. Each file should require the Config,
 
 # Examples
 See `test/logon.js` and `test/lib/auth/micis.js` for a simple example.

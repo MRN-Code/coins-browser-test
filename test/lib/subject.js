@@ -70,7 +70,7 @@ module.exports = (client) => {
       .scroll()
       .click('#submit_new_subject')
       .waitForPaginationComplete()
-      .pause(100);
+      .pause(1000);
     const isExisting = client.isExisting('[value="Add >"]');
     if (!isExisting) {
       throw new Error('Submit new subject did not detect that it made it to the verify page.');
@@ -78,7 +78,7 @@ module.exports = (client) => {
   };
 
   me.new.verify = () => {
-    client.pause(200);
+    client.pause(2000);
     client
       .element('[value="Add >"]')
       .scroll()
@@ -129,6 +129,7 @@ module.exports = (client) => {
   };
   /* eslint-enable no-underscore-dangle */
   me.new.handleSubjectMatchesExisting = () => {
+    client.pause(1000);
     client
       .scroll(0, 0)
       .setValue('.coins-datatable-wrapper input[type=search]', 'testaddressline1')
@@ -136,14 +137,19 @@ module.exports = (client) => {
       .pause(500);
 
     // Create/Re-use
+    client.pause(1000);
     if (Date.now() % 2 === 0) {
       client.click('input[type=button][value=\'Reuse URSI\']');
     } else {
       client.click('input[type=button][value=\'Create New URSI\']');
     }
+    client.pause(3000);
 
-    client.pause(1000);
-    client.click('input[type=button][value=Continue]');
+    if (client.isExisting('input[type=button][value=Continue]')) {
+      client.click('input[type=button][value=Continue]');
+    } else {
+      client.click('input[type=button][value=Submit]');
+    }
   };
 
   me.enroll.submitExisting = () => {

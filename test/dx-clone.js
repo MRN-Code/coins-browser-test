@@ -2,14 +2,11 @@
 
 /* globals browser */
 
-const config = require('config');
-const nav = require('./lib/nav/navigation')(browser, config);
+const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
 
-describe('Test data exchange functionality for cloning a request', function dxClone() {
-  this.timeout(config.defaultTimeout);
-
+describe('Test data exchange functionality for cloning a request', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

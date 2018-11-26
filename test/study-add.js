@@ -15,8 +15,7 @@
 
 const _ = require('lodash');
 const moment = require('moment');
-const config = require('config');
-const nav = require('./lib/nav/navigation')(browser, config);
+const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
 
@@ -51,9 +50,7 @@ const sampleData = {
   cssUrl: 'http://www.mrn.org/_ui/css/style.css',
 };
 
-describe('Add a new study', function studyAdd() {
-  this.timeout(config.defaultTimeout);
-
+describe('Add a new study', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

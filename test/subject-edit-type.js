@@ -20,10 +20,9 @@
 
 
 const _ = require('lodash');
-const config = require('config');
 const hideZendeskWidget = require('./lib/hide-zendesk-widget.js');
 const micis = require('./lib/auth/micis.js')(browser);
-const nav = require('./lib/nav/navigation.js')(browser, config);
+const nav = require('./lib/nav/navigation.js')(browser);
 
 const sampleUrsi = 'M87161657';
 const sampleNote = `Test: ${Date.now()}`;
@@ -32,9 +31,7 @@ let sampleType;
 /** These types should not be selected. */
 const DISALLOWED_TYPES = ['EXCLUDED', 'WITHDRAWN'];
 
-describe('Edit subject type', function subjectEditType() {
-  this.timeout(config.defaultTimeout);
-
+describe('Edit subject type', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
       micis.logon();

@@ -53,4 +53,4 @@ const menuMap = [
   },
 ];
 
-module.exports = (client, config) => menu(client, config, menuMap);
+module.exports = client => menu(client, menuMap);

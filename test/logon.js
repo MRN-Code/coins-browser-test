@@ -2,13 +2,9 @@
 
 /* globals browser */
 
-const config = require('config');
+const auth = require('./lib/auth/micis.js')(browser);
 
-const auth = require('./lib/auth/micis.js')(browser, config);
-
-describe('micis logon', function logon() {
-  this.timeout(config.defaultTimeout);
-
+describe('micis logon', () => {
   it('should logon', () => {
     auth.logon();
   });
