@@ -10,6 +10,7 @@ const zip = 'R3J 1R5';
 const country = 'Canada';
 const city = 'Winnipeg';
 const phoneNum = '14433335555';
+
 describe('subject enroll', () => {
   before('initialize', () => {
     if (!micis.loggedOn) { micis.logon(); }
