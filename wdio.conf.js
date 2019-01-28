@@ -31,6 +31,7 @@ exports.config = {
     'test/subject-enroll.js',      // should add fix for auto disenroll
     'test/subject-edit-type.js',
     'test/subject-add.js',
+    'test/subject-add-non-us.js',
     'test/dx-clone.js',
     'test/dx-new-request.js',
     'test/fileImport.js',
