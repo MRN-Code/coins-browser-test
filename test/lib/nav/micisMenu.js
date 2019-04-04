@@ -26,6 +26,13 @@ const menuMap = [
             { text: 'Browse Available Data' },
     ],
   },
+  {
+    text: 'Admin',
+    children: [
+            { text: 'Sites' },
+            { text: 'Users' },
+    ],
+  },
 ];
 
 module.exports = client => menu(client, menuMap);
