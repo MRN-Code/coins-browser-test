@@ -103,6 +103,17 @@ const subjectEnroll = {
   studyID: 7640,
 };
 
+const siteAdd = {
+  sampleData: {
+    label: 'University 00',
+    description: 'University 00',
+    URSIPrefix: `M${_.random(100, 999)}`,
+    userLabel: 'CITI Training',
+    expirationDateChecked: true,
+    siteID: _.random(10, 99),
+  },
+};
+
 module.exports = {
   studyVisit,
   subjectLookUp,
@@ -115,4 +126,5 @@ module.exports = {
   fileImport,
   subjectAdd,
   subjectEnroll,
+  siteAdd,
 };
