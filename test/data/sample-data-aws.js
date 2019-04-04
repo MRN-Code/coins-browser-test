@@ -115,6 +115,28 @@ const siteAdd = {
   },
 };
 
+const userAdd = {
+  sampleData: {
+    name: 'Autotest User',
+    username: `u${moment().unix()}`,
+    password: 'coins4life',
+    emailAddress: `${moment().unix()}@mrn.org`,
+    receiveCOINSNotificationEmails: true,
+    accountExpirationDate: moment().add(2, 'year').format('MM/DD/YYYY'),
+    passwordExpirationDate: moment().add(1, 'year').format('MM/DD/YYYY'),
+    site: 'University 1',
+    siteAdministrator: false,
+    appPermissions: [
+         { MICIS: 'Coordinator' },
+         { MICIS: 'everybody' },
+         { Assessments: 'Coordinator' },
+    ],
+    studyPermissions: [
+         { Study3: 'Coordinator' },
+    ],
+  },
+};
+
 
 module.exports = {
   studyVisit,
@@ -129,4 +151,5 @@ module.exports = {
   subjectAdd,
   subjectEnroll,
   siteAdd,
+  userAdd,
 };
