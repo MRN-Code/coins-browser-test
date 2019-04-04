@@ -8,6 +8,8 @@ const subject = require('./lib/subject.js')(browser);
 
 const micis = require('./lib/auth/micis.js')(browser);
 
+const sampleData = browser.options.testData.subjectAdd;
+
 describe('subject', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
@@ -28,7 +30,7 @@ describe('subject', () => {
 
     it('should generate an URSI prefix', () => {
       const text = browser.getText('#ursi_prefix_preview_prefix');
-      text.trim().should.equal('M871');
+      text.trim().should.equal(sampleData.ursiPrefix);
     });
 
     it('should not have a hidden subject type ("Special") as a subject type', () => {

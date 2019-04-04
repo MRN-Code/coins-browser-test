@@ -5,6 +5,8 @@
 const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
+const sampleData = browser.options.testData.dxClone;
+
 
 describe('Test data exchange functionality for cloning a request', () => {
   before('initialize', () => {
@@ -30,18 +32,18 @@ describe('Test data exchange functionality for cloning a request', () => {
   });
 
   it('should load a Public Templates', () => {
-    const publicTemplates = 'select#requestMenu > optgroup[label="Public Templates"]';
+    const publicTemplates = `select#requestMenu > optgroup[label="${sampleData.publicTemplateLabel}"]`;
 
     browser.waitForExist(publicTemplates);
     browser
-      .selectByValue(publicTemplates, 460)
+      .selectByValue(publicTemplates, sampleData.publicTemplateValue)
       .click('input#requestOpenButton')
       .pause(3000);
     browser.waitForPaginationComplete();
     browser.click('div#requestStatusMessage > a.symlink');
     browser.waitForPaginationComplete();
     const response = browser.customGetText('div#filterContainer > div.statisticsLabel > div.statisticsValue');
-    response.should.be.eql(['2253', '1112', '1', '1112']);
+    response.should.be.eql(sampleData.statisticsValue);
   });
 
   it('should click on [Untitled Request] and add a new title', () => {

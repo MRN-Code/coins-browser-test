@@ -7,6 +7,8 @@
 const study = require('./lib/study')(browser);
 const micis = require('./lib/auth/micis')(browser);
 
+const sampleData = browser.options.testData.studyDetails;
+
 /**
  * Navigate to a single study.
  *
@@ -17,7 +19,7 @@ const micis = require('./lib/auth/micis')(browser);
  * @return {undefined}
  */
 function navigateToSingleStudy() {
-  study.goToView('NITEST');
+  study.goToView(sampleData.study);
 }
 
 describe('Study details', () => {

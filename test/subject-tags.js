@@ -17,18 +17,10 @@
  *   6. Confirm tags were deleted
  */
 
-const randomNumber = require('lodash/random');
 const micis = require('./lib/auth/micis.js')(browser);
 const nav = require('./lib/nav/navigation.js')(browser);
 
-const sampleUrsi = 'M87161657';
-const sampleTags = [{
-  type: 'Temporary Subject ID',
-  value: `test_${Date.now()}`,
-}, {
-  type: 'U.S. SSN',
-  value: randomNumber(1e8, 1e9 - 1), // Random 9-digit number
-}];
+const sampleData = browser.options.testData.subjectTags;
 
 describe('Add subject tags', () => {
   /**
@@ -42,7 +34,7 @@ describe('Add subject tags', () => {
     }
     nav.micisMenu
       .clickNested('Look Up a Subject')
-      .setValue('#ursi', sampleUrsi)
+      .setValue('#ursi', sampleData.sampleUrsi)
       .click('#frmFindSubject .ui-button-success')
       .waitForPaginationComplete()
       .waitForExist('#button-extideditor');
@@ -61,7 +53,7 @@ describe('Add subject tags', () => {
      * Iterate over `sampleTags`, input properties into the appropriate
      * form elements, and save.
      */
-    sampleTags.forEach((tag) => {
+    sampleData.sampleTags.forEach((tag) => {
       browser
         .selectByVisibleText(
           '#addextFrm select[name=subject_tag_id]',
@@ -73,7 +65,7 @@ describe('Add subject tags', () => {
         .click('#addextFrm input[value=study]')
         .selectByVisibleText(
           '#addextFrm select[name=tag_study]',
-          'NITEST'
+          sampleData.study
         )
         .click('#addextFrm input[type=button]')
         .waitForPaginationComplete();
@@ -92,15 +84,15 @@ describe('Add subject tags', () => {
      * Iterate over the table's rows and find those containing
      * data from `sampleTags`.
      */
-    const matches = res.split(/\n/).filter(row => sampleTags.some(tag => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1));
+    const matches = res.split(/\n/).filter(row => sampleData.sampleTags.some(tag => row.indexOf(tag.type) !== -1 && row.indexOf(tag.value) !== -1));
 
     /* eslint-disable no-unused-expressions */
-    should(matches.length === sampleTags.length).be.ok;
+    should(matches.length === sampleData.sampleTags.length).be.ok;
     /* eslint-enable no-unused-expressions */
   });
 
   it('should save tag edits', () => {
-    const tag = sampleTags[0];
+    const tag = sampleData.sampleTags[0];
     // search for tag in the data table to make it visible.
     browser.setValue('#subject_tags_table_filter > label > input[type="search"]', tag.value);
     browser.pause(1000);
@@ -128,7 +120,7 @@ describe('Add subject tags', () => {
   });
 
   it('should remove deleted tags', () => {
-    sampleTags.forEach((tag) => {
+    sampleData.sampleTags.forEach((tag) => {
       // search for tag in the data table to make it visible.
       browser.setValue('#subject_tags_table_filter > label > input[type="search"]', tag.value);
       browser

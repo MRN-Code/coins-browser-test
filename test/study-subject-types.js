@@ -23,6 +23,8 @@
 const micis = require('./lib/auth/micis.js')(browser);
 const study = require('./lib/study.js')(browser);
 
+const sampleData = browser.options.testData.studySubjectTypes;
+
 /**
  * Target subject type label.
  *
@@ -31,7 +33,6 @@ const study = require('./lib/study.js')(browser);
  *
  * @const {string}
  */
-const targetSubjectTypeLabel = 'Testing';
 
 /**
  * Test subject type values.
@@ -95,7 +96,7 @@ describe('Edit study subject type', () => {
       micis.logon();
     }
     study
-      .goToView('NITEST')
+      .goToView(sampleData.study)
       .waitForPaginationComplete();
   });
 
@@ -106,7 +107,7 @@ describe('Edit study subject type', () => {
   });
 
   it('should edit a subject type', () => {
-    const linkSelector = getEditLinkSelector(targetSubjectTypeLabel);
+    const linkSelector = getEditLinkSelector(sampleData.targetSubjectTypeLabel);
 
     const res = browser
       .click(linkSelector)
@@ -125,7 +126,7 @@ describe('Edit study subject type', () => {
       const linkSelector = getEditLinkSelector(testSubjectType.label);
 
       const text = study
-        .goToView('NITEST')
+        .goToView(sampleData.study)
         .waitForPaginationComplete()
         .click('input[value="Edit Subject Types"]')
         .waitForPaginationComplete()
@@ -143,12 +144,12 @@ describe('Edit study subject type', () => {
 
   it('should reset subject type', () => {
     const res = browser
-      .setValue(labelSelector, targetSubjectTypeLabel)
-      .setValue(descriptionSelector, targetSubjectTypeLabel)
+      .setValue(labelSelector, sampleData.targetSubjectTypeLabel)
+      .setValue(descriptionSelector, sampleData.targetSubjectTypeLabel)
       .click('input[type=button][name=DoUpdate]')
       .waitForPaginationComplete()
-      .execute(findNotifyItem, targetSubjectTypeLabel);
+      .execute(findNotifyItem, sampleData.targetSubjectTypeLabel);
     const text = res.value;
-    text.should.match(new RegExp(targetSubjectTypeLabel));
+    text.should.match(new RegExp(sampleData.targetSubjectTypeLabel));
   });
 });

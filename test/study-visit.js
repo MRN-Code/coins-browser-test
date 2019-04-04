@@ -7,17 +7,7 @@
 const study = require('./lib/study.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
-const sampleVisitData = {
-  label: 'Test Label 1',
-  timeFromBaseline: 1,
-  timeUnit: 'Week',
-  segmentInterval: `test_${(new Date()).getTime()}`,
-};
-const editVisitData = {
-  label: 'Test Label 2',
-  timeFromBaseline: 2,
-  timeUnit: 'Month',
-};
+const sampleData = browser.options.testData.studyVisit;
 
 describe('study visit', () => {
   before('initialize', () => {
@@ -25,7 +15,7 @@ describe('study visit', () => {
       micis.logon();
     }
     study
-      .goToView('NITEST')
+      .goToView(sampleData.study)
       .click('[data-hook="edit-study-visits"]');
     browser
       .waitForPaginationComplete();
@@ -35,7 +25,7 @@ describe('study visit', () => {
     it('should accept new visit values', () => {
       study.view.visits
         .fillOutForm({
-          data: sampleVisitData,
+          data: sampleData.sampleVisitData,
           mode: 'add',
         });
     });
@@ -44,8 +34,8 @@ describe('study visit', () => {
       const row = ['label', 'timeFromBaseline', 'timeUnit', 'segmentInterval']
         .map((key) => {
           let value = '';
-          if (key in sampleVisitData) {
-            value = sampleVisitData[key];
+          if (key in sampleData.sampleVisitData) {
+            value = sampleData.sampleVisitData[key];
           }
           return value;
         });
@@ -60,7 +50,7 @@ describe('study visit', () => {
   describe('edit study visit', () => {
     it('should have an edit visit form', () => {
       browser.pause(3000);
-      const segmentInt = sampleVisitData.segmentInterval;
+      const segmentInt = sampleData.sampleVisitData.segmentInterval;
       study.view.visits
         .navigateToEditPage(segmentInt)
         .waitForPaginationComplete();
@@ -72,7 +62,7 @@ describe('study visit', () => {
     it('should accept edited visit values', () => {
       study.view.visits
         .fillOutForm({
-          data: editVisitData,
+          data: sampleData.editVisitData,
           mode: 'update',
         });
     });
@@ -80,8 +70,8 @@ describe('study visit', () => {
       const row = ['label', 'timeFromBaseline', 'timeUnit']
         .map((key) => {
           let value = '';
-          if (key in editVisitData) {
-            value = editVisitData[key];
+          if (key in sampleData.editVisitData) {
+            value = sampleData.editVisitData[key];
           }
           return value;
         });

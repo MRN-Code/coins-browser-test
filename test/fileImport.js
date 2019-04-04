@@ -7,6 +7,9 @@ const path = require('path');
 const nav = require('./lib/nav/navigation.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
+const sampleData = browser.options.testData.fileImport;
+
+
 describe('Perform various imports and verify that they function correctly', () => {
   before('initialize', () => {
     if (!micis.loggedOn) {
@@ -21,7 +24,7 @@ describe('Perform various imports and verify that they function correctly', () =
 
     it('Should upload file', () => {
       browser
-        .selectByValue('select#study_id', 2319)
+        .selectByValue('select#study_id', sampleData.studyID)
         .waitForValue('select#subject_type_id', 3000);
       // This click action is a hack to activate the 'input[name=userfile]' element
       // Otherwise the selenium will not be able to see the element
@@ -45,7 +48,7 @@ describe('Perform various imports and verify that they function correctly', () =
   describe('Import instruments and assessments', () => {
     it('Should go to asmt and select NITEST (study_id 2319)', () => {
       nav.gotoAsmt();
-      nav.selectAsmtStudy(2319);
+      nav.selectAsmtStudy(sampleData.studyID);
     });
 
     // Import instruments
