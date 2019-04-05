@@ -27,6 +27,16 @@ const menuMap = [
     ],
   },
   {
+    text: 'Billing',
+    children: [
+            { text: 'List Charge Codes' },
+            { text: 'Add Credits' },
+            { text: 'View Discrepancies' },
+            { text: 'Canceled Scan Billing' },
+            { text: 'Billing Report' },
+    ],
+  },
+  {
     text: 'Admin',
     children: [
             { text: 'Sites' },
