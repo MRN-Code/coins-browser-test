@@ -135,6 +135,15 @@ const userAdd = {
     ],
   },
 };
+const chargeCodeAdd = {
+  sampleData: {
+    chargeCode: `00-00${_.random(1000, 9999)}`,
+    projectNumber: 300,
+    startDate: moment().format('MM/DD/YYYY'),
+    endDate: moment().add(30, 'days').format('MM/DD/YYYY'),
+    onlyAllowScanCreditBilling: false,
+  },
+};
 
 module.exports = {
   studyVisit,
@@ -150,4 +159,5 @@ module.exports = {
   subjectEnroll,
   siteAdd,
   userAdd,
+  chargeCodeAdd,
 };
