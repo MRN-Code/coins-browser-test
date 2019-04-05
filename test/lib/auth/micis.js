@@ -37,11 +37,11 @@ module.exports = (configuredClient) => {
    * @param {Function} [done] Function to execute once logon is complete
    */
   me.logon = () => {
-    if (configuredClient.options.baseUrl.includes('coinstraining')) {
-      configuredClient.url('/');
-    } else {
+    if (configuredClient.options.baseUrl.includes('dev')) {
       const route = encodeURIComponent(`${configuredClient.options.baseUrl}/micis/index.php`);
       configuredClient.url(`/login/?rp=${route}`);
+    } else {
+      configuredClient.url('/');
     }
 
     if (!me.loggedOn) {
