@@ -54,11 +54,11 @@ exports.config = {
     'test/dx-clone.js',
     'test/dx-new-request.js',
     'test/fileImport.js',
-    //'test/site-add.js',
-    //'test/user-add.js',
-    //'test/billing-report.js',
-    //'test/charge-code-add.js',
-    //'test/user-edit.js',
+    'test/site-add.js',
+    'test/user-add.js',
+    'test/billing-report.js',
+    'test/charge-code.js',
+    'test/credits-add.js',
     //'test/ocoins.js',              // broken
     //'test/instrument.js',          // broken
     //'test/study.js',               // broken
