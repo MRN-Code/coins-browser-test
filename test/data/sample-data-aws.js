@@ -137,13 +137,24 @@ const userAdd = {
   },
 };
 
-const chargeCodeAdd = {
+const chargeCode = {
   sampleData: {
     chargeCode: `00-00${_.random(1000, 9999)}`,
     projectNumber: 300,
     startDate: moment().format('MM/DD/YYYY'),
     endDate: moment().add(30, 'days').format('MM/DD/YYYY'),
     onlyAllowScanCreditBilling: false,
+    fundingSource: 'Three, Investigator',
+    studyID: 1,
+  },
+};
+
+const creditsAdd = {
+  sampleData: {
+    piId: 'Three, Investigator',
+    defaultChargeCode: '00-000003',
+    effectiveDate: moment().format('MM/DD/YYYY'),
+    numCredits: 1,
   },
 };
 
@@ -161,5 +172,6 @@ module.exports = {
   subjectEnroll,
   siteAdd,
   userAdd,
-  chargeCodeAdd,
+  chargeCode,
+  creditsAdd,
 };
