@@ -126,14 +126,66 @@ const userAdd = {
     passwordExpirationDate: moment().add(1, 'year').format('MM/DD/YYYY'),
     site: 'University 1',
     siteAdministrator: false,
-    appPermissions: [
-         { MICIS: 'Coordinator' },
-         { MICIS: 'everybody' },
-         { Assessments: 'Coordinator' },
-    ],
-    studyPermissions: [
+    appPermissions: {
+      remove: [],
+      add: [
+       { MICIS: 'Coordinator' },
+       { MICIS: 'everybody' },
+       { Assessments: 'Coordinator' },
+      ],
+    },
+    studyPermissions: {
+      remove: [],
+      add: [
          { Study3: 'Coordinator' },
-    ],
+      ],
+    },
+  },
+};
+
+const userEdit = {
+  sampleData: {
+    name: `UserEdit ${moment().unix()}`,
+    username: '1554310643',
+    password: `coins${moment().unix()}`,
+    emailAddress: `${moment().unix()}@mrn.org`,
+    receiveCOINSNotificationEmails: false,
+    accountExpirationDate: moment().add(2, 'year').format('MM/DD/YYYY'),
+    passwordExpirationDate: moment().add(1, 'year').format('MM/DD/YYYY'),
+    site: 'University 2',
+    siteAdministrator: true,
+    appPermissions1: {
+      remove: [],
+      add: [
+        { MICIS: 'Coordinator' },
+        { MICIS: 'everybody' },
+        { Assessments: 'Coordinator' },
+      ],
+    },
+    appPermissions2: {
+      remove: [
+        { MICIS: 'Coordinator' },
+        { Assessments: 'Coordinator' },
+      ],
+      add: [
+        { MICIS: 'Radiologist' },
+        { MICIS: 'everybody' },
+      ],
+    },
+    studyPermissions1: {
+      remove: [],
+      add: [
+         { Study2: 'Coordinator' },
+      ],
+    },
+    studyPermissions2: {
+      remove: [
+         { Study2: 'Coordinator' },
+      ],
+      add: [
+         { Study3: 'Coordinator' },
+      ],
+    },
   },
 };
 
@@ -172,6 +224,7 @@ module.exports = {
   subjectEnroll,
   siteAdd,
   userAdd,
+  userEdit,
   chargeCode,
   creditsAdd,
 };
