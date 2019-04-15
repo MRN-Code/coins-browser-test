@@ -8,9 +8,10 @@
  * Steps:
  *
  *   1. Navigate to charge codes report from (MICIS > Billing > List Charge Codes)
- *   1. Clist new charge code abd fill out form with some sample data
- *   2. Click add charge code
- *   3. Search and Verify data.
+ *   2. Clist new charge code and fill out form with some sample data
+ *   3. Click add charge code
+ *   4. Search and Verify data.
+ *   5. Add a study to the charge code
  */
 const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);

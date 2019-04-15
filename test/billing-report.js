@@ -8,9 +8,9 @@
  * Steps:
  *
  *   1. Navigate to Billing report from (MICIS > Billing > Belling report)
- *   1. Fill out form with some sample data
- *   2. Click Get Report
- *   3. Watch for downloaded file.
+ *   2. Fill out form with some sample data
+ *   3. Click Get Report
+ *   4. Watch for downloaded file.
  */
 const nav = require('./lib/nav/navigation')(browser);
 const micis = require('./lib/auth/micis')(browser);
