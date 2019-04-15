@@ -62,5 +62,15 @@ module.exports = (configuredClient) => {
       .disableNavigationAlert();
   };
 
+  me.logoutAndLogin = (username, password) => {
+    me.loggedOn = false;
+    configuredClient.click('#container > header > div > a');
+    configuredClient.element('input[name=password]').waitForExist();
+    configuredClient
+      .setValue('.modal form input[name=username]', username)
+      .setValue('.modal form input[name=password]', password)
+      .click('.modal form button[type=submit]')
+      .pause(2000);
+  };
   return me;
 };
