@@ -1,16 +1,35 @@
-exports.config = {
-  // Configurations for coins
-  // shell login
-  shlogin: '<encrypted username> <encrypted password>',
-  // credentials for coins login
-  auth: {
-    un: 'yourUsername',
-    pw: 'yourPassword',
+const path = require('path')
+const fs = require('fs')
+
+/* global browser */
+// Configurations for coins environments
+const environments = {
+  awsStaging: {
+    url: 'https://coins-staging-portal.trendscentertest.org',
+    data: './test/data/sample-data-aws.js',
+    shlogin: '<SHELL LOGIN KEY>',
+    auth: {
+      un: '<USERNAME>',
+      pw: '<PASSWORD>',
+    },
   },
-  //
-  // Set a base URL in order to shorten url command calls. If your url parameter starts
-  // with "/", then the base url gets prepended.
-  baseUrl: 'https://coinstraining.mrn.org',
+  mrnStaging: {
+    url: 'https://coinstraining.mrn.org',
+    data: './test/data/sample-data-mrn.js',
+    shlogin: '<SHELL LOGIN KEY>',
+    auth: {
+      un: '<USERNAME>',
+      pw: '<PASSWORD>',
+    },
+  },
+};
+
+global.downloadDir = path.join(__dirname, 'tempDownload');
+
+/* globals downloadDir */
+exports.config = {
+  // Set the environment to run the tests on. awsStaging,mrnStaging
+  env: 'awsStaging',
   //
   // ==================
   // Specify Test Files
@@ -35,7 +54,12 @@ exports.config = {
     'test/dx-clone.js',
     'test/dx-new-request.js',
     'test/fileImport.js',
-    'test/ocoins.js',
+    'test/site-add.js',
+    'test/user-add.js',
+    'test/billing-report.js',
+    'test/charge-code.js',
+    'test/credits-add.js',
+    //'test/ocoins.js',              // broken
     //'test/instrument.js',          // broken
     //'test/study.js',               // broken
     //'test/asmt-double-entry.js',   // broken
@@ -74,6 +98,11 @@ exports.config = {
     maxInstances: 1,
     //
     browserName: 'chrome',
+    chromeOptions: {
+      prefs: {
+        'download.default_directory': downloadDir,
+      },
+    },
   }],
   //
   // ===================
@@ -159,14 +188,25 @@ exports.config = {
   // resolved to continue.
   //
   // Gets executed once before all workers get launched.
-  // onPrepare: function (config, capabilities) {
-  // },
+  onPrepare: function (config, capabilities) {
+    if (!fs.existsSync(downloadDir)) {
+      // if it doesn't exist, create it
+      fs.mkdirSync(downloadDir);
+    }
+  },
   //
   // Gets executed before test execution begins. At this point you can access all global
   // variables, such as `browser`. It is the perfect place to define custom commands.
   before: function(capabilities, specs) {
     const should = require('should');
     require('./util/pagination.js')(browser);
+
+    // set the options from the environment
+    browser.options.baseUrl = environments[browser.options.env].url;
+    browser.options.shlogin = environments[browser.options.env].shlogin;
+    browser.options.auth = environments[browser.options.env].auth;
+    // set the testData object
+    browser.options.testData = require(environments[browser.options.env].data);
   },
   //
   // Hook that gets executed before the suite starts

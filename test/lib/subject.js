@@ -44,7 +44,7 @@ module.exports = (client) => {
       .element('#site_id')
       .scroll()
       .selectByValue('#site_id', 7)
-      .selectByVisibleText('select[name=ethnicity]', 'Unknown')
+      .selectByVisibleText('select[name=ethnicity]', 'Unknown/Not Reported')
       .click('#racCat1')
       .click('#racCat2')
       .click('#racCat3')

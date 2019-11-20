@@ -37,11 +37,11 @@ module.exports = (configuredClient) => {
    * @param {Function} [done] Function to execute once logon is complete
    */
   me.logon = () => {
-    if (configuredClient.options.baseUrl.includes('coinstraining')) {
-      configuredClient.url('/');
-    } else {
+    if (configuredClient.options.baseUrl.includes('dev')) {
       const route = encodeURIComponent(`${configuredClient.options.baseUrl}/micis/index.php`);
       configuredClient.url(`/login/?rp=${route}`);
+    } else {
+      configuredClient.url('/');
     }
 
     if (!me.loggedOn) {
@@ -62,5 +62,15 @@ module.exports = (configuredClient) => {
       .disableNavigationAlert();
   };
 
+  me.logoutAndLogin = (username, password) => {
+    me.loggedOn = false;
+    configuredClient.click('#container > header > div > a');
+    configuredClient.element('input[name=password]').waitForExist();
+    configuredClient
+      .setValue('.modal form input[name=username]', username)
+      .setValue('.modal form input[name=password]', password)
+      .click('.modal form button[type=submit]')
+      .pause(2000);
+  };
   return me;
 };

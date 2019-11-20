@@ -24,8 +24,8 @@ const hideZendeskWidget = require('./lib/hide-zendesk-widget.js');
 const micis = require('./lib/auth/micis.js')(browser);
 const nav = require('./lib/nav/navigation.js')(browser);
 
-const sampleUrsi = 'M87161657';
-const sampleNote = `Test: ${Date.now()}`;
+const sampleData = browser.options.testData.subjectEditType;
+
 let sampleType;
 
 /** These types should not be selected. */
@@ -42,7 +42,7 @@ describe('Edit subject type', () => {
      */
     nav.micisMenu
       .clickNested('Look Up a Subject')
-      .setValue('#ursi', sampleUrsi)
+      .setValue('#ursi', sampleData.sampleUrsi)
       .click('#frmFindSubject .ui-button-success')
       .waitForPaginationComplete()
       .pause(200);
@@ -58,7 +58,7 @@ describe('Edit subject type', () => {
      * study-level details (step 4). Choose "NITEST" as it has
      * several non-desctructive test subject types.
      */
-    browser.click('//td/a[text()="NITEST"]/../..//form/a')
+    browser.click(`//td/a[text()="${sampleData.study}"]/../..//form/a`)
       .waitForPaginationComplete();
   });
 
@@ -74,7 +74,7 @@ describe('Edit subject type', () => {
       .split(/\n/)
       .filter(type => DISALLOWED_TYPES.indexOf(type) !== -1));
     browser.selectByVisibleText('#update_subject_type_id', sampleType)
-      .setValue('#frmChange textarea[name=notes]', sampleNote);
+      .setValue('#frmChange textarea[name=notes]', sampleData.sampleNote);
   });
 
   it('should persist subject type, note', () => {
@@ -86,6 +86,6 @@ describe('Edit subject type', () => {
 
     const value = browser.getValue('#frmChange textarea[name=notes]');
 
-    should(value === sampleNote).be.ok; // eslint-disable-line no-unused-expressions
+    should(value === sampleData.sampleNote).be.ok; // eslint-disable-line no-unused-expressions
   });
 });

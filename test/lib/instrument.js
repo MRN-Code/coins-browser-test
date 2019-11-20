@@ -71,7 +71,7 @@ module.exports = (client) => {
   me.gotoSection = (sectionLabel) => {
     const xPathNavSelector = '//*[@id="asmtPageNav"]';
     const xPathSelector = `${xPathNavSelector}//li[normalize-space(.) = "${sectionLabel}"]`;
-
+    console.log(xPathSelector);
     return client.element(xPathNavSelector).scroll()
       .click(xPathSelector)
       .element('#page-container')
@@ -113,9 +113,9 @@ module.exports = (client) => {
     options.skipQuestionText = client.getValue('input[name=skip_question_text]');
     options.hideSaPrevious = client.getValue('select[name=hide_sa_previous]');
     options.saHideSkippedQuestions = client.getValue('select[name=sa_hide_skipped_questions]');
-    const lock = client.getValue('select[name=lock]');
+    const lock = client.isExisting('select[name=lock]');
     if (lock) {
-      options.lock = lock;
+      options.lock = client.getValue('select[name=lock]');
     } else {
       // the lock select element is not printed if the instrument is locked
       options.lock = '1';

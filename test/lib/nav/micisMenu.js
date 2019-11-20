@@ -26,6 +26,31 @@ const menuMap = [
             { text: 'Browse Available Data' },
     ],
   },
+  {
+    text: 'Billing',
+    children: [
+            { text: 'List Charge Codes' },
+            { text: 'Add Credits' },
+            { text: 'View Discrepancies' },
+            { text: 'Canceled Scan Billing' },
+            { text: 'Billing Report' },
+    ],
+  },
+  {
+    text: 'Imaging',
+    children: [
+            { text: 'List Credits' },
+            { text: 'List Scans' },
+            { text: 'Add a Scan Session' },
+    ],
+  },
+  {
+    text: 'Admin',
+    children: [
+            { text: 'Sites' },
+            { text: 'Users' },
+    ],
+  },
 ];
 
 module.exports = client => menu(client, menuMap);

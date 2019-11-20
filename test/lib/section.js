@@ -53,7 +53,7 @@ module.exports = (client) => {
     });
 
     client
-      .click('#addSectionIcon')
+      .click('#add_section_button_wrapper > input')
       .waitForPaginationComplete()
       .waitForVis(formSelector, 4000);
     return client;

@@ -6,6 +6,8 @@ const nav = require('./lib/nav/navigation.js')(browser);
 const subject = require('./lib/subject.js')(browser);
 const micis = require('./lib/auth/micis.js')(browser);
 
+const sampleData = browser.options.testData.subjectEnroll;
+
 describe('subject enroll', () => {
   before('initialize', () => {
     if (!micis.loggedOn) { micis.logon(); }
@@ -21,7 +23,7 @@ describe('subject enroll', () => {
       // fill form
       subject.new.fillForm();
       // Change study id
-      browser.selectByValue('#study_id', 7640); // Smoking
+      browser.selectByValue('#study_id', sampleData.studyID); // Smoking
     });
 
     it('should be submittable', () => {
