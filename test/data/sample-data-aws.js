@@ -210,6 +210,17 @@ const creditsAdd = {
   },
 };
 
+const scanAdd = {
+  sampleData: {
+    ursi: 'Three, Investigator',
+    study: '',
+    scanDateTime: moment().format('MM/DD/YYYY hh:mm:ss'),
+    defaultChargeCode: '00-000003',
+    effectiveDate: moment().format('MM/DD/YYYY'),
+    numCredits: 1,
+  },
+};
+
 module.exports = {
   studyVisit,
   subjectLookUp,
@@ -227,4 +238,5 @@ module.exports = {
   userEdit,
   chargeCode,
   creditsAdd,
+  scanAdd,
 };

@@ -45,8 +45,14 @@ const studyDetails = {
 
 const dxClone = {
   publicTemplateLabel: 'Public Templates',
-  publicTemplateValue: 460,
-  statisticsValue: ['2253', '1112', '1', '1112'],
+  publicTemplateValue: 1779, // All CoRR Data (From 2014-05-08)
+  statisticsValue: ['1301', '4136', '1', '1418'],
+};
+
+const dxNewRequest = {
+  publicTemplateLabel: 'Public Templates',
+  publicTemplateValue: 1779, // All CoRR Data (From 2014-05-08)
+  statisticsValue: ['1301', '4136', '1', '1418'],
 };
 
 const studySubjectTypes = {
@@ -110,7 +116,7 @@ const siteAdd = {
     URSIPrefix: `M${_.random(100, 999)}`,
     userLabel: 'CITI Training',
     expirationDateChecked: true,
-    siteID: _.random(10, 99),
+    siteID: _.random(56, 98),
   },
 };
 
@@ -136,7 +142,7 @@ const userAdd = {
     studyPermissions: {
       remove: [],
       add: [
-       { Study3: 'Coordinator' },
+       { cobre06: 'Coordinator' },
       ],
     },
   },
@@ -145,7 +151,7 @@ const userAdd = {
 const userEdit = {
   sampleData: {
     name: `UserEdit ${moment().unix()}`,
-    username: '1554310643',
+    username: 'u1558127291',
     password: `coins${moment().unix()}`,
     emailAddress: `${moment().unix()}@mrn.org`,
     receiveCOINSNotificationEmails: false,
@@ -174,15 +180,15 @@ const userEdit = {
     studyPermissions1: {
       remove: [],
       add: [
-         { Study2: 'Coordinator' },
+         { cobre06: 'Coordinator' },
       ],
     },
     studyPermissions2: {
       remove: [
-         { Study2: 'Coordinator' },
+         { cobre06: 'Coordinator' },
       ],
       add: [
-         { Study3: 'Coordinator' },
+         { MCIC: 'Coordinator' },
       ],
     },
   },
@@ -195,17 +201,79 @@ const chargeCode = {
     startDate: moment().format('MM/DD/YYYY'),
     endDate: moment().add(30, 'days').format('MM/DD/YYYY'),
     onlyAllowScanCreditBilling: false,
-    fundingSource: 'Three, Investigator',
-    studyID: 1,
+    fundingSource: 'Vince, Calhoun',
+    studyID: 2319,
   },
 };
 
 const creditsAdd = {
   sampleData: {
-    piId: 'Three, Investigator',
-    defaultChargeCode: '00-000003',
+    piId: 'Calhoun, Vince',
+    defaultChargeCodeName: 'INTMRI01',
+    defaultChargeCodeValue: '224',
     effectiveDate: moment().format('MM/DD/YYYY'),
     numCredits: 1,
+  },
+};
+
+const paymentAdd = {
+  studyID: '2319',
+  participant: {
+    payeeType: 'Participant',
+    payeeName: 'Icare Test',
+    paymentDate: moment().format('MM/DD/YYYY'),
+    paymentRate: 'Hourly',
+    hours: '2.32',
+    hourlyRate: '8.5',
+    paymentType: 'Check',
+    paymentMethod: 'Mailed',
+    extra: {
+      supllies: '1.0',
+      food: '2.0',
+    },
+    w9Provided: 'No',
+    payer: 'Test Payer',
+    notes: 'Test payment note',
+  },
+  alternate: {
+    payeeType: 'Alternate',
+    payeeLastName: 'Alternate',
+    payeeFirstName: 'Test',
+    payeeBirthMonth: '7 - July',
+    payeeBirthDay: '1',
+    payeeAddressLine1: ' Test Address Line 1',
+    payeeCity: 'Test City',
+    payeeState: 'New Mexico',
+    payeeZip: '87000',
+    payeeCountry: 'United States',
+    payeeDetails: 'Test payee details',
+    paymentDate: moment().format('MM/DD/YYYY'),
+    paymentRate: 'Flat',
+    AmountPaid: '8.32',
+    paymentType: 'Check',
+    paymentMethod: 'Mailed',
+    extra: {
+      supllies: '1.0',
+      food: '2.0',
+    },
+    w9Provided: 'No',
+    payer: 'Test Payer',
+    notes: 'Test payment note',
+  },
+};
+
+const scanAdd = {
+  ursi: 'M87138333',
+  studyID: 2319,
+  scanDateTime: moment().format('MM/DD/YYYY hh:mmA'),
+  visit: 'visit1',
+  scanner: 'MIC SMS SON 1.5T',
+  sessionID: `Study${moment().format('YYYYMMDD')}at${moment().format('hhmmss')}`,
+  notes: 'Test session note',
+  queueForRadRead: true,
+  seriesConditions: {
+    1: ['MID Pilot', 'Completed - No Problems', 'Test series note'],
+    2: ['Migraine 2', 'Completed - Problems', 'Test series note problems'],
   },
 };
 
@@ -215,6 +283,7 @@ module.exports = {
   subjectTags,
   studyDetails,
   dxClone,
+  dxNewRequest,
   studySubjectTypes,
   subjectEditType,
   studyAdd,
@@ -226,4 +295,6 @@ module.exports = {
   userEdit,
   chargeCode,
   creditsAdd,
+  paymentAdd,
+  scanAdd,
 };
