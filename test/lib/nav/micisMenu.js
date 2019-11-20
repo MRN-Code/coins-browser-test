@@ -37,6 +37,14 @@ const menuMap = [
     ],
   },
   {
+    text: 'Imaging',
+    children: [
+            { text: 'List Credits' },
+            { text: 'List Scans' },
+            { text: 'Add a Scan Session' },
+    ],
+  },
+  {
     text: 'Admin',
     children: [
             { text: 'Sites' },

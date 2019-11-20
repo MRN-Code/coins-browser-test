@@ -47,7 +47,13 @@ module.exports = (client) => {
       .click('=Query Builder')
       .waitForPaginationComplete();
   };
-
+  me.goToPayments = () => {
+    client
+      .scroll(0, 0);
+    me.hoverHome()
+      .click('=Payments')
+      .pause(2000);
+  };
   me.selectAsmtStudy = (studyId) => {
     client.waitForExist(`select[name=asmt_study_id] option[value="${studyId}"]`);
     client

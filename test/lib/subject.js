@@ -35,7 +35,7 @@ module.exports = (client) => {
       .click('#context_site') // subject tag context === site
       .element('#study_id')
       .scroll()
-      .selectByValue('#study_id', 1); // NITEST
+      .selectByValue('#study_id', 2319); // NITEST
       /* @todo: if (client.alertText()) {
       client.alertDismiss();
       }*/
@@ -43,7 +43,7 @@ module.exports = (client) => {
     client
       .element('#site_id')
       .scroll()
-      .selectByValue('#site_id', 1)
+      .selectByValue('#site_id', 7)
       .selectByVisibleText('select[name=ethnicity]', 'Unknown/Not Reported')
       .click('#racCat1')
       .click('#racCat2')

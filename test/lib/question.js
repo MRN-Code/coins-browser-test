@@ -76,7 +76,7 @@ module.exports = (client) => {
     const clickSelector = `#questionList_${fromId} .duplicateQuestionButton`;
     me.hoverEdit(fromId)
       .click(clickSelector)
-      .pause(1500);
+      .pause(2500);
     client.setValue('input[name=question_id]', toId)
       .click('.tcontent')
       .pause(1500);
@@ -88,7 +88,6 @@ module.exports = (client) => {
 
   me.delete = (questionId) => {
     const clickSelector = `#questionList_${questionId} .deleteQuestionButton`;
-
     return me.hoverEdit(questionId)
       .click(clickSelector)
       .pause(10000)
