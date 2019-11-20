@@ -32,9 +32,9 @@ describe('Add a credits', () => {
   it('should fill values in the form', () => {
     browser
        .selectByVisibleText('select#pi_id', sampleData.piId)
-       .waitForExist('select#default_charge_code_id [value=\'3\']');
+       .waitForExist(`select#default_charge_code_id [value='${sampleData.defaultChargeCodeValue}']`);
     browser
-       .selectByVisibleText('#default_charge_code_id', sampleData.defaultChargeCode);
+       .selectByVisibleText('#default_charge_code_id', sampleData.defaultChargeCodeName);
     browser
        .setValue('#date_effective', sampleData.effectiveDate)
        .setValue('input[name=count]', sampleData.numCredits);
